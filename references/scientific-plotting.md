@@ -1,0 +1,173 @@
+# Scientific Plotting
+
+Status: first active Tao Style module.
+
+## Scope
+
+Use this reference for research data plots, figure panels, publication graphics, and exploratory plots that may later become manuscript, report, or presentation figures.
+
+The skill is language-agnostic. Prefer Python when the user has not chosen a stack, because Python is Tao's default environment for plotting and validation. If the user's data, code, or workflow is already in another language, apply the same style principles in that language instead of translating the whole workflow without a reason.
+
+## Backend Selection
+
+- Python: prefer Matplotlib for static publication figures; use Seaborn for statistical plot convenience when it does not obscure control; use Plotly only when interactive output is requested.
+- R: use ggplot2 themes and scales that mirror the profile.
+- MATLAB: set root/default graphics properties or local axes properties.
+- Julia: use Makie or Plots themes matching the profile.
+- C++: use the plotting framework already present in the project, such as ROOT, matplotlib-cpp, or generated data plus a plotting script.
+- LaTeX: use pgfplots/TikZ when the user needs native TeX typography or Beamer integration.
+
+## Default Scientific Figure Principles
+
+- Preserve data honesty: do not smooth, interpolate, remove outliers, change axis scales, or normalize data unless the user requests it or the method is explicit.
+- Prefer direct visual comparison over decoration.
+- Keep units in axis labels when units are known.
+- Use consistent significant figures and tick formatting.
+- Make legends, labels, and annotations readable at the final target size, not only on a large preview.
+- Use vector output for publication-style line art when possible.
+- Save a raster preview when helpful for quick inspection.
+
+## Typography
+
+- Use Helvetica as the first-choice English font.
+- Use `Nimbus Sans` only as a Helvetica-compatible local preview fallback when the system does not provide Helvetica.
+- Use 宋体 for Chinese text. In code, prefer cross-platform font names in this order: `SimSun`, `Songti SC`, `Noto Serif CJK SC`.
+- Keep font selection explicit in plotting code when the environment may not have the preferred fonts installed.
+- Make axis labels/titles slightly larger than tick labels. Use axis labels at `9 pt` and tick labels at `8 pt` by default.
+- Use Computer Modern as the default math font for real mathematical expressions.
+- For ordinary axis labels, tick labels, legends, and annotations, use plain text with the Tao Style font stack instead of Matplotlib mathtext. Avoid `$...$` for simple labels such as `x`, `y`, `y = sin(x)`, or `π/2`, because mathtext uses a separate math font.
+- Reserve mathtext or LaTeX rendering for real equations; when using Matplotlib mathtext, set `mathtext.fontset` to `cm`.
+
+## Axis Labels and Units
+
+- Use square brackets for units in axis labels: `Quantity [Unit]`.
+- Examples: `Bias Voltage [V]`, `Current [A]`, `Time [s]`, `Temperature [K]`.
+- Keep the quantity name in plain text. Use math rendering only for real mathematical symbols or expressions that need it.
+
+## Axis and Tick Style
+
+- Use a boxed axis by default for XY scientific curves: show left, right, top, and bottom spines.
+- Use black axis spines and black ticks.
+- Use axis line width `1.0`.
+- Draw both major and minor ticks inward.
+- Show ticks on all four sides of the plotting box when the backend supports it.
+- Mirror all ticks in Plotly using `mirror="allticks"`.
+- Enable minor ticks for continuous numeric axes unless they make the axis visually crowded.
+- Use major tick width `1.0`.
+- Use minor tick width `0.5`.
+- Do not use grid lines by default.
+
+## Log Axes
+
+- For base-10 log axes, format major tick labels as `10^{n}` rather than `1eN` or plain exponent notation.
+- Use Computer Modern math rendering for log tick exponents when the backend supports math text.
+- Keep minor ticks visible on log axes unless they overcrowd the plot.
+
+## Color
+
+- Prefer a cool, restrained categorical palette: dark blue/Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, and gray `#808080`.
+- Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding.
+- When red is needed, prefer muted red `#B04A4A` over saturated red.
+- For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients.
+- Avoid rainbow-like or highly saturated multi-hue gradients unless the user specifically asks for them.
+- Preferred dark-blue gradient: `#E6EEF6`, `#AFCBE3`, `#6CA6CD`, `#2F5F9F`, `#000080`.
+- Preferred grayscale gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
+- Use this list consistently across supported backends unless the user provides a data-specific color mapping.
+- Keep the list easy to extend as Tao adds more preferred colors.
+
+## Markers and Error Bars
+
+- Use relatively small markers by default for binned or dense scientific data.
+- Start with Matplotlib marker size `3.2 pt` and marker edge width `0.7 pt`.
+- Increase marker size only when the figure is sparse or the output medium needs larger symbols.
+- For marker-only errorbar plots, keep error bar lines visually lighter than the data markers.
+- Start with errorbar line width `0.6 pt` and cap size `1.6 pt`.
+
+## Lines and Fits
+
+- Use line width `1.0 pt` for fitted curves and ordinary continuous curves by default.
+- When multiple fitted curves appear in the same plot, distinguish them with both color and line style. Use solid, dashed, dotted, then dash-dot as the default sequence.
+- Use the same color for a fitted curve and its corresponding data markers/error bars unless another mapping is specified.
+- Keep fitted curves visually secondary to the data points when judging fit quality; adjust line width or opacity if the fit overpowers markers/error bars.
+
+## Legend
+
+- For legends inside the plotting frame, do not draw a legend border.
+- When many curves make the legend large or likely to cover data, place the legend outside the plotting frame on the right.
+- Outside legends should be vertical, single-column, and framed.
+- Use the same frame color and line width as the XY axis box for outside legend borders: black, `1.0 pt`.
+- Prefer the outside-right legend for more than about five legend items, or earlier if the legend overlaps important data.
+
+## Figure Aspect Ratio
+
+- If the user asks for a scientific plot and does not specify the output image width:height ratio, ask which ratio to use before final rendering.
+- Offer `1:1`, `3:2`, and `5:3` as the first choices because Tao commonly uses them.
+- Treat the ratio as the output figure or plotting-area width:height ratio, not as an equal data-unit aspect constraint.
+- Use `5:3` as the working default only for local tests or when the user explicitly wants the assistant to choose.
+
+## Python Starter
+
+When using Matplotlib, import `scripts/apply_tao_style.py` if the skill files are available locally:
+
+```python
+from scripts.apply_tao_style import figure_size, matplotlib_rcparams
+
+plt.rcParams.update(matplotlib_rcparams())
+fig, ax = plt.subplots(figsize=figure_size("5:3"))
+```
+
+For legends, use the helper when available:
+
+```python
+from scripts.apply_tao_style import apply_matplotlib_legend
+
+apply_matplotlib_legend(ax)
+```
+
+If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
+
+```bash
+python scripts/apply_tao_style.py --aspect 5:3 --format json
+```
+
+For Plotly, use the helper functions when available:
+
+```python
+from scripts.apply_tao_style import apply_plotly_style
+
+fig = apply_plotly_style(fig, aspect="5:3")
+```
+
+Or inspect the Plotly axis/layout dictionary:
+
+```bash
+python scripts/apply_tao_style.py --target plotly --aspect 5:3 --format json
+```
+
+## Output Defaults
+
+- Preview: PNG at 150-200 DPI.
+- Final raster: PNG or TIFF at 300 DPI unless the target venue requires otherwise.
+- Final vector: PDF or SVG for line art and editable figures.
+- Keep text editable in SVG/PDF when the backend supports it.
+
+## Figure QA Checklist
+
+- Axis labels include names and units when known.
+- Tick labels are readable and not overcrowded.
+- Legend does not cover important data.
+- Colors remain distinguishable in grayscale or for common color-vision deficiencies.
+- Multi-panel figures align axes, labels, and panel spacing.
+- Exported files do not clip titles, labels, legends, or annotations.
+- Final file format matches the user's target use: notebook, manuscript, slide, report, or web.
+
+## Open Preferences
+
+- TODO: Confirm Tao's default journal and slide figure sizes.
+- TODO: Extend the common categorical color list beyond Navy, black, and gray.
+- TODO: Confirm sequential and diverging colormaps.
+- TODO: Confirm final default errorbar cap size and errorbar line width after visual review.
+- TODO: Confirm final default fitted-line width and opacity after visual review.
+- TODO: Confirm preferred major tick length and minor tick length.
+- TODO: Confirm whether `5:3` or `1:1` should be the default when Tao asks the assistant to choose.
+- TODO: Add representative input data and expected figure examples.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tao Style"
+  short_description: "Tao's reusable visual style system"
+  default_prompt: "Use $tao-style to create a scientific plot in Tao's saved visual style."
