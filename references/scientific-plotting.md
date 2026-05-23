@@ -86,6 +86,14 @@ The skill is language-agnostic. Prefer Python when the user has not chosen a sta
 - For marker-only errorbar plots, keep error bar lines visually lighter than the data markers.
 - Start with errorbar line width `0.6 pt` and cap size `1.6 pt`.
 
+## Histograms
+
+- Before plotting a histogram, ask which y-axis mode to use: raw `Count` or normalized `Probability`.
+- Use `Count` for raw bin counts. Label the y axis `Count`.
+- Use `Probability` when Tao asks for normalized probability. Normalize each bin height as `bin count / total sample count`, so all bin heights sum to 1. Label the y axis `Probability`.
+- Do not silently use probability density for this preference. In Matplotlib, `density=True` gives probability density, not bin probability; for `Probability`, use weights such as `np.ones_like(data) / len(data)`.
+- Use `Probability Density [1/Unit]` only when the user explicitly asks for density/PDF-style normalization or when variable-width bins make probability density the appropriate representation.
+
 ## Lines and Fits
 
 - Use line width `1.0 pt` for fitted curves and ordinary continuous curves by default.
@@ -136,6 +144,16 @@ apply_matplotlib_log10_axis(ax, axis="y")
 ```
 
 This helper formats major log tick labels as ordinary text with Unicode superscripts, preserving the same font family as other axis tick labels.
+
+For histograms, ask for the y-axis mode first, then use the helper label/weights when available:
+
+```python
+from scripts.apply_tao_style import histogram_weights, histogram_ylabel
+
+mode = "probability"  # or "count", after asking Tao
+ax.hist(data, bins=bins, weights=histogram_weights(data, mode))
+ax.set_ylabel(histogram_ylabel(mode))
+```
 
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
 

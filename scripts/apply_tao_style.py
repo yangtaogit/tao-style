@@ -61,6 +61,7 @@ ERRORBAR_CAP_SIZE = 1.6
 DEFAULT_ASPECT = "5:3"
 DEFAULT_FIGURE_WIDTH_IN = 3.6
 DEFAULT_PLOTLY_WIDTH_PX = 600
+HISTOGRAM_Y_MODES = ("count", "probability")
 FIGURE_ASPECTS = {
     "1:1": 1.0,
     "3:2": 3.0 / 2.0,
@@ -231,6 +232,49 @@ def apply_matplotlib_log10_axis(ax, axis: str = "y"):
     return target_axis
 
 
+def normalize_histogram_y_mode(mode: str) -> str:
+    """Return a validated Tao Style histogram y-axis mode."""
+
+    normalized = mode.strip().lower().replace("-", "_")
+    aliases = {
+        "counts": "count",
+        "raw_count": "count",
+        "raw_counts": "count",
+        "prob": "probability",
+        "normalized": "probability",
+        "normalised": "probability",
+    }
+    normalized = aliases.get(normalized, normalized)
+    if normalized not in HISTOGRAM_Y_MODES:
+        allowed = ", ".join(HISTOGRAM_Y_MODES)
+        raise ValueError(f"Unknown histogram y-axis mode {mode!r}. Allowed: {allowed}")
+    return normalized
+
+
+def histogram_ylabel(mode: str) -> str:
+    """Return the y-axis label for a Tao Style histogram mode."""
+
+    normalized = normalize_histogram_y_mode(mode)
+    if normalized == "count":
+        return "Count"
+    return "Probability"
+
+
+def histogram_weights(data, mode: str):
+    """Return Matplotlib weights for Count or Probability histograms."""
+
+    normalized = normalize_histogram_y_mode(mode)
+    if normalized == "count":
+        return None
+
+    import numpy as np
+
+    values = np.asarray(data)
+    if values.size == 0:
+        raise ValueError("Cannot normalize an empty histogram dataset.")
+    return np.ones_like(values, dtype=float) / values.size
+
+
 def plotly_axis_style() -> dict[str, object]:
     """Return Tao Style axis settings for Plotly xaxes/yaxes."""
 
@@ -382,6 +426,13 @@ def main() -> None:
                         "outside": matplotlib_legend_kwargs(True),
                     },
                     "gradients": GRADIENT_COLORMAPS,
+                    "histogram": {
+                        "y_modes": HISTOGRAM_Y_MODES,
+                        "labels": {
+                            mode: histogram_ylabel(mode)
+                            for mode in HISTOGRAM_Y_MODES
+                        },
+                    },
                     "rcParams": style,
                 },
                 indent=2,

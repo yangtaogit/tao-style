@@ -27,13 +27,32 @@ for script in example/*.py; do python3 "$script"; done
 
 README 中展示的 SVG 会把文字保存为矢量路径，以避免浏览器或不同机器缺少字体时改变显示效果。正式需要后期编辑文字的 SVG 可以保留 editable text，但要确认目标环境安装了 Helvetica/兼容字体和数学字体。
 
-| XY 离散数据与拟合 | Gaussian Error Bar |
-| --- | --- |
-| ![XY linear fit example](example/xy_linear_fit.svg) | ![Gaussian error bar example](example/gaussian_errorbar.svg) |
-| Log 坐标 | 多曲线与外置 Legend |
-| ![Log axis example](example/log_axis.svg) | ![Many curves gradient example](example/many_curves_gradient.svg) |
-| 颜色梯度 |  |
-| ![Color gradient example](example/color_gradients.svg) |  |
+<table>
+  <tr>
+    <td>XY 离散数据与拟合</td>
+    <td>Gaussian Error Bar</td>
+  </tr>
+  <tr>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example"></td>
+  </tr>
+  <tr>
+    <td>Log 坐标</td>
+    <td>多曲线与外置 Legend</td>
+  </tr>
+  <tr>
+    <td><img src="example/log_axis.svg" alt="Log axis example"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example"></td>
+  </tr>
+  <tr>
+    <td>颜色梯度</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example"></td>
+    <td></td>
+  </tr>
+</table>
 
 ## 安装
 
