@@ -88,11 +88,11 @@ The skill is language-agnostic. Prefer Python when the user has not chosen a sta
 
 ## Histograms
 
-- Before plotting a histogram, ask which y-axis mode to use: raw `Count` or normalized `Probability`.
+- Before plotting a histogram, ask which y-axis mode to use: raw `Count` or normalized `Probability Density [1/Unit]`.
 - Use `Count` for raw bin counts. Label the y axis `Count`.
-- Use `Probability` when Tao asks for normalized probability. Normalize each bin height as `bin count / total sample count`, so all bin heights sum to 1. Label the y axis `Probability`.
-- Do not silently use probability density for this preference. In Matplotlib, `density=True` gives probability density, not bin probability; for `Probability`, use weights such as `np.ones_like(data) / len(data)`.
-- Use `Probability Density [1/Unit]` only when the user explicitly asks for density/PDF-style normalization or when variable-width bins make probability density the appropriate representation.
+- Use `Probability Density [1/Unit]` when Tao asks for normalized histograms. The unit should be the inverse of the x-axis unit, for example `Probability Density [1/mm]`.
+- In Matplotlib, use `density=True` for `Probability Density [1/Unit]`.
+- Do not use bin probability (`bin count / total sample count`) unless Tao explicitly asks for probability per bin.
 
 ## Lines and Fits
 
@@ -145,14 +145,14 @@ apply_matplotlib_log10_axis(ax, axis="y")
 
 This helper formats major log tick labels as ordinary text with Unicode superscripts, preserving the same font family as other axis tick labels.
 
-For histograms, ask for the y-axis mode first, then use the helper label/weights when available:
+For histograms, ask for the y-axis mode first, then use the helper label/kwargs when available:
 
 ```python
-from scripts.apply_tao_style import histogram_weights, histogram_ylabel
+from scripts.apply_tao_style import histogram_kwargs, histogram_ylabel
 
-mode = "probability"  # or "count", after asking Tao
-ax.hist(data, bins=bins, weights=histogram_weights(data, mode))
-ax.set_ylabel(histogram_ylabel(mode))
+mode = "probability_density"  # or "count", after asking Tao
+ax.hist(data, bins=bins, **histogram_kwargs(mode))
+ax.set_ylabel(histogram_ylabel(mode, unit="mm"))
 ```
 
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:

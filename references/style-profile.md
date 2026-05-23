@@ -12,7 +12,7 @@ Status: draft template. Replace TODO entries as preferences are confirmed.
 
 See `references/scientific-plotting.md` for the active plotting workflow and backend guidance. Keep confirmed reusable preferences here so future modules, such as LaTeX Beamer or document templates, can share the same visual identity.
 
-- Histograms: ask whether the y axis should be raw `Count` or normalized `Probability` before plotting.
+- Histograms: ask whether the y axis should be raw `Count` or normalized `Probability Density [1/Unit]` before plotting.
 
 ## Typography
 

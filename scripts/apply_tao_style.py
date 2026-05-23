@@ -61,7 +61,7 @@ ERRORBAR_CAP_SIZE = 1.6
 DEFAULT_ASPECT = "5:3"
 DEFAULT_FIGURE_WIDTH_IN = 3.6
 DEFAULT_PLOTLY_WIDTH_PX = 600
-HISTOGRAM_Y_MODES = ("count", "probability")
+HISTOGRAM_Y_MODES = ("count", "probability_density")
 FIGURE_ASPECTS = {
     "1:1": 1.0,
     "3:2": 3.0 / 2.0,
@@ -240,9 +240,11 @@ def normalize_histogram_y_mode(mode: str) -> str:
         "counts": "count",
         "raw_count": "count",
         "raw_counts": "count",
-        "prob": "probability",
-        "normalized": "probability",
-        "normalised": "probability",
+        "density": "probability_density",
+        "pdf": "probability_density",
+        "probability_density": "probability_density",
+        "normalized_density": "probability_density",
+        "normalised_density": "probability_density",
     }
     normalized = aliases.get(normalized, normalized)
     if normalized not in HISTOGRAM_Y_MODES:
@@ -251,28 +253,26 @@ def normalize_histogram_y_mode(mode: str) -> str:
     return normalized
 
 
-def histogram_ylabel(mode: str) -> str:
+def histogram_ylabel(mode: str, unit: str = "Unit") -> str:
     """Return the y-axis label for a Tao Style histogram mode."""
 
     normalized = normalize_histogram_y_mode(mode)
     if normalized == "count":
         return "Count"
-    return "Probability"
+    return f"Probability Density [1/{unit}]"
 
 
-def histogram_weights(data, mode: str):
-    """Return Matplotlib weights for Count or Probability histograms."""
+def histogram_density(mode: str) -> bool:
+    """Return the Matplotlib density flag for a Tao Style histogram mode."""
 
     normalized = normalize_histogram_y_mode(mode)
-    if normalized == "count":
-        return None
+    return normalized == "probability_density"
 
-    import numpy as np
 
-    values = np.asarray(data)
-    if values.size == 0:
-        raise ValueError("Cannot normalize an empty histogram dataset.")
-    return np.ones_like(values, dtype=float) / values.size
+def histogram_kwargs(mode: str) -> dict[str, bool]:
+    """Return Matplotlib hist keyword arguments for a Tao Style y-axis mode."""
+
+    return {"density": histogram_density(mode)}
 
 
 def plotly_axis_style() -> dict[str, object]:
