@@ -30,7 +30,7 @@ def main() -> None:
     cmap = LinearSegmentedColormap.from_list("tao_dark_blue", GRADIENT_COLORMAPS["dark-blue"])
     colors = [cmap(value) for value in np.linspace(0.18, 1.0, len(temperatures))]
 
-    plt.rcParams.update(matplotlib_rcparams())
+    plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=figure_size("5:3"))
 
     for index, (temperature, color) in enumerate(zip(temperatures, colors)):

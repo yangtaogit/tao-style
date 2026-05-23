@@ -17,12 +17,13 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Primary Latin font: Helvetica.
 - Primary CJK font: 宋体, using `SimSun` on Windows, `Songti SC` on macOS, and `Noto Serif CJK SC` as a Linux fallback when 宋体 is unavailable.
 - Math font: Computer Modern.
+- Coordinate-axis labels and tick labels: prefer ordinary text fonts over math fonts; for log axes, use plain-text superscripts such as `10⁻⁶` with a sans fallback that supports the required glyphs.
 - Title size: TODO.
 - Axis label size: TODO.
 - Tick label size: TODO.
 - Legend size: TODO.
 - Annotation size: TODO.
-- Font embedding: prefer editable text in SVG and TrueType fonts in PDF when the plotting backend supports it.
+- Font embedding: prefer editable text in final SVG/PDF when the required fonts are available; use path-converted SVG text for README/web previews where stable cross-machine appearance is more important than text editability.
 
 ## Lines, Markers, and Error Bars
 

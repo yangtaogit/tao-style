@@ -30,12 +30,13 @@ The skill is language-agnostic. Prefer Python when the user has not chosen a sta
 ## Typography
 
 - Use Helvetica as the first-choice English font.
-- Use `Nimbus Sans` only as a Helvetica-compatible local preview fallback when the system does not provide Helvetica.
+- Use `Arimo`, `Noto Sans`, or `Nimbus Sans` only as Helvetica-compatible local preview fallbacks when the system does not provide Helvetica. Prefer a fallback with complete superscript glyphs for log-axis labels.
 - Use 宋体 for Chinese text. In code, prefer cross-platform font names in this order: `SimSun`, `Songti SC`, `Noto Serif CJK SC`.
 - Keep font selection explicit in plotting code when the environment may not have the preferred fonts installed.
 - Make axis labels/titles slightly larger than tick labels. Use axis labels at `9 pt` and tick labels at `8 pt` by default.
 - Use Computer Modern as the default math font for real mathematical expressions.
 - For ordinary axis labels, tick labels, legends, and annotations, use plain text with the Tao Style font stack instead of Matplotlib mathtext. Avoid `$...$` for simple labels such as `x`, `y`, `y = sin(x)`, or `π/2`, because mathtext uses a separate math font.
+- Keep coordinate-axis labels and tick labels in the ordinary text font whenever possible, including log-axis exponents.
 - Reserve mathtext or LaTeX rendering for real equations; when using Matplotlib mathtext, set `mathtext.fontset` to `cm`.
 
 ## Axis Labels and Units
@@ -59,8 +60,10 @@ The skill is language-agnostic. Prefer Python when the user has not chosen a sta
 
 ## Log Axes
 
-- For base-10 log axes, format major tick labels as `10^{n}` rather than `1eN` or plain exponent notation.
-- Use Computer Modern math rendering for log tick exponents when the backend supports math text.
+- For base-10 log axes, format major tick labels visually as `10^{n}` rather than `1eN` or plain exponent notation.
+- In Matplotlib, prefer plain-text Unicode superscripts such as `10⁻⁶` instead of mathtext labels such as `$10^{-6}$`, because Unicode text preserves the ordinary axis font while still showing a true superscript.
+- If the active Helvetica-compatible font lacks superscript glyphs, switch to a plain sans fallback with complete superscript coverage rather than using mathtext.
+- Avoid `LogFormatterMathtext` for Tao Style axes unless the user explicitly wants mathematical fonts on ticks.
 - Keep minor ticks visible on log axes unless they overcrowd the plot.
 
 ## Color
@@ -124,6 +127,16 @@ from scripts.apply_tao_style import apply_matplotlib_legend
 apply_matplotlib_legend(ax)
 ```
 
+For base-10 log axes, use the helper formatter when available:
+
+```python
+from scripts.apply_tao_style import apply_matplotlib_log10_axis
+
+apply_matplotlib_log10_axis(ax, axis="y")
+```
+
+This helper formats major log tick labels as ordinary text with Unicode superscripts, preserving the same font family as other axis tick labels.
+
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
 
 ```bash
@@ -150,6 +163,8 @@ python scripts/apply_tao_style.py --target plotly --aspect 5:3 --format json
 - Final raster: PNG or TIFF at 300 DPI unless the target venue requires otherwise.
 - Final vector: PDF or SVG for line art and editable figures.
 - Keep text editable in SVG/PDF when the backend supports it.
+- For README, web, or cross-machine previews where exact font appearance matters more than editability, export SVG text as paths using Matplotlib `svg.fonttype = "path"`.
+- For final editable SVG, use `svg.fonttype = "none"` only when the target machine or editor has the required fonts available.
 
 ## Figure QA Checklist
 

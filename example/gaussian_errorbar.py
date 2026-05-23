@@ -37,7 +37,7 @@ def main() -> None:
     centers = 0.5 * (bins[:-1] + bins[1:])
     x_fit = np.linspace(-4.5, 4.5, 400)
 
-    plt.rcParams.update(matplotlib_rcparams())
+    plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=figure_size("5:3"))
 
     for index, sigma in enumerate(sigmas):
@@ -57,7 +57,7 @@ def main() -> None:
             elinewidth=ERRORBAR_LINE_WIDTH,
             capsize=ERRORBAR_CAP_SIZE,
             color=color,
-            label=fr"$\sigma$ = {sigma:.2f}",
+            label=f"σ = {sigma:.2f}",
         )
         ax.plot(
             x_fit,

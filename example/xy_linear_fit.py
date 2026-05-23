@@ -33,7 +33,7 @@ def main() -> None:
         (0.31, 1.85, "Device C"),
     ]
 
-    plt.rcParams.update(matplotlib_rcparams())
+    plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=figure_size("5:3"))
 
     fit_x = np.linspace(0.0, 10.0, 300)

@@ -25,29 +25,23 @@
 for script in example/*.py; do python3 "$script"; done
 ```
 
+README 中展示的 SVG 会把文字保存为矢量路径，以避免浏览器或不同机器缺少字体时改变显示效果。正式需要后期编辑文字的 SVG 可以保留 editable text，但要确认目标环境安装了 Helvetica/兼容字体和数学字体。
+
 ### XY 离散数据与拟合
 
 ![XY linear fit example](example/xy_linear_fit.svg)
-
-这个样例展示离散 marker、同色拟合线、冷色/黑灰优先色板、无边框框内 legend，以及 `Quantity [Unit]` 坐标轴标题格式。
 
 ### Gaussian Error Bar
 
 ![Gaussian error bar example](example/gaussian_errorbar.svg)
 
-这个样例展示较小 marker、较细 error bar、Computer Modern 数学字体，以及多组数据对应同色拟合曲线。
-
 ### Log 坐标
 
 ![Log axis example](example/log_axis.svg)
 
-这个样例展示 y 轴 base-10 log 坐标，主刻度使用 `10^{n}` 形式，tick 向内且上下左右都有 tick。
-
 ### 多曲线与外置 Legend
 
 ![Many curves gradient example](example/many_curves_gradient.svg)
-
-这个样例展示超过 5 条曲线时的外置右侧竖向 legend。legend 带边框，边框线宽和 XY 坐标框一致；多曲线颜色优先使用暗蓝梯度。
 
 ## 安装
 

@@ -7,7 +7,6 @@ from pathlib import Path
 import sys
 
 import matplotlib.pyplot as plt
-from matplotlib.ticker import LogFormatterMathtext, LogLocator
 import numpy as np
 
 
@@ -19,6 +18,7 @@ from apply_tao_style import (  # noqa: E402
     LINE_WIDTH,
     PALETTE,
     apply_matplotlib_legend,
+    apply_matplotlib_log10_axis,
     figure_size,
     matplotlib_rcparams,
 )
@@ -29,7 +29,7 @@ def main() -> None:
     scales = [0.7, 1.3, 2.2]
     offsets = [85, 130, 175]
 
-    plt.rcParams.update(matplotlib_rcparams())
+    plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=figure_size("5:3"))
 
     for index, (scale, offset) in enumerate(zip(scales, offsets)):
@@ -45,15 +45,12 @@ def main() -> None:
             label=f"Sample {index + 1}",
         )
 
-    ax.set_yscale("log")
-    ax.yaxis.set_major_locator(LogLocator(base=10))
-    ax.yaxis.set_minor_locator(LogLocator(base=10, subs=np.arange(2, 10) * 0.1))
-    ax.yaxis.set_major_formatter(LogFormatterMathtext(base=10))
     ax.set_xlabel("Bias Voltage [V]")
     ax.set_ylabel("Current [A]")
     ax.set_xlim(0, 600)
     ax.set_ylim(1e-10, 1e-6)
     ax.minorticks_on()
+    apply_matplotlib_log10_axis(ax, axis="y")
     apply_matplotlib_legend(ax)
 
     output = Path(__file__).with_suffix(".svg")

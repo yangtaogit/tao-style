@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 
 try:
     from cycler import cycler as _cycler_factory
@@ -30,6 +31,8 @@ GRADIENT_COLORMAPS = {
 
 FONT_FAMILY = [
     "Helvetica",
+    "Arimo",
+    "Noto Sans",
     "Nimbus Sans",
     "SimSun",
     "Songti SC",
@@ -63,6 +66,22 @@ FIGURE_ASPECTS = {
     "3:2": 3.0 / 2.0,
     "5:3": 5.0 / 3.0,
 }
+SUPERSCRIPT_TRANSLATION = str.maketrans(
+    {
+        "-": "⁻",
+        "+": "⁺",
+        "0": "⁰",
+        "1": "¹",
+        "2": "²",
+        "3": "³",
+        "4": "⁴",
+        "5": "⁵",
+        "6": "⁶",
+        "7": "⁷",
+        "8": "⁸",
+        "9": "⁹",
+    }
+)
 
 
 def figure_size(aspect: str = DEFAULT_ASPECT, width: float = DEFAULT_FIGURE_WIDTH_IN) -> tuple[float, float]:
@@ -83,8 +102,11 @@ def plotly_dimensions(aspect: str = DEFAULT_ASPECT, width: int = DEFAULT_PLOTLY_
     return {"width": width, "height": round(width / FIGURE_ASPECTS[aspect])}
 
 
-def matplotlib_rcparams(serializable: bool = False) -> dict[str, object]:
+def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "none") -> dict[str, object]:
     """Return a starter rcParams dictionary for Tao Style plots."""
+
+    if svg_fonttype not in {"none", "path"}:
+        raise ValueError("svg_fonttype must be 'none' or 'path'")
 
     prop_cycle = _cycler_expr("color", PALETTE)
     if not serializable and _cycler_factory is not None:
@@ -138,7 +160,7 @@ def matplotlib_rcparams(serializable: bool = False) -> dict[str, object]:
         "legend.frameon": False,
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
-        "svg.fonttype": "none",
+        "svg.fonttype": svg_fonttype,
     }
 
 
@@ -173,6 +195,40 @@ def apply_matplotlib_legend(ax, outside=None, **kwargs):
         frame.set_facecolor("white")
         frame.set_alpha(1.0)
     return legend
+
+
+def base10_log_tick_label(value: float, _position=None) -> str:
+    """Return a plain-text superscript label such as 10⁻⁶ for log ticks."""
+
+    if value <= 0:
+        return ""
+
+    exponent = math.log10(value)
+    rounded = round(exponent)
+    if not math.isclose(exponent, rounded, rel_tol=0.0, abs_tol=1e-10):
+        return ""
+    return "10" + str(int(rounded)).translate(SUPERSCRIPT_TRANSLATION)
+
+
+def apply_matplotlib_log10_axis(ax, axis: str = "y"):
+    """Apply Tao Style base-10 log tick formatting to a Matplotlib axis."""
+
+    from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
+
+    if axis == "x":
+        ax.set_xscale("log")
+        target_axis = ax.xaxis
+    elif axis == "y":
+        ax.set_yscale("log")
+        target_axis = ax.yaxis
+    else:
+        raise ValueError("axis must be 'x' or 'y'")
+
+    target_axis.set_major_locator(LogLocator(base=10))
+    target_axis.set_minor_locator(LogLocator(base=10, subs=tuple(i / 10 for i in range(2, 10))))
+    target_axis.set_major_formatter(FuncFormatter(base10_log_tick_label))
+    target_axis.set_minor_formatter(NullFormatter())
+    return target_axis
 
 
 def plotly_axis_style() -> dict[str, object]:
