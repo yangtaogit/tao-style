@@ -1,8 +1,216 @@
 # τ Style
 
 <p align="center">
-  <img src="assets/tao-style-logo.png" alt="τ Style logo" width="420">
+  <img src="assets/tao-style-logo.png" alt="tau Style logo" width="420">
 </p>
+
+<p align="center">
+  <a href="#chinese-version">Chinese Version / 中文版本</a>
+</p>
+
+`τ style` is a personal AI Skill for preserving and reusing τ's plotting and visual-format preferences. The scientific plotting profile is currently maintained, and the scientific report / slides profile has started; future extensions may cover documents, schematic figures, and other visual outputs.
+
+This repository is the development version of the Skill. It is kept under WSL so Python, C++, and other plotting environments can be used conveniently for visual debugging. For actual use in Codex or Claude Code, install or sync this repository into the target `skills` directory.
+
+## Current Scope
+
+The scientific plotting part is provisionally complete. Scientific data plots default to Python/Matplotlib, while the style rules are language-agnostic and can later be ported to R, MATLAB, Julia, C++/ROOT, Plotly, or LaTeX/pgfplots.
+
+The scientific report / slides part is in its early stage. When generating slide reports and no output format is specified, the Skill should ask whether to use Beamer. If Beamer is selected, reports should be based on the `yangtaogit/tao-slides` template.
+
+Detailed rules are maintained in `references/style-profile.md`, `references/scientific-plotting.md`, and `references/scientific-slides.md`. The Python helper is maintained in `scripts/apply_tao_style.py`.
+
+## Confirmed Scientific Plotting Rules
+
+- Fonts: English text should prefer Helvetica; Chinese text should prefer Songti; mathematical expressions use Computer Modern. Regular axis labels, tick labels, legends, and annotations should avoid math fonts when possible so the visual style remains consistent.
+- Font sizes: axis labels use `9 pt`; tick labels use `8 pt`; legends use `8 pt`.
+- Axes: use a closed black axis box by default; all four spines are visible; ticks point inward; top and right ticks are shown; axis line width is `1.0 pt`; major tick width is `1.0`; minor tick width is `0.5`; grid lines are off by default.
+- Axis labels and units: units use square brackets, such as `Bias Voltage [V]` and `Current [A]`.
+- Figure size and aspect ratio: single-panel scientific plots default to a physical width of `3.6 in` and an aspect ratio of `5:3`, i.e. `3.6 in x 2.16 in`. Common ratios are `1:1`, `3:2`, and `5:3`. Multi-panel figures are not constrained by this single-panel rule; their canvas size should be chosen according to the layout, number of panels, and data relationships. If the target medium has a fixed final width, such as a paper column, slide placeholder, poster panel, or report layout, confirm the target width before setting `figsize` to avoid large downstream scaling.
+- Log axes: base-10 log major ticks should be displayed as plain-text superscripts such as `10^-6`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.
+- Colors: prefer cool tones, dark blue, soft blue, black, and gray. The current core palette is Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, gray `#808080`, and muted red `#B04A4A` as a low-priority accent color.
+- Color gradients: for many curves or ordered data, prefer dark-blue gradients or grayscale gradients. Avoid rainbow palettes and highly saturated multi-color gradients.
+- Markers and error bars: default marker size is `3.2 pt`; marker edge width is `0.7 pt`; error-bar line width is `0.6 pt`; cap size is `1.6 pt`.
+- Lines and fitting: regular continuous curves and fitted curves default to a line width of `1.0 pt`. For dense two-dimensional XY data, prefer line-only plots to avoid overcrowded markers. Multiple fitted curves should be distinguished by both color and line style, with the default order solid, dashed, dotted, and dash-dot.
+- Legends: legends inside the plotting box should not have a frame. If many curves are present or the legend overlaps the data, place the legend outside the right side of the axes as a vertical single column, with a black `1.0 pt` frame matching the axis box.
+- Histograms: before plotting, ask whether the y-axis should be raw `Count` or normalized `Probability Density [1/Unit]`. The default histogram style is a stepped bin outline with a light fill, meaning the outline follows bin edges. It is not a line connecting bin centers. Use marker + errorbar or bin-center line styles only for special cases such as wide bins, low statistics, or fitted binned data with uncertainty shown for each bin.
+- Output: line plots and scientific figures should prefer vector formats. SVGs shown in README/web previews may convert text to paths for cross-machine consistency. Formal editable SVG/PDF output may keep editable text, but the target environment must have the required Helvetica-compatible and math fonts.
+
+## Confirmed Scientific Report / Slides Rules
+
+- When generating scientific slide reports and no output format is specified, ask whether to use Beamer.
+- If Beamer is used, base the report on the `yangtaogit/tao-slides` template: `https://github.com/yangtaogit/tao-slides`.
+- Before generating, fetch or locate the template and inspect its README, examples, theme files, and build commands. Do not assume template filenames or build commands without checking.
+- Generate content in a copied template or a new report project directory. Do not directly modify the template source unless explicitly requested.
+- New scientific figures used in slides should still follow the τ Style scientific plotting rules.
+
+## Plotting Examples
+
+The SVG figures below are generated from scripts in `example/` and are used to visually check the current scientific plotting style. Regenerate all examples with:
+
+```bash
+for script in example/*.py; do python3 "$script"; done
+```
+
+The SVGs shown in this README save text as vector paths so browsers and machines without the exact fonts do not alter the appearance. Formal SVG files that require later text editing may keep editable text, but the target environment should have Helvetica-compatible fonts and the chosen math font installed.
+
+<table>
+  <tr>
+    <td>XY Data and Linear Fit</td>
+    <td>Gaussian Error Bar</td>
+  </tr>
+  <tr>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example"></td>
+  </tr>
+  <tr>
+    <td>Log Axis</td>
+    <td>Many Curves with External Legend</td>
+  </tr>
+  <tr>
+    <td><img src="example/log_axis.svg" alt="Log axis example"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example"></td>
+  </tr>
+  <tr>
+    <td>Color Gradients</td>
+    <td>Multiple Filled Histograms</td>
+  </tr>
+  <tr>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example"></td>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example"></td>
+  </tr>
+</table>
+
+## Installation
+
+Install the Skill as a `tao-style/` folder under the target AI tool's `skills` directory. The installer supports Codex and Claude Code targets, and can sync to both at once.
+
+- `copy`: copy the installable Skill files. This is the most robust choice when installing from the WSL repository into the Windows Codex directory.
+- `symlink`: create a symbolic link. This is useful for development within the same filesystem, because repository edits become immediately visible.
+
+Install targets:
+
+- `codex`: install to `$CODEX_HOME/skills`; if `CODEX_HOME` is unset, install to `~/.codex/skills`.
+- `claude-code`: install to `~/.claude/skills`, the personal Skills location for Claude Code.
+- `all`: install or update both Codex and Claude Code default locations.
+
+Run from this WSL repository:
+
+```bash
+cd /home/tao/git_repository/tao-style
+```
+
+Install to Windows Codex Desktop:
+
+```bash
+python3 scripts/install_skill.py --target codex --mode copy --skills-dir /mnt/c/Users/yangt/.codex/skills --force
+```
+
+Install to Claude Code personal Skills:
+
+```bash
+python3 scripts/install_skill.py --target claude-code --mode copy --force
+```
+
+Update Codex and Claude Code together from WSL:
+
+```bash
+python3 scripts/install_skill.py --target all --mode copy --force
+```
+
+For WSL-only debugging where repository edits should take effect immediately:
+
+```bash
+python3 scripts/install_skill.py --target claude-code --mode symlink --force
+```
+
+Install to a Claude Code project-level Skills directory:
+
+```bash
+python3 scripts/install_skill.py --target claude-code --mode copy --skills-dir /path/to/project/.claude/skills --force
+```
+
+Preview the planned operation:
+
+```bash
+python3 scripts/install_skill.py --target claude-code --mode copy --dry-run
+```
+
+## Updating
+
+After editing the Skill, use this workflow:
+
+1. Modify `SKILL.md`, `references/`, or `scripts/apply_tao_style.py`.
+2. Generate test figures in `test/` and visually check the result.
+3. Run Skill validation.
+4. If installed with `copy`, rerun the install command. If installed with `symlink`, no extra sync is usually needed. Claude Code watches existing Skills directories for file changes; if a new top-level `.claude/skills` directory was created for the first time, Claude Code may need a restart.
+
+Validation command:
+
+```bash
+python3 /mnt/c/Users/yangt/.codex/skills/.system/skill-creator/scripts/quick_validate.py /home/tao/git_repository/tao-style
+```
+
+Update Windows Codex Desktop:
+
+```bash
+python3 scripts/install_skill.py --target codex --mode copy --skills-dir /mnt/c/Users/yangt/.codex/skills --force
+```
+
+Update Claude Code:
+
+```bash
+python3 scripts/install_skill.py --target claude-code --mode copy --force
+```
+
+Update both Codex and Claude Code:
+
+```bash
+python3 scripts/install_skill.py --target all --mode copy --force
+```
+
+## Repository Layout
+
+```text
+tao-style/
+|-- SKILL.md                         # Skill entry point and usage workflow
+|-- AGENTS.md                        # Project guidance for coding agents
+|-- agents/openai.yaml               # Codex UI metadata
+|-- references/style-profile.md      # Overall tau Style preferences
+|-- references/scientific-plotting.md # Scientific plotting rules
+|-- references/scientific-slides.md   # Scientific report / slides and Beamer rules
+|-- scripts/apply_tao_style.py       # Python plotting style helper
+|-- scripts/install_skill.py         # Install/update script
+|-- example/                         # Committed plotting examples and SVG outputs
+|-- assets/                          # Assets such as fonts, templates, palettes, and logo files
+`-- test/                            # Local debugging scripts and outputs; not copied into install packages
+```
+
+A `copy` installation only copies `SKILL.md`, `agents/`, `assets/`, `references/`, and `scripts/`. `README.md`, `example/`, and `test/` are for development and maintenance, and are not required at runtime. `agents/openai.yaml` is Codex UI metadata; in Claude Code it is just a supporting file and does not affect how Claude Code reads `SKILL.md`.
+
+## Usage
+
+When generating a plot, explicitly mention the Skill if needed:
+
+```text
+Please use $tao-style to generate this scientific figure.
+```
+
+If the Skill is not explicitly mentioned but the task is to generate or revise a scientific figure, the intended behavior is to ask whether τ Style should be applied, then use the style after confirmation. In Claude Code, `/tao-style` can be used directly, or the Skill can be triggered automatically through its `description`.
+
+## Maintenance Principles
+
+- Newly confirmed visual preferences should be written to `references/style-profile.md`.
+- Scientific plotting details should be written to `references/scientific-plotting.md`.
+- Scientific report / slides and Beamer details should be written to `references/scientific-slides.md`.
+- Reusable deterministic logic should be written to `scripts/apply_tao_style.py`.
+- Committable visual examples should be placed in `example/` for README display and long-term comparison.
+- Test scripts and output images should be placed in `test/` for visual iteration, not as formal install content.
+
+## Chinese Version
+
+<a id="chinese-version"></a>
+
 `τ style` 是一个个人 AI Skill，用来保存和复用 τ 的作图与视觉格式偏好。当前已经维护科研绘图部分，并开始维护科研报告 / slides 风格；后续可以继续扩展到文档、示意图等其它输出风格。
 
 这个仓库是开发版 Skill 仓库，放在 WSL 下是为了方便调用 Python、C++ 等环境快速生成测试图。真正安装到 Codex 或 Claude Code 时，可以把它复制或链接到目标 `skills` 目录。

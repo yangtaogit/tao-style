@@ -47,6 +47,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Keep reusable rules in `references/`.
 - Keep deterministic plotting helpers in `scripts/apply_tao_style.py`.
 - Keep formal examples in `example/`; keep throwaway visual tests in `test/`.
+- When the Skill changes, update the corresponding README content in the same work session, including the English default section and Chinese version when user-facing behavior or documented rules change.
 - `test/` is ignored by git and is not installed.
 - Validate after Skill edits:
 
