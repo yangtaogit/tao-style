@@ -3,7 +3,7 @@
 <p align="center">
   <img src="assets/tao-style-logo.png" alt="τ Style logo" width="420">
 </p>
-`τ Style` 是一个个人 AI Skill，用来保存和复用 τ 的作图与视觉格式偏好。当前已经维护科研绘图部分，并开始维护科研报告 / slides 风格；后续可以继续扩展到文档、示意图等其它输出风格。
+`τ style` 是一个个人 AI Skill，用来保存和复用 τ 的作图与视觉格式偏好。当前已经维护科研绘图部分，并开始维护科研报告 / slides 风格；后续可以继续扩展到文档、示意图等其它输出风格。
 
 这个仓库是开发版 Skill 仓库，放在 WSL 下是为了方便调用 Python、C++ 等环境快速生成测试图。真正安装到 Codex 或 Claude Code 时，可以把它复制或链接到目标 `skills` 目录。
 
