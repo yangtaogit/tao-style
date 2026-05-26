@@ -58,6 +58,7 @@ MARKER_SIZE = 3.2
 MARKER_EDGE_WIDTH = 0.7
 ERRORBAR_LINE_WIDTH = 0.6
 ERRORBAR_CAP_SIZE = 1.6
+HISTOGRAM_FILL_ALPHA = 0.28
 DEFAULT_ASPECT = "5:3"
 DEFAULT_FIGURE_WIDTH_IN = 3.6
 DEFAULT_PLOTLY_WIDTH_PX = 600
@@ -275,6 +276,46 @@ def histogram_kwargs(mode: str) -> dict[str, bool]:
     return {"density": histogram_density(mode)}
 
 
+def plot_matplotlib_histogram(
+    ax,
+    data,
+    bins,
+    mode: str,
+    *,
+    unit: str = "Unit",
+    color: str = PALETTE[0],
+    label: str | None = None,
+    fill_alpha: float = HISTOGRAM_FILL_ALPHA,
+    linewidth: float = LINE_WIDTH,
+    **kwargs,
+):
+    """Draw a Tao Style histogram with a light fill and crisp outline."""
+
+    base_kwargs = histogram_kwargs(mode)
+    base_kwargs.update(kwargs)
+    fill = ax.hist(
+        data,
+        bins=bins,
+        histtype="stepfilled",
+        facecolor=color,
+        edgecolor="none",
+        alpha=fill_alpha,
+        label=None,
+        **base_kwargs,
+    )
+    outline = ax.hist(
+        data,
+        bins=bins,
+        histtype="step",
+        color=color,
+        linewidth=linewidth,
+        label=label,
+        **base_kwargs,
+    )
+    ax.set_ylabel(histogram_ylabel(mode, unit=unit))
+    return fill, outline
+
+
 def plotly_axis_style() -> dict[str, object]:
     """Return Tao Style axis settings for Plotly xaxes/yaxes."""
 
@@ -428,6 +469,7 @@ def main() -> None:
                     "gradients": GRADIENT_COLORMAPS,
                     "histogram": {
                         "y_modes": HISTOGRAM_Y_MODES,
+                        "fill_alpha": HISTOGRAM_FILL_ALPHA,
                         "labels": {
                             mode: histogram_ylabel(mode)
                             for mode in HISTOGRAM_Y_MODES

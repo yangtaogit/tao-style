@@ -22,7 +22,7 @@ The current repository location is only a development and validation workspace. 
 ## Plotting Workflow
 
 1. Read `references/style-profile.md` before choosing visual parameters.
-2. For scientific plots, read `references/scientific-plotting.md` and match the user's existing plotting stack. Prefer Python when the user leaves the stack open, but do not force Python when the task is already in R, MATLAB, Julia, C++, Gnuplot, LaTeX, or another tool.
+2. For scientific plots, read `references/scientific-plotting.md` and match the user's existing plotting stack. Default to Python/Matplotlib when the user leaves the stack open, but do not force Matplotlib when the task is already in R, MATLAB, Julia, C++, Gnuplot, LaTeX, Plotly, or another tool.
 3. Prefer styling at the source plotting layer, such as Matplotlib rcParams, Seaborn themes, Plotly templates, ggplot themes, MATLAB defaults, Makie themes, ROOT styles, or pgfplots settings, instead of post-processing rendered images.
 4. Apply typography, palette, line widths, marker sizes, tick style, legend placement, panel labels, and export settings consistently.
 5. Check that labels, units, legends, annotations, color scales, and tick text remain readable at the target output size.

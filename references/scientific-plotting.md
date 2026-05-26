@@ -6,11 +6,11 @@ Status: first active Tao Style module.
 
 Use this reference for research data plots, figure panels, publication graphics, and exploratory plots that may later become manuscript, report, or presentation figures.
 
-The skill is language-agnostic. Prefer Python when the user has not chosen a stack, because Python is Tao's default environment for plotting and validation. If the user's data, code, or workflow is already in another language, apply the same style principles in that language instead of translating the whole workflow without a reason.
+The skill is language-agnostic. Default to Python/Matplotlib when the user has not chosen a stack, because Python is Tao's default environment for plotting and validation and Matplotlib is Tao's default plotting backend. If the user's data, code, or workflow is already in another language or plotting library, apply the same style principles in that stack instead of translating the whole workflow without a reason.
 
 ## Backend Selection
 
-- Python: prefer Matplotlib for static publication figures; use Seaborn for statistical plot convenience when it does not obscure control; use Plotly only when interactive output is requested.
+- Python: use Matplotlib by default for static scientific figures; use Seaborn only for statistical plot convenience when it does not obscure control; use Plotly only when interactive output is requested.
 - R: use ggplot2 themes and scales that mirror the profile.
 - MATLAB: set root/default graphics properties or local axes properties.
 - Julia: use Makie or Plots themes matching the profile.
@@ -81,6 +81,7 @@ The skill is language-agnostic. Prefer Python when the user has not chosen a sta
 ## Markers and Error Bars
 
 - Use relatively small markers by default for binned or dense scientific data.
+- For dense 2D XY data, prefer line-only rendering and omit markers to avoid visual clutter from overcrowded points.
 - Start with Matplotlib marker size `3.2 pt` and marker edge width `0.7 pt`.
 - Increase marker size only when the figure is sparse or the output medium needs larger symbols.
 - For marker-only errorbar plots, keep error bar lines visually lighter than the data markers.
@@ -93,10 +94,13 @@ The skill is language-agnostic. Prefer Python when the user has not chosen a sta
 - Use `Probability Density [1/Unit]` when Tao asks for normalized histograms. The unit should be the inverse of the x-axis unit, for example `Probability Density [1/mm]`.
 - In Matplotlib, use `density=True` for `Probability Density [1/Unit]`.
 - Do not use bin probability (`bin count / total sample count`) unless Tao explicitly asks for probability per bin.
+- Render ordinary histograms as a line outline with a light fill color by default, for example Matplotlib `histtype="stepfilled"` with modest transparency.
+- Use marker + errorbar histogram-style points only for special cases, such as large bin widths, low statistics, or when the binned data need to be fitted and the per-bin uncertainty should be visible.
 
 ## Lines and Fits
 
 - Use line width `1.0 pt` for fitted curves and ordinary continuous curves by default.
+- Use line-only rendering for dense 2D data unless the user explicitly wants markers or the markers carry additional meaning.
 - When multiple fitted curves appear in the same plot, distinguish them with both color and line style. Use solid, dashed, dotted, then dash-dot as the default sequence.
 - Use the same color for a fitted curve and its corresponding data markers/error bars unless another mapping is specified.
 - Keep fitted curves visually secondary to the data points when judging fit quality; adjust line width or opacity if the fit overpowers markers/error bars.
@@ -111,10 +115,10 @@ The skill is language-agnostic. Prefer Python when the user has not chosen a sta
 
 ## Figure Aspect Ratio
 
-- If the user asks for a scientific plot and does not specify the output image width:height ratio, ask which ratio to use before final rendering.
-- Offer `1:1`, `3:2`, and `5:3` as the first choices because Tao commonly uses them.
+- For a single-plot canvas, use `5:3` as the default output width:height ratio when Tao does not specify otherwise.
+- Keep `1:1`, `3:2`, and `5:3` as the common ratio options when Tao asks to choose or compare.
 - Treat the ratio as the output figure or plotting-area width:height ratio, not as an equal data-unit aspect constraint.
-- Use `5:3` as the working default only for local tests or when the user explicitly wants the assistant to choose.
+- Multi-panel canvases are not constrained by the single-plot ratio rule. Choose the figure size and layout based on the number of panels, shared axes, label space, legend placement, and the data relationship.
 
 ## Python Starter
 
@@ -145,14 +149,13 @@ apply_matplotlib_log10_axis(ax, axis="y")
 
 This helper formats major log tick labels as ordinary text with Unicode superscripts, preserving the same font family as other axis tick labels.
 
-For histograms, ask for the y-axis mode first, then use the helper label/kwargs when available:
+For histograms, ask for the y-axis mode first, then use the helper when available:
 
 ```python
-from scripts.apply_tao_style import histogram_kwargs, histogram_ylabel
+from scripts.apply_tao_style import plot_matplotlib_histogram
 
 mode = "probability_density"  # or "count", after asking Tao
-ax.hist(data, bins=bins, **histogram_kwargs(mode))
-ax.set_ylabel(histogram_ylabel(mode, unit="mm"))
+plot_matplotlib_histogram(ax, data, bins, mode, unit="mm", color="#000080", label="Sample")
 ```
 
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:

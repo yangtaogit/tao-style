@@ -50,7 +50,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Margins: avoid clipped labels and overly tight legends.
 - Multi-panel spacing: TODO.
 - Shared axes: use when it improves comparison and does not hide important scale differences.
-- Aspect ratio: choose based on the data relationship, not only page fit.
+- Aspect ratio: use `5:3` by default for a single-plot canvas; multi-panel canvases should be sized by layout, label space, and data relationship rather than the single-plot default.
 - Annotations: keep them close to the data they describe and avoid covering important points.
 
 ## Generated Images and Diagrams

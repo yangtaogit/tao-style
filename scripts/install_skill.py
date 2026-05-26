@@ -26,6 +26,13 @@ def repo_root() -> Path:
 
 
 def default_skills_dir() -> Path:
+    return default_skills_dir_for_target("codex")
+
+
+def default_skills_dir_for_target(target: str) -> Path:
+    if target == "claude-code":
+        return Path.home() / ".claude" / "skills"
+
     codex_home = os.environ.get("CODEX_HOME")
     if codex_home:
         return Path(codex_home).expanduser() / "skills"
@@ -108,7 +115,16 @@ def symlink_install(root: Path, target: Path, *, force: bool, dry_run: bool) -> 
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Install or update the tao-style Codex Skill.")
+    parser = argparse.ArgumentParser(description="Install or update the tao-style Skill.")
+    parser.add_argument(
+        "--target",
+        choices=("codex", "claude-code", "all"),
+        default="codex",
+        help=(
+            "Tool target to install for. codex uses $CODEX_HOME/skills or ~/.codex/skills; "
+            "claude-code uses ~/.claude/skills; all installs to both default locations."
+        ),
+    )
     parser.add_argument(
         "--mode",
         choices=("copy", "symlink"),
@@ -118,8 +134,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--skills-dir",
         type=Path,
-        default=default_skills_dir(),
-        help="Directory that contains Codex skills. Defaults to $CODEX_HOME/skills or ~/.codex/skills.",
+        default=None,
+        help=(
+            "Override the directory that contains skills. Only valid for a single target. "
+            "For Claude Code project skills, pass a project .claude/skills directory here."
+        ),
     )
     parser.add_argument(
         "--force",
@@ -137,26 +156,37 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     root = repo_root()
-    skills_dir = args.skills_dir.expanduser()
-    target = skills_dir / SKILL_NAME
+
+    if args.skills_dir is not None and args.target == "all":
+        print("error: --skills-dir cannot be used with --target all", file=sys.stderr)
+        return 1
+
+    targets = ("codex", "claude-code") if args.target == "all" else (args.target,)
 
     try:
         validate_source(root)
         print(f"Source: {root}")
-        print(f"Target: {target}")
         print(f"Mode: {args.mode}")
-        if not args.dry_run:
-            skills_dir.mkdir(parents=True, exist_ok=True)
-        if args.mode == "copy":
-            copy_install(root, target, force=args.force, dry_run=args.dry_run)
-        else:
-            symlink_install(root, target, force=args.force, dry_run=args.dry_run)
+        for tool_target in targets:
+            skills_dir = (
+                args.skills_dir.expanduser()
+                if args.skills_dir is not None
+                else default_skills_dir_for_target(tool_target)
+            )
+            target = skills_dir / SKILL_NAME
+            print(f"Target ({tool_target}): {target}")
+            if not args.dry_run:
+                skills_dir.mkdir(parents=True, exist_ok=True)
+            if args.mode == "copy":
+                copy_install(root, target, force=args.force, dry_run=args.dry_run)
+            else:
+                symlink_install(root, target, force=args.force, dry_run=args.dry_run)
     except RuntimeError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
     action = "checked" if args.dry_run else "installed"
-    print(f"tao-style {action} at {target}")
+    print(f"tao-style {action} for {', '.join(targets)}")
     return 0
 
 
