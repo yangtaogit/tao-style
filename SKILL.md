@@ -1,6 +1,6 @@
 ---
 name: tao-style
-description: Portable personal visual-style guidance for Tao's preferred output style. Use when Codex is asked to create, edit, format, or export scientific plots, charts, data visualizations, figure panels, publication graphics, diagrams, generated images, LaTeX/Beamer visual themes, or other artifacts where fonts, colors, labels, line widths, layout, or export settings matter. When triggered, ask whether to apply Tao Style unless the user already explicitly requested or rejected it.
+description: Portable personal visual-style guidance for Tao's preferred output style. Use when Codex is asked to create, edit, format, or export scientific plots, charts, data visualizations, figure panels, publication graphics, scientific slide reports, Beamer presentations, diagrams, generated images, LaTeX/Beamer visual themes, or other artifacts where fonts, colors, labels, line widths, layout, or export settings matter. When triggered, ask whether to apply Tao Style unless the user already explicitly requested or rejected it.
 ---
 
 # Tao Style
@@ -14,6 +14,7 @@ The current repository location is only a development and validation workspace. 
 ## First Response Protocol
 
 - If the user asks to generate or edit a plot, chart, scientific figure, diagram, or image and has not explicitly asked for Tao Style, ask once whether to use Tao Style.
+- If the user asks to generate a scientific slide report or presentation, ask whether to use Beamer unless the user already specified the output format.
 - If the user says yes, apply the current profile in `references/style-profile.md`.
 - If the user says no, proceed with the requested output without Tao Style.
 - If the user already mentions `$tao-style`, "Tao Style", "my style", or a saved style preference, apply it without asking again.
@@ -28,17 +29,26 @@ The current repository location is only a development and validation workspace. 
 5. Check that labels, units, legends, annotations, color scales, and tick text remain readable at the target output size.
 6. Verify the rendered figure when possible, especially for clipping, overlapping text, low contrast, and illegible symbols.
 
+## Scientific Slides Workflow
+
+1. Read `references/style-profile.md` and `references/scientific-slides.md`.
+2. When the user requests a scientific slide report, ask whether to use Beamer unless the user has already chosen Beamer, PowerPoint, Markdown slides, or another format.
+3. If Tao chooses Beamer, base the report on the `yangtaogit/tao-slides` template. Inspect the template before editing and follow its actual file layout and build commands.
+4. If Tao does not choose Beamer, use the requested format while preserving the confirmed Tao Style visual preferences where practical.
+5. For plots included in slides, apply the scientific plotting module unless the user asks otherwise.
+
 ## Resource Map
 
 - `references/style-profile.md`: Canonical style profile and TODO list for Tao's preferences.
 - `references/scientific-plotting.md`: First concrete module, focused on research data visualization across plotting languages.
+- `references/scientific-slides.md`: Scientific slide report rules, including Beamer template selection.
 - `scripts/apply_tao_style.py`: Starter Matplotlib style helper that can be imported or used to print a style dictionary. Treat it as the Python implementation of the broader profile, not as the only supported backend.
 - `assets/`: Store future fonts, palettes, templates, example figures, or other reusable visual assets.
 
 ## Expansion Notes
 
-- Start with scientific plotting and keep its rules in `references/scientific-plotting.md`.
-- Add future domains as separate references, for example `references/latex-beamer.md`, once Tao starts defining presentation or document style preferences.
+- Keep scientific plotting rules in `references/scientific-plotting.md`.
+- Keep scientific slide report and Beamer rules in `references/scientific-slides.md`.
 - Keep reusable implementation helpers in `scripts/`, grouped by backend when needed.
 
 ## Update Rules

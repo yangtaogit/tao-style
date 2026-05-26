@@ -115,10 +115,14 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Figure Aspect Ratio
 
+- For a single-plot scientific figure, use `3.6 in` as the default physical width when Tao does not specify the target medium.
 - For a single-plot canvas, use `5:3` as the default output width:height ratio when Tao does not specify otherwise.
+- Therefore, the default single-plot figure size is `3.6 in x 2.16 in`.
+- With the same default width, `1:1` gives `3.6 in x 3.6 in`, and `3:2` gives `3.6 in x 2.4 in`.
 - Keep `1:1`, `3:2`, and `5:3` as the common ratio options when Tao asks to choose or compare.
 - Treat the ratio as the output figure or plotting-area width:height ratio, not as an equal data-unit aspect constraint.
 - Multi-panel canvases are not constrained by the single-plot ratio rule. Choose the figure size and layout based on the number of panels, shared axes, label space, legend placement, and the data relationship.
+- If the target medium has a known final figure width, such as a journal column, slide placeholder, poster panel, or report layout, confirm or infer that target width first and choose `figsize` so the figure is not heavily scaled later.
 
 ## Python Starter
 

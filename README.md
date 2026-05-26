@@ -1,14 +1,16 @@
 # Tao Style
 
-`Tao Style` 是一个个人 AI Skill，用来保存和复用 Tao 的作图与视觉格式偏好。当前阶段只维护科研绘图部分；后续可以继续扩展到 LaTeX Beamer、文档、示意图等其它输出风格。
+`Tao Style` 是一个个人 AI Skill，用来保存和复用 Tao 的作图与视觉格式偏好。当前已经维护科研绘图部分，并开始维护科研报告 / slides 风格；后续可以继续扩展到文档、示意图等其它输出风格。
 
 这个仓库是开发版 Skill 仓库，放在 WSL 下是为了方便调用 Python、C++ 等环境快速生成测试图。真正安装到 Codex 或 Claude Code 时，可以把它复制或链接到目标 `skills` 目录。
 
 ## 当前范围
 
-当前只维护科研绘图部分。科研数据绘图默认使用 Python/Matplotlib；风格规则保持语言无关，后续可迁移到 R、MATLAB、Julia、C++/ROOT、Plotly 或 LaTeX/pgfplots。
+当前科研绘图部分暂时完成，科研数据绘图默认使用 Python/Matplotlib；风格规则保持语言无关，后续可迁移到 R、MATLAB、Julia、C++/ROOT、Plotly 或 LaTeX/pgfplots。
 
-更完整的规则在 `references/style-profile.md` 和 `references/scientific-plotting.md` 中维护；Python helper 在 `scripts/apply_tao_style.py` 中维护。
+科研报告 / slides 部分刚开始维护。生成 slides 报告时，如果用户没有指定格式，Skill 应先询问是否使用 Beamer；如果使用 Beamer，应基于 `yangtaogit/tao-slides` 模板生成报告。
+
+更完整的规则在 `references/style-profile.md`、`references/scientific-plotting.md` 和 `references/scientific-slides.md` 中维护；Python helper 在 `scripts/apply_tao_style.py` 中维护。
 
 ## 已确认科研绘图规则
 
@@ -16,7 +18,7 @@
 - 字号：坐标轴标题 `9 pt`；tick 数字 `8 pt`；legend `8 pt`。
 - 坐标轴：默认封闭黑色坐标框；上下左右 spine 可见；tick 向内；顶部和右侧也显示 tick；坐标轴线宽 `1.0 pt`；主 tick 线宽 `1.0`；副 tick 线宽 `0.5`；默认不使用 grid。
 - 轴标题和单位：单位使用方括号格式 `Quantity [Unit]`，例如 `Bias Voltage [V]`、`Current [A]`。
-- 图像比例：单图画布默认使用 `5:3`；常用选项是 `1:1`、`3:2`、`5:3`。多图排列画布不受这个限制，应根据子图数量、排版和数据关系决定。
+- 图像尺寸和比例：单图科研图默认物理宽度 `3.6 in`，默认比例 `5:3`，即 `3.6 in × 2.16 in`；常用比例是 `1:1`、`3:2`、`5:3`。多图排列画布不受这个单图尺寸/比例限制，应根据子图数量、排版和数据关系决定。如果目标媒介有明确最终宽度，例如论文栏宽、slides 占位、poster panel 或报告版式，应先确认目标宽度再设定 `figsize`，避免后期大幅缩放。
 - Log 坐标：base-10 log 主刻度显示为 `10⁻⁶` 这类普通文本上标形式，不使用 Matplotlib mathtext；副 tick 保持可见，除非过于拥挤。
 - 颜色：偏好冷色调、暗蓝、柔和蓝、黑色、灰色。当前主色板为 Navy `#000080`、soft blue `#6CA6CD`、black `#000000`、gray `#808080`，muted red `#B04A4A` 仅作为低优先级强调色。
 - 颜色梯度：多曲线或有序数据优先使用暗蓝梯度或灰度梯度，避免彩虹色或高饱和多色梯度。
@@ -25,6 +27,14 @@
 - Legend：框内 legend 不加边框；曲线很多或遮挡数据时放到图框外右侧，竖向单列排列，并使用与坐标轴一致的黑色 `1.0 pt` 边框。
 - 直方图：绘制前必须询问 y 轴使用 raw `Count` 还是归一化 `Probability Density [1/Unit]`。默认使用线条轮廓加浅填充色；只有 bin 宽较大、统计量较低或需要拟合并展示每个 bin 的不确定度时，才使用 marker + errorbar 形式。
 - 输出：线图和科研图优先保存矢量格式；README/web 预览 SVG 可将文字转路径以保证跨机器显示一致；正式可编辑 SVG/PDF 应保留文字但需要确认目标环境有对应字体。
+
+## 已确认科研报告 / Slides 规则
+
+- 生成科研 slides 报告时，如果没有指定输出格式，应先询问是否使用 Beamer。
+- 如果使用 Beamer，应基于 `yangtaogit/tao-slides` 模板生成报告：`https://github.com/yangtaogit/tao-slides`。
+- 生成前应先获取或定位模板，检查模板的 README、示例、主题文件和构建命令，再按实际结构生成；不要凭空假设模板文件名或命令。
+- 应在模板副本或新的报告项目目录中生成内容，不直接修改模板源，除非明确要求修改模板。
+- slides 中的新科研图仍应遵守 Tao Style 科研绘图规则。
 
 ## 绘图风格样例
 
@@ -159,6 +169,7 @@ TaoStyle/
 ├── agents/openai.yaml               # Codex UI 元数据
 ├── references/style-profile.md      # Tao Style 总体偏好
 ├── references/scientific-plotting.md # 科研绘图规则
+├── references/scientific-slides.md   # 科研报告 / slides 与 Beamer 规则
 ├── scripts/apply_tao_style.py       # Python 绘图风格 helper
 ├── scripts/install_skill.py         # 安装/更新脚本
 ├── example/                         # 可提交的绘图风格样例脚本与 SVG 输出
@@ -182,6 +193,7 @@ TaoStyle/
 
 - 新确认的风格偏好优先写入 `references/style-profile.md`。
 - 科研绘图细节写入 `references/scientific-plotting.md`。
+- 科研报告 / slides 和 Beamer 细节写入 `references/scientific-slides.md`。
 - 可复用、可执行的确定性逻辑写入 `scripts/apply_tao_style.py`。
 - 可提交的风格展示图放在 `example/`，用于 README 和长期对比。
 - 测试脚本和输出图放在 `test/`，用于迭代视觉效果，不作为正式安装内容。

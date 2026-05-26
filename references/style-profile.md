@@ -4,7 +4,8 @@ Status: draft template. Replace TODO entries as preferences are confirmed.
 
 ## Invocation
 
-- Ask whether to use Tao Style when the user requests a plot, figure, diagram, or generated image and has not already opted in or out.
+- Ask whether to use Tao Style when the user requests a plot, figure, diagram, generated image, or scientific slide report and has not already opted in or out.
+- For scientific slide reports, ask whether to use Beamer when the output format is not already specified.
 - Apply Tao Style directly when the user invokes `$tao-style`, says "Tao Style", or asks for "my style".
 - If a preference is unknown, prefer a clean publication-style default and note the assumption briefly.
 
@@ -50,7 +51,8 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Margins: avoid clipped labels and overly tight legends.
 - Multi-panel spacing: TODO.
 - Shared axes: use when it improves comparison and does not hide important scale differences.
-- Aspect ratio: use `5:3` by default for a single-plot canvas; multi-panel canvases should be sized by layout, label space, and data relationship rather than the single-plot default.
+- Figure size: use `3.6 in` as the default single-plot width when the target medium is not specified.
+- Aspect ratio: use `5:3` by default for a single-plot canvas, giving `3.6 in x 2.16 in`; multi-panel canvases should be sized by layout, label space, and data relationship rather than the single-plot default.
 - Annotations: keep them close to the data they describe and avoid covering important points.
 
 ## Generated Images and Diagrams
@@ -62,16 +64,15 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Text in generated images: avoid unless necessary; if necessary, verify spelling and legibility.
 - Scientific diagrams: prioritize clarity, correct labels, and clean spatial hierarchy over decoration.
 
-## LaTeX and Beamer
+## Scientific Slides and Beamer
 
-- Status: future module.
-- Beamer theme: TODO.
+- Status: active initial module. See `references/scientific-slides.md`.
+- Beamer template: use `https://github.com/yangtaogit/tao-slides` when Tao chooses Beamer for a scientific slide report.
 - Font stack: TODO.
 - Math style: TODO.
 - Color theme: TODO.
 - Figure/table caption style: TODO.
 - Code block style: TODO.
-- Once this area becomes active, create `references/latex-beamer.md` and keep only cross-cutting preferences here.
 
 ## Matplotlib Starter Defaults
 
@@ -83,4 +84,4 @@ Use `scripts/apply_tao_style.py` as a conservative starting point for Matplotlib
 - TODO: Confirm color palette and colormap preferences.
 - TODO: Confirm line, marker, and axis styling.
 - TODO: Add example figures that represent the desired style.
-- TODO: Define LaTeX Beamer style after the scientific plotting module is usable.
+- TODO: Expand scientific slide and Beamer style after testing `yangtaogit/tao-slides` on real reports.
