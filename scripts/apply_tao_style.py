@@ -289,7 +289,7 @@ def plot_matplotlib_histogram(
     linewidth: float = LINE_WIDTH,
     **kwargs,
 ):
-    """Draw a Tao Style histogram with a light fill and crisp outline."""
+    """Draw a Tao Style histogram as bin-edge steps with light fill."""
 
     base_kwargs = histogram_kwargs(mode)
     base_kwargs.update(kwargs)

@@ -94,7 +94,9 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Use `Probability Density [1/Unit]` when Tao asks for normalized histograms. The unit should be the inverse of the x-axis unit, for example `Probability Density [1/mm]`.
 - In Matplotlib, use `density=True` for `Probability Density [1/Unit]`.
 - Do not use bin probability (`bin count / total sample count`) unless Tao explicitly asks for probability per bin.
-- Render ordinary histograms as a line outline with a light fill color by default, for example Matplotlib `histtype="stepfilled"` with modest transparency.
+- Render ordinary histograms as a stepped bin outline with a light fill color by default. This means tracing the outer edges of the histogram bins, not drawing a line through bin centers.
+- In Matplotlib, use `histtype="stepfilled"` for the fill and, when a crisp boundary is needed, overlay `histtype="step"` with the same bin edges.
+- Do not represent a default histogram as a connected line plot of bin-center values. Use bin-center marker/line/errorbar plots only for special binned-data cases.
 - Use marker + errorbar histogram-style points only for special cases, such as large bin widths, low statistics, or when the binned data need to be fitted and the per-bin uncertainty should be visible.
 
 ## Lines and Fits
@@ -161,6 +163,8 @@ from scripts.apply_tao_style import plot_matplotlib_histogram
 mode = "probability_density"  # or "count", after asking Tao
 plot_matplotlib_histogram(ax, data, bins, mode, unit="mm", color="#000080", label="Sample")
 ```
+
+This helper draws the histogram as bin-edge steps with light fill; it does not connect bin centers.
 
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
 
