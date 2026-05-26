@@ -33,7 +33,7 @@ Detailed rules are maintained in `references/style-profile.md`, `references/scie
 - Markers and error bars: default marker size is `3.2 pt`; marker edge width is `0.7 pt`; error-bar line width is `0.6 pt`; cap size is `1.6 pt`.
 - Lines and fitting: regular continuous curves and fitted curves default to a line width of `1.0 pt`. For dense two-dimensional XY data, prefer line-only plots to avoid overcrowded markers. Multiple fitted curves should be distinguished by both color and line style, with the default order solid, dashed, dotted, and dash-dot.
 - Legends: legends inside the plotting box should not have a frame. If many curves are present or the legend overlaps the data, place the legend outside the right side of the axes as a vertical single column, with a black `1.0 pt` frame matching the axis box.
-- Histograms: before plotting, ask whether the y-axis should be raw `Count` or normalized `Probability Density [1/Unit]`. The default histogram style is a stepped bin outline with a light fill, meaning the outline follows bin edges. It is not a line connecting bin centers. Use marker + errorbar or bin-center line styles only for special cases such as wide bins, low statistics, or fitted binned data with uncertainty shown for each bin.
+- Histograms: before plotting, ask whether the y-axis should be raw `Count` or normalized `Probability Density [1/Unit]`. The default histogram style is a stepped bin outline with a light fill, meaning the outline follows bin edges. It is not a line connecting bin centers. Use marker + errorbar only for special cases such as wide bins, low statistics, or fitted binned data with uncertainty shown for each bin.
 - Output: line plots and scientific figures should prefer vector formats. SVGs shown in README/web previews may convert text to paths for cross-machine consistency. Formal editable SVG/PDF output may keep editable text, but the target environment must have the required Helvetica-compatible and math fonts.
 
 ## Confirmed Scientific Report / Slides Rules
@@ -236,7 +236,7 @@ If the Skill is not explicitly mentioned but the task is to generate or revise a
 - Marker 和 error bar：默认 marker size `3.2 pt`，marker edge width `0.7 pt`；error bar line width `0.6 pt`，cap size `1.6 pt`。
 - 线条和拟合：普通连续曲线和拟合曲线默认 line width `1.0 pt`；二维 XY 数据点很密集时优先只用线条表示，避免 marker 挤在一起；多条拟合曲线用颜色加线型区分，默认线型顺序为 solid、dashed、dotted、dash-dot。
 - Legend：框内 legend 不加边框；曲线很多或遮挡数据时放到图框外右侧，竖向单列排列，并使用与坐标轴一致的黑色 `1.0 pt` 边框。
-- 直方图：绘制前必须询问 y 轴使用 raw `Count` 还是归一化 `Probability Density [1/Unit]`。默认使用阶梯状 bin 外轮廓加浅填充色，也就是沿 bin 边界画直方图外框，不是连接各个 bin 中点的折线；只有 bin 宽较大、统计量较低或需要拟合并展示每个 bin 的不确定度时，才使用 marker + errorbar 或 bin-center line 形式。
+- 直方图：绘制前必须询问 y 轴使用 raw `Count` 还是归一化 `Probability Density [1/Unit]`。默认使用阶梯状 bin 外轮廓加浅填充色，也就是沿 bin 边界画直方图外框，不是连接各个 bin 中点的折线；只有 bin 宽较大、统计量较低或需要拟合并展示每个 bin 的不确定度时，才使用 marker + errorbar。
 - 输出：线图和科研图优先保存矢量格式；README/web 预览 SVG 可将文字转路径以保证跨机器显示一致；正式可编辑 SVG/PDF 应保留文字但需要确认目标环境有对应字体。
 
 ## 已确认科研报告 / Slides 规则

@@ -96,7 +96,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Do not use bin probability (`bin count / total sample count`) unless Tao explicitly asks for probability per bin.
 - Render ordinary histograms as a stepped bin outline with a light fill color by default. This means tracing the outer edges of the histogram bins, not drawing a line through bin centers.
 - In Matplotlib, use `histtype="stepfilled"` for the fill and, when a crisp boundary is needed, overlay `histtype="step"` with the same bin edges.
-- Do not represent a default histogram as a connected line plot of bin-center values. Use bin-center marker/line/errorbar plots only for special binned-data cases.
+- Do not represent a default histogram as a connected line plot of bin-center values. Use marker + errorbar plots only for special binned-data cases.
 - Use marker + errorbar histogram-style points only for special cases, such as large bin widths, low statistics, or when the binned data need to be fitted and the per-bin uncertainty should be visible.
 
 ## Lines and Fits
