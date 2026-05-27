@@ -115,26 +115,38 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Use the same frame color and line width as the XY axis box for outside legend borders: black, `1.0 pt`.
 - Prefer the outside-right legend for more than about five legend items, or earlier if the legend overlaps important data.
 
-## Figure Aspect Ratio
+## Axes Box Size and Aspect Ratio
 
-- For a single-plot scientific figure, use `3.6 in` as the default physical width when Tao does not specify the target medium.
-- For a single-plot canvas, use `5:3` as the default output width:height ratio when Tao does not specify otherwise.
-- Therefore, the default single-plot figure size is `3.6 in x 2.16 in`.
-- With the same default width, `1:1` gives `3.6 in x 3.6 in`, and `3:2` gives `3.6 in x 2.4 in`.
-- Keep `1:1`, `3:2`, and `5:3` as the common ratio options when Tao asks to choose or compare.
-- Treat the ratio as the output figure or plotting-area width:height ratio, not as an equal data-unit aspect constraint.
-- Multi-panel canvases are not constrained by the single-plot ratio rule. Choose the figure size and layout based on the number of panels, shared axes, label space, legend placement, and the data relationship.
-- If the target medium has a known final figure width, such as a journal column, slide placeholder, poster panel, or report layout, confirm or infer that target width first and choose `figsize` so the figure is not heavily scaled later.
+- For a single-plot scientific figure, fix the physical size of the axes box, meaning the black XY plotting frame, rather than fixing the whole output canvas.
+- Use `3.0 in` as the default axes-box width when Tao does not specify the target medium.
+- Use `5:3` as the default axes-box width:height ratio, so the default axes box is `3.0 in x 1.8 in`.
+- With the same default axes-box width, `1:1` gives `3.0 in x 3.0 in`, and `3:2` gives `3.0 in x 2.0 in`.
+- Keep `1:1`, `3:2`, and `5:3` as the common axes-box ratio options when Tao asks to choose or compare.
+- For default single-panel figures, also keep the exported canvas height fixed. With the default `5:3` axes box, the default canvas height is about `2.20 in`.
+- Use the configured left margin (`0.42 in`) as the initial layout margin, but do not treat it as a hard crop boundary. The exported canvas width may expand left or right as needed to include y tick labels, y-axis labels, outside legends, colorbars, and annotations.
+- Prefer concise y tick formatting when labels become very long, but never crop tick labels or axis titles just to keep a fixed left canvas edge. These outside elements must not change the final physical size of the XY plotting frame or the fixed vertical canvas height.
+- Keep vertical elements within the fixed top and bottom margins. If needed, adjust tick-label alignment, axis limits, or annotation placement rather than allowing the exported canvas height to vary.
+- Treat the ratio as the plotting-frame width:height ratio, not as an equal data-unit aspect constraint.
+- Multi-panel canvases are not constrained by the single-plot ratio rule. Choose the canvas size and panel axes-box sizes based on the number of panels, shared axes, label space, legend placement, and the data relationship.
+- If the target medium has a known final figure width, such as a journal column, slide placeholder, poster panel, or report layout, confirm or infer that target width first and choose the axes-box size and surrounding canvas so the figure is not heavily scaled later.
 
 ## Python Starter
 
 When using Matplotlib, import `scripts/apply_tao_style.py` if the skill files are available locally:
 
 ```python
-from scripts.apply_tao_style import figure_size, matplotlib_rcparams
+from scripts.apply_tao_style import (
+    axes_box_size,
+    matplotlib_rcparams,
+    save_fixed_height_figure,
+    set_fixed_axes_box,
+)
 
 plt.rcParams.update(matplotlib_rcparams())
-fig, ax = plt.subplots(figsize=figure_size("5:3"))
+fig, ax = plt.subplots(figsize=axes_box_size("5:3"))
+# After plotting labels/legends and before saving:
+set_fixed_axes_box(fig, ax, "5:3")
+save_fixed_height_figure(fig, "figure.svg")
 ```
 
 For legends, use the helper when available:

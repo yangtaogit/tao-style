@@ -30,7 +30,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 ## Important Scientific Plotting Rules
 
 - Default plotting backend: Python/Matplotlib unless the user's stack is already different.
-- Default single-plot size: `3.6 in x 2.16 in` (`5:3`).
+- Default single-plot axes box size: `3.0 in x 1.8 in` (`5:3`); keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
 - Common single-plot ratios: `1:1`, `3:2`, `5:3`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.

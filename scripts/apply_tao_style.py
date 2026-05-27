@@ -60,7 +60,12 @@ ERRORBAR_LINE_WIDTH = 0.6
 ERRORBAR_CAP_SIZE = 1.6
 HISTOGRAM_FILL_ALPHA = 0.28
 DEFAULT_ASPECT = "5:3"
-DEFAULT_FIGURE_WIDTH_IN = 3.6
+DEFAULT_AXES_WIDTH_IN = 3.0
+DEFAULT_CANVAS_LEFT_IN = 0.42
+DEFAULT_CANVAS_BOTTOM_IN = 0.35
+DEFAULT_CANVAS_RIGHT_IN = 0.08
+DEFAULT_CANVAS_TOP_IN = 0.05
+DEFAULT_FIGURE_WIDTH_IN = DEFAULT_AXES_WIDTH_IN
 DEFAULT_PLOTLY_WIDTH_PX = 600
 HISTOGRAM_Y_MODES = ("count", "probability_density")
 FIGURE_ASPECTS = {
@@ -86,13 +91,93 @@ SUPERSCRIPT_TRANSLATION = str.maketrans(
 )
 
 
-def figure_size(aspect: str = DEFAULT_ASPECT, width: float = DEFAULT_FIGURE_WIDTH_IN) -> tuple[float, float]:
-    """Return a Matplotlib figure size for a width:height aspect ratio."""
+def axes_box_size(aspect: str = DEFAULT_ASPECT, width: float = DEFAULT_AXES_WIDTH_IN) -> tuple[float, float]:
+    """Return the target physical size of the plotting axes box in inches."""
 
     if aspect not in FIGURE_ASPECTS:
         allowed = ", ".join(sorted(FIGURE_ASPECTS))
         raise ValueError(f"Unknown aspect ratio {aspect!r}. Allowed: {allowed}")
     return (width, width / FIGURE_ASPECTS[aspect])
+
+
+def figure_size(aspect: str = DEFAULT_ASPECT, width: float = DEFAULT_AXES_WIDTH_IN) -> tuple[float, float]:
+    """Return the legacy initial Matplotlib figure size for a target axes box.
+
+    Tao Style now fixes the axes box size, not the final canvas size. Use this
+    value as a convenient initial figure size, then call set_fixed_axes_box()
+    before saving so labels and outside legends can expand the canvas without
+    changing the plotting box.
+    """
+
+    return axes_box_size(aspect, width)
+
+
+def set_fixed_axes_box(
+    fig,
+    ax,
+    aspect: str = DEFAULT_ASPECT,
+    width: float = DEFAULT_AXES_WIDTH_IN,
+    *,
+    left: float = DEFAULT_CANVAS_LEFT_IN,
+    bottom: float = DEFAULT_CANVAS_BOTTOM_IN,
+    right: float = DEFAULT_CANVAS_RIGHT_IN,
+    top: float = DEFAULT_CANVAS_TOP_IN,
+):
+    """Resize a Matplotlib figure so the axes box has a fixed inch size.
+
+    The axes rectangle itself remains fixed, making the visual plotting box
+    consistent across figures. For single-panel figures, pair this with
+    save_fixed_height_figure() so the exported canvas height also stays fixed
+    while the canvas width can expand for long y labels or outside legends.
+    """
+
+    axes_width, axes_height = axes_box_size(aspect, width)
+    figure_width = left + axes_width + right
+    figure_height = bottom + axes_height + top
+    fig.set_size_inches(figure_width, figure_height, forward=True)
+    ax.set_position([
+        left / figure_width,
+        bottom / figure_height,
+        axes_width / figure_width,
+        axes_height / figure_height,
+    ])
+    return fig, ax
+
+
+def fixed_height_bbox_inches(fig, *, pad_inches: float | None = None):
+    """Return a savefig bbox with fixed canvas height and adaptive width.
+
+    The vertical export range is the full current figure height. The horizontal
+    range expands as needed to include artists found by Matplotlib's tight-bbox
+    pass, such as long y tick labels, y labels, outside legends, or colorbars.
+    """
+
+    from matplotlib import rcParams
+    from matplotlib.transforms import Bbox
+
+    if pad_inches is None:
+        pad_inches = float(rcParams.get("savefig.pad_inches", 0.03))
+
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    tight = fig.get_tightbbox(renderer)
+    figure_width, figure_height = fig.get_size_inches()
+    x0 = min(0.0, tight.x0 - pad_inches)
+    x1 = max(float(figure_width), tight.x1 + pad_inches)
+    return Bbox.from_extents(x0, 0.0, x1, float(figure_height))
+
+
+def save_fixed_height_figure(fig, filename, *, pad_inches: float | None = None, **kwargs):
+    """Save a Matplotlib figure with fixed height and adaptive width.
+
+    Use this after set_fixed_axes_box() for single-panel Tao Style figures. It
+    avoids vertical variation from bbox_inches='tight' while preserving horizontal
+    growth for long tick labels, outside legends, and colorbars.
+    """
+
+    kwargs.setdefault("bbox_inches", fixed_height_bbox_inches(fig, pad_inches=pad_inches))
+    kwargs.setdefault("pad_inches", 0.0)
+    return fig.savefig(filename, **kwargs)
 
 
 def plotly_dimensions(aspect: str = DEFAULT_ASPECT, width: int = DEFAULT_PLOTLY_WIDTH_PX) -> dict[str, int]:
@@ -461,6 +546,8 @@ def main() -> None:
             json.dumps(
                 {
                     "aspect": args.aspect,
+                    "axes_box_size": axes_box_size(args.aspect),
+                    "fixed_canvas_height": axes_box_size(args.aspect)[1] + DEFAULT_CANVAS_BOTTOM_IN + DEFAULT_CANVAS_TOP_IN,
                     "figure_size": figure_size(args.aspect),
                     "legend": {
                         "inside": matplotlib_legend_kwargs(False),

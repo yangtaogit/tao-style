@@ -19,7 +19,9 @@ from apply_tao_style import (  # noqa: E402
     PALETTE,
     apply_matplotlib_legend,
     apply_matplotlib_log10_axis,
-    figure_size,
+    axes_box_size,
+    save_fixed_height_figure,
+    set_fixed_axes_box,
     matplotlib_rcparams,
 )
 
@@ -30,7 +32,7 @@ def main() -> None:
     offsets = [85, 130, 175]
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
-    fig, ax = plt.subplots(figsize=figure_size("5:3"))
+    fig, ax = plt.subplots(figsize=axes_box_size("5:3"))
 
     for index, (scale, offset) in enumerate(zip(scales, offsets)):
         color = PALETTE[index]
@@ -53,8 +55,10 @@ def main() -> None:
     apply_matplotlib_log10_axis(ax, axis="y")
     apply_matplotlib_legend(ax)
 
+    set_fixed_axes_box(fig, ax, "5:3")
+
     output = Path(__file__).with_suffix(".svg")
-    fig.savefig(output)
+    save_fixed_height_figure(fig, output)
     plt.close(fig)
     print(output)
 
