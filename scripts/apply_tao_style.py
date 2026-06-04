@@ -24,9 +24,25 @@ PALETTE = [
     "#808080",
     "#B04A4A",
 ]
+BRIGHT_HIGH_CONTRAST_PALETTE = [
+    "#2A2F80",
+    "#3953A5",
+    "#4378BC",
+    "#6FCCDE",
+    "#99CB6F",
+    "#F6EB14",
+    "#F67F21",
+    "#EE2024",
+    "#7D1415",
+]
+CATEGORICAL_PALETTES = {
+    "default": PALETTE,
+    "bright-high-contrast": BRIGHT_HIGH_CONTRAST_PALETTE,
+}
 GRADIENT_COLORMAPS = {
     "dark-blue": ["#E6EEF6", "#AFCBE3", "#6CA6CD", "#2F5F9F", "#000080"],
     "gray": ["#EDEDED", "#C9C9C9", "#9A9A9A", "#5F5F5F", "#000000"],
+    "bright-high-contrast": BRIGHT_HIGH_CONTRAST_PALETTE,
 }
 
 FONT_FAMILY = [
@@ -469,6 +485,15 @@ def apply_plotly_style(
     return fig
 
 
+def categorical_palette(name: str = "default") -> list[str]:
+    """Return a preferred Tao Style categorical palette."""
+
+    if name not in CATEGORICAL_PALETTES:
+        allowed = ", ".join(sorted(CATEGORICAL_PALETTES))
+        raise ValueError(f"Unknown categorical palette {name!r}. Allowed: {allowed}")
+    return CATEGORICAL_PALETTES[name]
+
+
 def gradient_colormap(name: str = "dark-blue") -> list[str]:
     """Return a preferred Tao Style color gradient."""
 
@@ -533,6 +558,7 @@ def main() -> None:
                         "outside": plotly_legend_style(True),
                     },
                     "gradients": GRADIENT_COLORMAPS,
+                    "palettes": CATEGORICAL_PALETTES,
                 },
                 indent=2,
                 sort_keys=True,
@@ -554,6 +580,7 @@ def main() -> None:
                         "outside": matplotlib_legend_kwargs(True),
                     },
                     "gradients": GRADIENT_COLORMAPS,
+                    "palettes": CATEGORICAL_PALETTES,
                     "histogram": {
                         "y_modes": HISTOGRAM_Y_MODES,
                         "fill_alpha": HISTOGRAM_FILL_ALPHA,

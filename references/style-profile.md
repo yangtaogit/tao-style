@@ -40,7 +40,8 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 ## Color
 
 - Primary palette: Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, gray `#808080`, muted red `#B04A4A` as a lower-priority accent.
-- Sequential colormap: prefer dark-blue gradients and grayscale gradients for many curves or ordered series.
+- Optional bright high-contrast palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a bright, high-contrast alternative is desired.
+- Sequential colormap: prefer dark-blue gradients and grayscale gradients for many curves or ordered series; use the bright high-contrast gradient as an optional alternative for high-contrast colorbars or heatmaps.
 - Diverging colormap: TODO.
 - Categorical color count: TODO.
 - Accessibility: prefer colorblind-aware palettes and avoid encoding critical distinctions by color alone.

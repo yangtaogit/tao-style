@@ -68,15 +68,18 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Color
 
-- Prefer a cool, restrained categorical palette: dark blue/Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, and gray `#808080`.
+- Prefer a cool, restrained categorical palette by default: dark blue/Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, and gray `#808080`.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding.
 - When red is needed, prefer muted red `#B04A4A` over saturated red.
-- For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients.
-- Avoid rainbow-like or highly saturated multi-hue gradients unless the user specifically asks for them.
+- For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients by default.
+- Use the bright high-contrast palette as an optional alternative when Tao asks for stronger visual separation, a bright presentation-style figure, or a high-contrast colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Treat the bright high-contrast palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
+- Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the bright high-contrast palette.
 - Preferred dark-blue gradient: `#E6EEF6`, `#AFCBE3`, `#6CA6CD`, `#2F5F9F`, `#000080`.
 - Preferred grayscale gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
-- Use this list consistently across supported backends unless the user provides a data-specific color mapping.
-- Keep the list easy to extend as Tao adds more preferred colors.
+- Optional bright high-contrast gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Use these lists consistently across supported backends unless the user provides a data-specific color mapping.
+- Keep the lists easy to extend as Tao adds more preferred colors.
 
 ## Markers and Error Bars
 

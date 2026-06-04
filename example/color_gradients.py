@@ -62,16 +62,18 @@ def plot_curve_panel(ax, gradient_name: str, colors: list[str], count: int) -> N
 def main() -> None:
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
 
-    fig = plt.figure(figsize=figure_size(DEFAULT_ASPECT, width=6.0))
+    gradient_names = sorted(GRADIENT_COLORMAPS)
+    figure_width = max(6.0, 2.8 * len(gradient_names))
+    fig = plt.figure(figsize=figure_size(DEFAULT_ASPECT, width=figure_width))
     grid = fig.add_gridspec(
         nrows=3,
-        ncols=2,
+        ncols=len(gradient_names),
         height_ratios=[0.26, 1.0, 1.0],
         hspace=0.38,
         wspace=0.28,
     )
 
-    for column, name in enumerate(sorted(GRADIENT_COLORMAPS)):
+    for column, name in enumerate(gradient_names):
         colors = gradient_colormap(name)
         plot_gradient_row(fig.add_subplot(grid[0, column]), name, colors)
         plot_curve_panel(fig.add_subplot(grid[1:, column]), name, colors, count=10)
