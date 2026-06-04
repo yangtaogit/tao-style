@@ -119,10 +119,10 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 - For a single-plot scientific figure, fix the physical size of the axes box, meaning the black XY plotting frame, rather than fixing the whole output canvas.
 - Use `3.0 in` as the default axes-box width when Tao does not specify the target medium.
-- Use `5:3` as the default axes-box width:height ratio, so the default axes box is `3.0 in x 1.8 in`.
-- With the same default axes-box width, `1:1` gives `3.0 in x 3.0 in`, and `3:2` gives `3.0 in x 2.0 in`.
+- Use `3:2` as the default axes-box width:height ratio, so the default axes box is `3.0 in x 2.0 in`.
+- With the same default axes-box width, `1:1` gives `3.0 in x 3.0 in`, and `5:3` gives `3.0 in x 1.8 in`.
 - Keep `1:1`, `3:2`, and `5:3` as the common axes-box ratio options when Tao asks to choose or compare.
-- For default single-panel figures, also keep the exported canvas height fixed. With the default `5:3` axes box, the default canvas height is about `2.20 in`.
+- For default single-panel figures, also keep the exported canvas height fixed. With the default `3:2` axes box, the default canvas height is about `2.40 in`.
 - Use the configured left margin (`0.42 in`) as the initial layout margin, but do not treat it as a hard crop boundary. The exported canvas width may expand left or right as needed to include y tick labels, y-axis labels, outside legends, colorbars, and annotations.
 - Prefer concise y tick formatting when labels become very long, but never crop tick labels or axis titles just to keep a fixed left canvas edge. These outside elements must not change the final physical size of the XY plotting frame or the fixed vertical canvas height.
 - Keep vertical elements within the fixed top and bottom margins. If needed, adjust tick-label alignment, axis limits, or annotation placement rather than allowing the exported canvas height to vary.
@@ -143,9 +143,9 @@ from scripts.apply_tao_style import (
 )
 
 plt.rcParams.update(matplotlib_rcparams())
-fig, ax = plt.subplots(figsize=axes_box_size("5:3"))
+fig, ax = plt.subplots(figsize=axes_box_size())
 # After plotting labels/legends and before saving:
-set_fixed_axes_box(fig, ax, "5:3")
+set_fixed_axes_box(fig, ax)
 save_fixed_height_figure(fig, "figure.svg")
 ```
 
@@ -181,7 +181,7 @@ This helper draws the histogram as bin-edge steps with light fill; it does not c
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
 
 ```bash
-python scripts/apply_tao_style.py --aspect 5:3 --format json
+python scripts/apply_tao_style.py --aspect 3:2 --format json
 ```
 
 For Plotly, use the helper functions when available:
@@ -189,13 +189,13 @@ For Plotly, use the helper functions when available:
 ```python
 from scripts.apply_tao_style import apply_plotly_style
 
-fig = apply_plotly_style(fig, aspect="5:3")
+fig = apply_plotly_style(fig)
 ```
 
 Or inspect the Plotly axis/layout dictionary:
 
 ```bash
-python scripts/apply_tao_style.py --target plotly --aspect 5:3 --format json
+python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 ```
 
 ## Output Defaults
@@ -225,5 +225,4 @@ python scripts/apply_tao_style.py --target plotly --aspect 5:3 --format json
 - TODO: Confirm final default errorbar cap size and errorbar line width after visual review.
 - TODO: Confirm final default fitted-line width and opacity after visual review.
 - TODO: Confirm preferred major tick length and minor tick length.
-- TODO: Confirm whether `5:3` or `1:1` should be the default when Tao asks the assistant to choose.
 - TODO: Add representative input data and expected figure examples.

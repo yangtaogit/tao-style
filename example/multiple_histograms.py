@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
+    DEFAULT_ASPECT,
     PALETTE,
     apply_matplotlib_legend,
     axes_box_size,
@@ -38,7 +39,7 @@ def main() -> None:
     colors = [PALETTE[0], PALETTE[1], PALETTE[3], PALETTE[2]]
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
-    fig, ax = plt.subplots(figsize=axes_box_size("5:3"))
+    fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
 
     for data, label, color in zip(samples, labels, colors):
         plot_matplotlib_histogram(
@@ -57,7 +58,7 @@ def main() -> None:
     ax.minorticks_on()
     apply_matplotlib_legend(ax)
 
-    set_fixed_axes_box(fig, ax, "5:3")
+    set_fixed_axes_box(fig, ax, DEFAULT_ASPECT)
 
     output = Path(__file__).with_suffix(".svg")
     save_fixed_height_figure(fig, output)

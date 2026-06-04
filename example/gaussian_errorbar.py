@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
+    DEFAULT_ASPECT,
     ERRORBAR_CAP_SIZE,
     ERRORBAR_LINE_WIDTH,
     FIT_LINE_STYLES,
@@ -40,7 +41,7 @@ def main() -> None:
     x_fit = np.linspace(-4.5, 4.5, 400)
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
-    fig, ax = plt.subplots(figsize=axes_box_size("5:3"))
+    fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
 
     for index, sigma in enumerate(sigmas):
         color = PALETTE[index]
@@ -76,7 +77,7 @@ def main() -> None:
     ax.minorticks_on()
     apply_matplotlib_legend(ax)
 
-    set_fixed_axes_box(fig, ax, "5:3")
+    set_fixed_axes_box(fig, ax, DEFAULT_ASPECT)
 
     output = Path(__file__).with_suffix(".svg")
     save_fixed_height_figure(fig, output)

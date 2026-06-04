@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
+    DEFAULT_ASPECT,
     FIT_LINE_STYLES,
     LINE_WIDTH,
     MARKER_SIZE,
@@ -36,7 +37,7 @@ def main() -> None:
     ]
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
-    fig, ax = plt.subplots(figsize=axes_box_size("5:3"))
+    fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
 
     fit_x = np.linspace(0.0, 10.0, 300)
     for index, (slope, intercept, label) in enumerate(series):
@@ -68,7 +69,7 @@ def main() -> None:
     ax.minorticks_on()
     apply_matplotlib_legend(ax)
 
-    set_fixed_axes_box(fig, ax, "5:3")
+    set_fixed_axes_box(fig, ax, DEFAULT_ASPECT)
 
     output = Path(__file__).with_suffix(".svg")
     save_fixed_height_figure(fig, output)

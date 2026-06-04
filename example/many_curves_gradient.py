@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
+    DEFAULT_ASPECT,
     FIT_LINE_STYLES,
     GRADIENT_COLORMAPS,
     LINE_WIDTH,
@@ -33,7 +34,7 @@ def main() -> None:
     colors = [cmap(value) for value in np.linspace(0.18, 1.0, len(temperatures))]
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
-    fig, ax = plt.subplots(figsize=axes_box_size("5:3"))
+    fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
 
     for index, (temperature, color) in enumerate(zip(temperatures, colors)):
         amplitude = 0.34 + 0.0022 * (temperature - temperatures[0])
@@ -56,7 +57,7 @@ def main() -> None:
     ax.minorticks_on()
     apply_matplotlib_legend(ax)
 
-    set_fixed_axes_box(fig, ax, "5:3")
+    set_fixed_axes_box(fig, ax, DEFAULT_ASPECT)
 
     output = Path(__file__).with_suffix(".svg")
     save_fixed_height_figure(fig, output)
