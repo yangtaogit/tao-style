@@ -54,37 +54,37 @@ for script in example/*.py; do python3 "$script"; done
 
 The SVGs shown in this README save text as vector paths so browsers and machines without the exact fonts do not alter the appearance. Formal SVG files that require later text editing may keep editable text, but the target environment should have Helvetica-compatible fonts and the chosen math font installed.
 
-<table>
+<table width="100%">
   <tr>
-    <td>XY Data and Linear Fit</td>
+    <td width="50%">XY Data and Linear Fit</td>
     <td>Gaussian Error Bar</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="140"></td>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="140"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="160"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="160"></td>
   </tr>
   <tr>
-    <td>Log Axis</td>
+    <td width="50%">Log Axis</td>
     <td>Many Curves with External Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="140"></td>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="140"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="160"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="160"></td>
   </tr>
   <tr>
-    <td>Color Gradients</td>
+    <td width="50%">Color Gradients</td>
     <td>Bright High-Contrast Palette</td>
   </tr>
   <tr>
-    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="140"></td>
-    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="140"></td>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="160"></td>
+    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="160"></td>
   </tr>
   <tr>
-    <td>Multiple Filled Histograms</td>
+    <td width="50%">Multiple Filled Histograms</td>
     <td></td>
   </tr>
   <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="140"></td>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="160"></td>
     <td></td>
   </tr>
 </table>
@@ -265,37 +265,37 @@ for script in example/*.py; do python3 "$script"; done
 
 README 中展示的 SVG 会把文字保存为矢量路径，以避免浏览器或不同机器缺少字体时改变显示效果。正式需要后期编辑文字的 SVG 可以保留 editable text，但要确认目标环境安装了 Helvetica/兼容字体和数学字体。
 
-<table>
+<table width="100%">
   <tr>
-    <td>XY 离散数据与拟合</td>
+    <td width="50%">XY 离散数据与拟合</td>
     <td>高斯分布样本误差棒</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="140"></td>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="140"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="160"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="160"></td>
   </tr>
   <tr>
-    <td>Log 坐标</td>
+    <td width="50%">Log 坐标</td>
     <td>多曲线与外置 Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="140"></td>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="140"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="160"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="160"></td>
   </tr>
   <tr>
-    <td>颜色梯度</td>
+    <td width="50%">颜色梯度</td>
     <td>明亮高对比度配色</td>
   </tr>
   <tr>
-    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="140"></td>
-    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="140"></td>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="160"></td>
+    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="160"></td>
   </tr>
   <tr>
-    <td>多个直方图填充</td>
+    <td width="50%">多个直方图填充</td>
     <td></td>
   </tr>
   <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="140"></td>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="160"></td>
     <td></td>
   </tr>
 </table>
