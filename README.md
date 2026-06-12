@@ -60,31 +60,31 @@ The SVGs shown in this README save text as vector paths so browsers and machines
     <td>Gaussian Error Bar</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="160"></td>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="160"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">Log Axis</td>
     <td>Many Curves with External Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="160"></td>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="160"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">Color Gradients</td>
     <td>Bright High-Contrast Palette</td>
   </tr>
   <tr>
-    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="160"></td>
-    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="160"></td>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="190"></td>
+    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">Multiple Filled Histograms</td>
     <td></td>
   </tr>
   <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="160"></td>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
     <td></td>
   </tr>
 </table>
@@ -271,31 +271,31 @@ README 中展示的 SVG 会把文字保存为矢量路径，以避免浏览器�
     <td>高斯分布样本误差棒</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="160"></td>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="160"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">Log 坐标</td>
     <td>多曲线与外置 Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="160"></td>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="160"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">颜色梯度</td>
     <td>明亮高对比度配色</td>
   </tr>
   <tr>
-    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="160"></td>
-    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="160"></td>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="190"></td>
+    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">多个直方图填充</td>
     <td></td>
   </tr>
   <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="160"></td>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
     <td></td>
   </tr>
 </table>
