@@ -57,51 +57,35 @@ The SVGs shown in this README save text as vector paths so browsers and machines
 <table width="100%">
   <tr>
     <td width="50%">XY Data and Linear Fit</td>
-    <td width="50%">XY Data and Linear Fit - High Contrast</td>
+    <td>Gaussian Error Bar</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="200"></td>
-    <td><img src="example/xy_linear_fit_high_contrast.svg" alt="XY linear fit high-contrast example" height="200"></td>
-  </tr>
-  <tr>
-    <td width="50%">Gaussian Error Bar</td>
-    <td width="50%">Gaussian Error Bar - High Contrast</td>
-  </tr>
-  <tr>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="200"></td>
-    <td><img src="example/gaussian_errorbar_high_contrast.svg" alt="Gaussian error bar high-contrast example" height="200"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">Log Axis</td>
-    <td width="50%">Log Axis - High Contrast</td>
+    <td>Many Curves with External Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="200"></td>
-    <td><img src="example/log_axis_high_contrast.svg" alt="Log axis high-contrast example" height="200"></td>
-  </tr>
-  <tr>
-    <td width="50%">Many Curves with External Legend</td>
-    <td width="50%">Many Curves with External Legend - High Contrast</td>
-  </tr>
-  <tr>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="200"></td>
-    <td><img src="example/many_curves_gradient_high_contrast.svg" alt="Many curves gradient high-contrast example" height="200"></td>
-  </tr>
-  <tr>
-    <td width="50%">Multiple Filled Histograms</td>
-    <td width="50%">Multiple Filled Histograms - High Contrast</td>
-  </tr>
-  <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="200"></td>
-    <td><img src="example/multiple_histograms_high_contrast.svg" alt="Multiple filled histograms high-contrast example" height="200"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">Color Gradients</td>
-    <td width="50%">Bright High-Contrast Palette</td>
+    <td>Bright High-Contrast Palette</td>
   </tr>
   <tr>
-    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="200"></td>
-    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="200"></td>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="190"></td>
+    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="190"></td>
+  </tr>
+  <tr>
+    <td width="50%">Multiple Filled Histograms</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
+    <td></td>
   </tr>
 </table>
 
@@ -284,51 +268,35 @@ README 中展示的 SVG 会把文字保存为矢量路径，以避免浏览器�
 <table width="100%">
   <tr>
     <td width="50%">XY 离散数据与拟合</td>
-    <td width="50%">XY 离散数据与拟合 - 高对比度配色</td>
+    <td>高斯分布样本误差棒</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="200"></td>
-    <td><img src="example/xy_linear_fit_high_contrast.svg" alt="XY linear fit high-contrast example" height="200"></td>
-  </tr>
-  <tr>
-    <td width="50%">高斯分布样本误差棒</td>
-    <td width="50%">高斯分布样本误差棒 - 高对比度配色</td>
-  </tr>
-  <tr>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="200"></td>
-    <td><img src="example/gaussian_errorbar_high_contrast.svg" alt="Gaussian error bar high-contrast example" height="200"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">Log 坐标</td>
-    <td width="50%">Log 坐标 - 高对比度配色</td>
+    <td>多曲线与外置 Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="200"></td>
-    <td><img src="example/log_axis_high_contrast.svg" alt="Log axis high-contrast example" height="200"></td>
-  </tr>
-  <tr>
-    <td width="50%">多曲线与外置 Legend</td>
-    <td width="50%">多曲线与外置 Legend - 高对比度配色</td>
-  </tr>
-  <tr>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="200"></td>
-    <td><img src="example/many_curves_gradient_high_contrast.svg" alt="Many curves gradient high-contrast example" height="200"></td>
-  </tr>
-  <tr>
-    <td width="50%">多个直方图填充</td>
-    <td width="50%">多个直方图填充 - 高对比度配色</td>
-  </tr>
-  <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="200"></td>
-    <td><img src="example/multiple_histograms_high_contrast.svg" alt="Multiple filled histograms high-contrast example" height="200"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">颜色梯度</td>
-    <td width="50%">明亮高对比度配色</td>
+    <td>明亮高对比度配色</td>
   </tr>
   <tr>
-    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="200"></td>
-    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="200"></td>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="190"></td>
+    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="190"></td>
+  </tr>
+  <tr>
+    <td width="50%">多个直方图填充</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
+    <td></td>
   </tr>
 </table>
 
