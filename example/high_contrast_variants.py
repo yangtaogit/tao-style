@@ -11,7 +11,6 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 
 
@@ -23,7 +22,6 @@ from apply_tao_style import (  # noqa: E402
     ERRORBAR_CAP_SIZE,
     ERRORBAR_LINE_WIDTH,
     FIT_LINE_STYLES,
-    GRADIENT_COLORMAPS,
     LINE_WIDTH,
     MARKER_SIZE,
     apply_matplotlib_legend,
@@ -37,7 +35,19 @@ from apply_tao_style import (  # noqa: E402
 )
 
 
-PALETTE = categorical_palette("bright-high-contrast")
+BRIGHT_HIGH_CONTRAST = categorical_palette("bright-high-contrast")
+# Example priority order: blue -> green -> red first, then secondary colors.
+PALETTE = [
+    BRIGHT_HIGH_CONTRAST[0],  # deep blue
+    BRIGHT_HIGH_CONTRAST[4],  # green
+    BRIGHT_HIGH_CONTRAST[7],  # red
+    BRIGHT_HIGH_CONTRAST[2],  # blue
+    BRIGHT_HIGH_CONTRAST[8],  # dark red
+    BRIGHT_HIGH_CONTRAST[3],  # cyan
+    BRIGHT_HIGH_CONTRAST[1],  # medium blue
+    BRIGHT_HIGH_CONTRAST[5],  # yellow
+    BRIGHT_HIGH_CONTRAST[6],  # orange
+]
 
 
 def save_single_panel(fig, ax, filename: str) -> None:
@@ -134,8 +144,7 @@ def log_axis() -> None:
 def many_curves_gradient() -> None:
     x = np.linspace(0, 12, 320)
     temperatures = np.arange(80, 241, 20)
-    cmap = LinearSegmentedColormap.from_list("tao_bright_high_contrast", GRADIENT_COLORMAPS["bright-high-contrast"])
-    colors = [cmap(value) for value in np.linspace(0.04, 1.0, len(temperatures))]
+    colors = [PALETTE[index % len(PALETTE)] for index in range(len(temperatures))]
     fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
 
     for index, (temperature, color) in enumerate(zip(temperatures, colors)):
