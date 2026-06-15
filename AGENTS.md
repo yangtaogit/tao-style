@@ -7,7 +7,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Repository path: `/home/tao/git_repository/tao-style`
 - Remote: `git@github.com:yangtaogit/tao-style.git`
 - Skill name: `tao-style`
-- Current release tag: `v0.1`
+- Release tags: check `git tag --sort=-creatordate` for the current tagged release; do not assume this note is authoritative.
 - Main installed WSL targets:
   - Codex: `/home/tao/.codex/skills/tao-style`
   - Claude Code: `/home/tao/.claude/skills/tao-style`
@@ -30,7 +30,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 ## Important Scientific Plotting Rules
 
 - Default plotting backend: Python/Matplotlib unless the user's stack is already different.
-- Default single-plot axes box size: `3.0 in x 1.8 in` (`5:3`); keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
+- Default single-plot axes box size: `3.0 in x 2.0 in` (`3:2`); keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
 - Common single-plot ratios: `1:1`, `3:2`, `5:3`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
@@ -41,22 +41,83 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Default histograms use stepped bin outlines with light fill, not connected bin-center lines.
 - Dense 2D data should usually use line-only rendering to avoid marker crowding.
 - Preferred palette: Navy `#000080`, soft blue `#6CA6CD`, black, gray, muted red as low-priority accent.
+- Optional bright high-contrast palette exists for special cases; it should not replace the default cool palette unless Tao asks.
+
+## README Audience Policy
+
+- Keep `README.md` user-facing: describe what the Skill does, show examples, and explain installation, updating, and usage.
+- Do not put personal development notes, local WSL paths, validation workflows, repository maintenance rules, or release-management reminders in `README.md` unless they are necessary for users.
+- Put agent/developer-facing instructions in `AGENTS.md` instead.
+- When the Skill changes, update corresponding user-facing README content only if public behavior, installation, usage, or documented style output changes.
+- Keep README English first; keep the Chinese version synchronized when changing user-facing content.
 
 ## Development Workflow
 
 - Keep reusable rules in `references/`.
 - Keep deterministic plotting helpers in `scripts/apply_tao_style.py`.
 - Keep formal examples in `example/`; keep throwaway visual tests in `test/`.
-- When the Skill changes, update the corresponding README content in the same work session, including the English default section and Chinese version when user-facing behavior or documented rules change.
 - `test/` is ignored by git and is not installed.
-- Validate after Skill edits:
+- When a visual preference is confirmed, update `references/style-profile.md` and the relevant module reference.
+- When scientific plotting behavior changes, update `references/scientific-plotting.md` and regenerate affected examples.
+- When scientific slide behavior changes, update `references/scientific-slides.md`.
+- When helper behavior changes, update `scripts/apply_tao_style.py` and run representative examples.
+- Do not commit throwaway files from `test/`.
+
+## Repository Layout
+
+```text
+tao-style/
+|-- SKILL.md                          # Skill entry point and usage workflow
+|-- AGENTS.md                         # Project guidance for coding agents
+|-- agents/openai.yaml                # Codex UI metadata
+|-- references/style-profile.md       # Overall τ Style preferences
+|-- references/scientific-plotting.md # Scientific plotting rules
+|-- references/scientific-slides.md   # Scientific report / slides and Beamer rules
+|-- scripts/apply_tao_style.py        # Python plotting style helper
+|-- scripts/install_skill.py          # Install/update script
+|-- example/                          # Committed plotting examples and SVG outputs
+|-- assets/                           # Assets such as logo files
+`-- test/                             # Local debugging scripts and outputs; ignored by git
+```
+
+A `copy` installation copies `SKILL.md`, `agents/`, `assets/`, `references/`, and `scripts/`. `README.md`, `example/`, and `test/` are development/support files and are not required at runtime. `agents/openai.yaml` is Codex UI metadata; in Claude Code it is only a supporting file and does not affect how Claude Code reads `SKILL.md`.
+
+## Local Validation
+
+Run Skill validation after changing `SKILL.md`, `references/`, `scripts/`, install behavior, or agent metadata:
 
 ```bash
 python3 /mnt/c/Users/yangt/.codex/skills/.system/skill-creator/scripts/quick_validate.py /home/tao/git_repository/tao-style
 ```
 
-- Update WSL-installed skills after changes:
+Compile Python helpers and examples when scripts change:
+
+```bash
+python3 -m py_compile scripts/apply_tao_style.py example/*.py
+```
+
+Regenerate examples when plotting behavior changes:
+
+```bash
+for script in example/*.py; do python3 "$script"; done
+```
+
+## Local Install And Sync
+
+Update WSL-installed skills after copy-installable changes:
 
 ```bash
 python3 scripts/install_skill.py --target all --mode copy --force
+```
+
+Useful Windows Codex Desktop target:
+
+```bash
+python3 scripts/install_skill.py --target codex --mode copy --skills-dir /mnt/c/Users/yangt/.codex/skills --force
+```
+
+For local WSL debugging where edits should take effect immediately:
+
+```bash
+python3 scripts/install_skill.py --target claude-code --mode symlink --force
 ```
