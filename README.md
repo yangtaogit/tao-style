@@ -1,142 +1,20 @@
 # τ Style
 
 <p align="center">
-  <img src="assets/tao-style-logo.png" alt="tau Style logo" width="420">
+  <img src="assets/logo-style.svg" alt="tau Style logo" width="420">
 </p>
 
 <p align="center">
-  <a href="#chinese-version">Chinese Version / 中文版本</a>
+  <img alt="Skill: tao-style" src="https://img.shields.io/badge/Skill-tao--style-2A2F80">
+  <img alt="Scientific plotting" src="https://img.shields.io/badge/Scientific%20Plotting-Matplotlib-6CA6CD">
+  <img alt="Slides: Beamer" src="https://img.shields.io/badge/Slides-Beamer-808080">
+  <img alt="Codex" src="https://img.shields.io/badge/Codex-ready-000000">
+  <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-ready-B04A4A">
 </p>
 
-`τ style` is a personal AI Skill for preserving and reusing τ's plotting and visual-format preferences. The scientific plotting profile is currently maintained, and the scientific report / slides profile has started; future extensions may cover documents, schematic figures, and other visual outputs.
-
-Install this repository into Codex or Claude Code to reuse τ Style when generating scientific plots, slide reports, and related visual outputs.
-
-## Current Scope
-
-The scientific plotting part is provisionally complete. Scientific data plots default to Python/Matplotlib, while the style rules are language-agnostic and can later be ported to R, MATLAB, Julia, C++/ROOT, Plotly, or LaTeX/pgfplots.
-
-The scientific report / slides part is in its early stage. When generating slide reports and no output format is specified, the Skill should ask whether to use Beamer. If Beamer is selected, reports should be based on the `yangtaogit/tao-slides` template.
-
-Detailed rules are maintained in `references/style-profile.md`, `references/scientific-plotting.md`, and `references/scientific-slides.md`. The Python helper is maintained in `scripts/apply_tao_style.py`.
-
-## Confirmed Scientific Plotting Rules
-
-- Fonts: English text should prefer Helvetica; Chinese text should prefer Songti; mathematical expressions use Computer Modern. Regular axis labels, tick labels, legends, and annotations should avoid math fonts when possible so the visual style remains consistent.
-- Font sizes: axis labels use `9 pt`; tick labels use `8 pt`; legends use `8 pt`.
-- Axes: use a closed black axis box by default; all four spines are visible; ticks point inward; top and right ticks are shown; axis line width is `1.0 pt`; major tick width is `1.0`; minor tick width is `0.5`; grid lines are off by default.
-- Axis labels and units: units use square brackets, such as `Bias Voltage [V]` and `Current [A]`.
-- Axes box size and aspect ratio: single-panel scientific plots fix the physical size of the black XY axes box, not the whole canvas. The default axes-box width is `3.0 in` with a `3:2` ratio, i.e. `3.0 in x 2.0 in`. Common ratios are `1:1`, `3:2`, and `5:3`. The exported single-panel canvas height is fixed by default. The initial left layout margin is `0.42 in`, but the exported canvas width may expand left or right to include y tick labels, y-axis labels, outside legends, colorbars, and annotations without cropping. Multi-panel figures are not constrained by this single-panel rule; their canvas and panel boxes should be chosen according to the layout, number of panels, and data relationships. If the target medium has a fixed final width, such as a paper column, slide placeholder, poster panel, or report layout, confirm the target width before choosing the axes-box size and canvas.
-- Log axes: base-10 log major ticks should be displayed as plain-text superscripts such as `10^-6`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.
-- Colors: prefer cool tones, dark blue, soft blue, black, and gray. The current core palette is Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, gray `#808080`, and muted red `#B04A4A` as a low-priority accent color. An optional bright high-contrast palette is available for stronger visual separation or high-contrast colorbars: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
-- Color gradients: for many curves or ordered data, prefer dark-blue gradients or grayscale gradients by default. Use the bright high-contrast gradient only when a vivid alternative is desired.
-- Markers and error bars: default marker size is `3.2 pt`; marker edge width is `0.7 pt`; error-bar line width is `0.6 pt`; cap size is `1.6 pt`.
-- Lines and fitting: regular continuous curves and fitted curves default to a line width of `1.0 pt`. For dense two-dimensional XY data, prefer line-only plots to avoid overcrowded markers. Multiple fitted curves should be distinguished by both color and line style, with the default order solid, dashed, dotted, and dash-dot.
-- Legends: legends inside the plotting box should not have a frame. If many curves are present or the legend overlaps the data, place the legend outside the right side of the axes as a vertical single column, with a black `1.0 pt` frame matching the axis box.
-- Histograms: before plotting, ask whether the y-axis should be raw `Count` or normalized `Probability Density [1/Unit]`. The default histogram style is a stepped bin outline with a light fill, meaning the outline follows bin edges. It is not a line connecting bin centers. Use marker + errorbar only for special cases such as wide bins, low statistics, or fitted binned data with uncertainty shown for each bin.
-- Output: line plots and scientific figures should prefer vector formats. SVGs shown in README/web previews may convert text to paths for cross-machine consistency. Formal editable SVG/PDF output may keep editable text, but the target environment must have the required Helvetica-compatible and math fonts.
-
-## Confirmed Scientific Report / Slides Rules
-
-- When generating scientific slide reports and no output format is specified, ask whether to use Beamer.
-- If Beamer is used, base the report on the `yangtaogit/tao-slides` template: `https://github.com/yangtaogit/tao-slides`.
-- Before generating, fetch or locate the template and inspect its README, examples, theme files, and build commands. Do not assume template filenames or build commands without checking.
-- Generate content in a copied template or a new report project directory. Do not directly modify the template source unless explicitly requested.
-- New scientific figures used in slides should still follow the τ Style scientific plotting rules.
-
-## Plotting Examples
-
-The figures below show the current scientific plotting style.
-
-<table width="100%">
-  <tr>
-    <td width="50%">XY Data and Linear Fit</td>
-    <td>Gaussian Error Bar</td>
-  </tr>
-  <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
-  </tr>
-  <tr>
-    <td width="50%">Log Axis</td>
-    <td>Many Curves with External Legend</td>
-  </tr>
-  <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
-  </tr>
-  <tr>
-    <td width="50%">Color Gradients</td>
-    <td>Bright High-Contrast Palette</td>
-  </tr>
-  <tr>
-    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="190"></td>
-    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="190"></td>
-  </tr>
-  <tr>
-    <td width="50%">Multiple Filled Histograms</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
-    <td></td>
-  </tr>
-</table>
-
-## Installation
-
-Install the Skill as a `tao-style/` folder under the target AI tool's `skills` directory. The installer supports Codex and Claude Code targets, and can sync to both at once.
-
-Clone the repository and run the installer from the repository root:
-
-```bash
-git clone https://github.com/yangtaogit/tao-style.git
-cd tao-style
-```
-
-Install to Codex:
-
-```bash
-python3 scripts/install_skill.py --target codex --mode copy --force
-```
-
-Install to Claude Code:
-
-```bash
-python3 scripts/install_skill.py --target claude-code --mode copy --force
-```
-
-Install or update both Codex and Claude Code:
-
-```bash
-python3 scripts/install_skill.py --target all --mode copy --force
-```
-
-Use `--skills-dir /path/to/skills` to install to a custom Skill directory. Use `--dry-run` to preview the operation before copying files.
-
-## Updating
-
-To update an installed copy:
-
-```bash
-git pull
-python3 scripts/install_skill.py --target all --mode copy --force
-```
-
-If the Skill was installed with `--mode symlink`, pulling or editing this repository is usually enough because the installed Skill points back to the working tree.
-
-## Usage
-
-When generating a plot, explicitly mention the Skill if needed:
-
-```text
-Please use $tao-style to generate this scientific figure.
-```
-
-If the Skill is not explicitly mentioned but the task is to generate or revise a scientific figure, the intended behavior is to ask whether τ Style should be applied, then use the style after confirmation. In Claude Code, `/tao-style` can be used directly, or the Skill can be triggered automatically through its `description`.
-
-
-## Chinese Version
+<p align="center">
+  <a href="#english-version">English Version</a>
+</p>
 
 <a id="chinese-version"></a>
 
@@ -267,3 +145,133 @@ python3 scripts/install_skill.py --target all --mode copy --force
 
 如果没有显式提到，但任务是生成或修改科研绘图，Skill 的设计是先询问是否采用 τ Style，再根据你的确认应用风格。Claude Code 中可用 `/tao-style` 直接调用，也可以依赖 `description` 自动触发。
 
+## English Version
+
+<a id="english-version"></a>
+
+`τ style` is a personal AI Skill for preserving and reusing τ's plotting and visual-format preferences. The scientific plotting profile is currently maintained, and the scientific report / slides profile has started; future extensions may cover documents, schematic figures, and other visual outputs.
+
+Install this repository into Codex or Claude Code to reuse τ Style when generating scientific plots, slide reports, and related visual outputs.
+
+## Current Scope
+
+The scientific plotting part is provisionally complete. Scientific data plots default to Python/Matplotlib, while the style rules are language-agnostic and can later be ported to R, MATLAB, Julia, C++/ROOT, Plotly, or LaTeX/pgfplots.
+
+The scientific report / slides part is in its early stage. When generating slide reports and no output format is specified, the Skill should ask whether to use Beamer. If Beamer is selected, reports should be based on the `yangtaogit/tao-slides` template.
+
+Detailed rules are maintained in `references/style-profile.md`, `references/scientific-plotting.md`, and `references/scientific-slides.md`. The Python helper is maintained in `scripts/apply_tao_style.py`.
+
+## Confirmed Scientific Plotting Rules
+
+- Fonts: English text should prefer Helvetica; Chinese text should prefer Songti; mathematical expressions use Computer Modern. Regular axis labels, tick labels, legends, and annotations should avoid math fonts when possible so the visual style remains consistent.
+- Font sizes: axis labels use `9 pt`; tick labels use `8 pt`; legends use `8 pt`.
+- Axes: use a closed black axis box by default; all four spines are visible; ticks point inward; top and right ticks are shown; axis line width is `1.0 pt`; major tick width is `1.0`; minor tick width is `0.5`; grid lines are off by default.
+- Axis labels and units: units use square brackets, such as `Bias Voltage [V]` and `Current [A]`.
+- Axes box size and aspect ratio: single-panel scientific plots fix the physical size of the black XY axes box, not the whole canvas. The default axes-box width is `3.0 in` with a `3:2` ratio, i.e. `3.0 in x 2.0 in`. Common ratios are `1:1`, `3:2`, and `5:3`. The exported single-panel canvas height is fixed by default. The initial left layout margin is `0.42 in`, but the exported canvas width may expand left or right to include y tick labels, y-axis labels, outside legends, colorbars, and annotations without cropping. Multi-panel figures are not constrained by this single-panel rule; their canvas and panel boxes should be chosen according to the layout, number of panels, and data relationships. If the target medium has a fixed final width, such as a paper column, slide placeholder, poster panel, or report layout, confirm the target width before choosing the axes-box size and canvas.
+- Log axes: base-10 log major ticks should be displayed as plain-text superscripts such as `10^-6`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.
+- Colors: prefer cool tones, dark blue, soft blue, black, and gray. The current core palette is Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, gray `#808080`, and muted red `#B04A4A` as a low-priority accent color. An optional bright high-contrast palette is available for stronger visual separation or high-contrast colorbars: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Color gradients: for many curves or ordered data, prefer dark-blue gradients or grayscale gradients by default. Use the bright high-contrast gradient only when a vivid alternative is desired.
+- Markers and error bars: default marker size is `3.2 pt`; marker edge width is `0.7 pt`; error-bar line width is `0.6 pt`; cap size is `1.6 pt`.
+- Lines and fitting: regular continuous curves and fitted curves default to a line width of `1.0 pt`. For dense two-dimensional XY data, prefer line-only plots to avoid overcrowded markers. Multiple fitted curves should be distinguished by both color and line style, with the default order solid, dashed, dotted, and dash-dot.
+- Legends: legends inside the plotting box should not have a frame. If many curves are present or the legend overlaps the data, place the legend outside the right side of the axes as a vertical single column, with a black `1.0 pt` frame matching the axis box.
+- Histograms: before plotting, ask whether the y-axis should be raw `Count` or normalized `Probability Density [1/Unit]`. The default histogram style is a stepped bin outline with a light fill, meaning the outline follows bin edges. It is not a line connecting bin centers. Use marker + errorbar only for special cases such as wide bins, low statistics, or fitted binned data with uncertainty shown for each bin.
+- Output: line plots and scientific figures should prefer vector formats. SVGs shown in README/web previews may convert text to paths for cross-machine consistency. Formal editable SVG/PDF output may keep editable text, but the target environment must have the required Helvetica-compatible and math fonts.
+
+## Confirmed Scientific Report / Slides Rules
+
+- When generating scientific slide reports and no output format is specified, ask whether to use Beamer.
+- If Beamer is used, base the report on the `yangtaogit/tao-slides` template: `https://github.com/yangtaogit/tao-slides`.
+- Before generating, fetch or locate the template and inspect its README, examples, theme files, and build commands. Do not assume template filenames or build commands without checking.
+- Generate content in a copied template or a new report project directory. Do not directly modify the template source unless explicitly requested.
+- New scientific figures used in slides should still follow the τ Style scientific plotting rules.
+
+## Plotting Examples
+
+The figures below show the current scientific plotting style.
+
+<table width="100%">
+  <tr>
+    <td width="50%">XY Data and Linear Fit</td>
+    <td>Gaussian Error Bar</td>
+  </tr>
+  <tr>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
+  </tr>
+  <tr>
+    <td width="50%">Log Axis</td>
+    <td>Many Curves with External Legend</td>
+  </tr>
+  <tr>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
+  </tr>
+  <tr>
+    <td width="50%">Color Gradients</td>
+    <td>Bright High-Contrast Palette</td>
+  </tr>
+  <tr>
+    <td><img src="example/color_gradients.svg" alt="Color gradient example" height="190"></td>
+    <td><img src="example/bright_high_contrast_palette.svg" alt="Bright high-contrast palette example" height="190"></td>
+  </tr>
+  <tr>
+    <td width="50%">Multiple Filled Histograms</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
+    <td></td>
+  </tr>
+</table>
+
+## Installation
+
+Install the Skill as a `tao-style/` folder under the target AI tool's `skills` directory. The installer supports Codex and Claude Code targets, and can sync to both at once.
+
+Clone the repository and run the installer from the repository root:
+
+```bash
+git clone https://github.com/yangtaogit/tao-style.git
+cd tao-style
+```
+
+Install to Codex:
+
+```bash
+python3 scripts/install_skill.py --target codex --mode copy --force
+```
+
+Install to Claude Code:
+
+```bash
+python3 scripts/install_skill.py --target claude-code --mode copy --force
+```
+
+Install or update both Codex and Claude Code:
+
+```bash
+python3 scripts/install_skill.py --target all --mode copy --force
+```
+
+Use `--skills-dir /path/to/skills` to install to a custom Skill directory. Use `--dry-run` to preview the operation before copying files.
+
+## Updating
+
+To update an installed copy:
+
+```bash
+git pull
+python3 scripts/install_skill.py --target all --mode copy --force
+```
+
+If the Skill was installed with `--mode symlink`, pulling or editing this repository is usually enough because the installed Skill points back to the working tree.
+
+## Usage
+
+When generating a plot, explicitly mention the Skill if needed:
+
+```text
+Please use $tao-style to generate this scientific figure.
+```
+
+If the Skill is not explicitly mentioned but the task is to generate or revise a scientific figure, the intended behavior is to ask whether τ Style should be applied, then use the style after confirmation. In Claude Code, `/tao-style` can be used directly, or the Skill can be triggered automatically through its `description`.
