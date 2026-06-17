@@ -55,6 +55,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Shared axes: use when it improves comparison and does not hide important scale differences.
 - Axes box size: fix the physical size of the single-plot XY axes box rather than the whole canvas; use `2.7 in` as the default axes-box width when the target medium is not specified.
 - Aspect ratio: use `3:2` by default for a single-plot axes box, giving `2.7 in x 1.8 in`; keep the exported single-panel canvas height fixed by default; use `0.42 in` as the initial left layout margin, while allowing the exported canvas width to expand left or right to avoid cropped labels, legends, and colorbars. Multi-panel canvases should be sized by layout, panel axes boxes, label space, and data relationship rather than the single-plot default.
+- 3D axes: use perspective projection by default, keep light-gray pane backgrounds, show only major-tick grid lines as very thin gray dotted lines, do not add extra pane boundary lines or manual frames, use inward ticks, keep tick labels very close to axes and keep axis labels compact, and apply Tao Style fonts and sizes.
 - Annotations: keep them close to the data they describe and avoid covering important points.
 
 ## Generated Images and Diagrams

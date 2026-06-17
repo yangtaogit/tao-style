@@ -42,6 +42,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Dense 2D data should usually use line-only rendering to avoid marker crowding.
 - Preferred palette: deep blue `#2A2F80`, blue `#4378BC`, black `#000000`, gray `#808080`, muted red `#B04A4A` as low-priority accent.
 - Optional τ palette exists for special cases; it should not replace the default cool palette unless Tao asks.
+- 3D plots: use perspective projection `projection="persp"`; pane color `#F2F2F2`; major-tick grid only with color `#9E9E9E`, dotted linestyle `":"`, and linewidth `0.2 pt`; no extra pane boundary lines or manual frames; inward ticks using `inward_factor=0.0` and `outward_factor=0.2`; `tick_pad=-3.0`; `labelpad=-4.0`; right-side colorbars with example spacing `pad=0.16`, `fraction=0.035`, `shrink=0.72`.
 
 ## README Audience Policy
 

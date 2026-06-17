@@ -421,6 +421,49 @@ def plot_matplotlib_histogram(
     return fill, outline
 
 
+def apply_matplotlib_3d_style(
+    ax,
+    *,
+    xlabel: str = "X",
+    ylabel: str = "Y",
+    zlabel: str = "Z",
+    labelpad: float = -4.0,
+    tick_pad: float = -3.0,
+    projection: str = "persp",
+):
+    """Apply Tao typography to Matplotlib's default 3D axes style."""
+
+    if projection:
+        ax.set_proj_type(projection)
+
+    ax.set_xlabel(xlabel, labelpad=labelpad)
+    ax.set_ylabel(ylabel, labelpad=labelpad)
+    ax.set_zlabel(zlabel, labelpad=labelpad)
+    ax.tick_params(labelsize=TICK_LABEL_SIZE, colors=AXIS_COLOR, pad=tick_pad)
+    ax.grid(True)
+
+    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+        try:
+            axis.pane.set_facecolor((0.95, 0.95, 0.95, 1.0))
+            axis.pane.set_edgecolor((0.95, 0.95, 0.95, 1.0))
+        except AttributeError:
+            pass
+        try:
+            axis._axinfo["grid"]["color"] = (0.62, 0.62, 0.62, 1.0)
+            axis._axinfo["grid"]["linestyle"] = ":"
+            axis._axinfo["grid"]["linewidth"] = 0.2
+            axis._axinfo["tick"]["inward_factor"] = 0.0
+            axis._axinfo["tick"]["outward_factor"] = 0.2
+        except (AttributeError, KeyError):
+            pass
+
+    for label in (ax.xaxis.label, ax.yaxis.label, ax.zaxis.label):
+        label.set_size(AXIS_LABEL_SIZE)
+        label.set_color("#111111")
+
+    return ax
+
+
 def plotly_axis_style() -> dict[str, object]:
     """Return Tao Style axis settings for Plotly xaxes/yaxes."""
 

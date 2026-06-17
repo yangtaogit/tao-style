@@ -59,6 +59,17 @@
 - 单位使用方括号格式 `Quantity [Unit]`，例如 `Bias Voltage [V]`、`Current [A]`。
 - base-10 log 主刻度显示为 `10⁻⁶` 这类普通文本上标形式，不使用 Matplotlib mathtext；副 tick 保持可见，除非过于拥挤。
 
+### 三维坐标
+
+- 三维科研图默认使用 Matplotlib 默认的 3D 坐标框、pane 和 grid，包括 `X`、`Y`、`Z` 坐标轴。
+- 3D 图默认使用透视投影 `projection="persp"`，保留三面浅灰 pane 背景，pane 颜色为 `#F2F2F2`。
+- 3D 网格只显示主 tick 对应的灰色点线，颜色为 `#9E9E9E`，线型为 dotted `":"`，线宽为 `0.2 pt`；不额外添加 pane 边界线或手动画框。
+- 3D tick 方向与 2D 坐标统一为向内；Matplotlib 3D 中使用 `inward_factor=0.0`、`outward_factor=0.2`。
+- 3D tick 数字和坐标轴标题使用紧凑间距：`tick_pad=-3.0`，`labelpad=-4.0`。字体、字号和普通文本规则使用 τ Style。
+- 已知单位时继续使用方括号格式，例如 `X Position [mm]`。
+- 三维空间坐标之外的数值可用颜色梯度表示；colorbar 放在图框外右侧，并使用比 2D 图更大的间距。当前 3D example 使用 `pad=0.16`、`fraction=0.035`、`shrink=0.72`。
+- 三维图不受单图二维 XY 坐标框尺寸规则约束，应根据视角、数据主体和右侧 colorbar 自适应选择 canvas。
+
 ### 颜色
 
 - 默认偏好冷色调、暗蓝、柔和蓝、黑色和灰色。
@@ -109,6 +120,14 @@
   </tr>
   <tr>
     <td colspan="2"><img src="example/tau_palette.svg" alt="τ palette example" width="100%"></td>
+  </tr>
+  <tr>
+    <td width="50%">三维曲面图</td>
+    <td>4D 数据颜色映射</td>
+  </tr>
+  <tr>
+    <td><img src="example/surface_3d.svg" alt="3D surface example" height="190"></td>
+    <td><img src="example/data_4d.svg" alt="4D data color mapping example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">XY 离散数据与拟合</td>
@@ -233,6 +252,17 @@ python3 scripts/install_skill.py --target all --mode copy --force
 - Units use square brackets, such as `Bias Voltage [V]` and `Current [A]`.
 - Base-10 log major ticks should be displayed as plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.
 
+### 3D Axes
+
+- 3D scientific plots should use Matplotlib's default 3D coordinate box, panes, and grid by default, including the `X`, `Y`, and `Z` axes.
+- Use perspective projection by default, `projection="persp"`. Keep the three light-gray 3D pane backgrounds with pane color `#F2F2F2`.
+- Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E`, linestyle `":"`, and linewidth `0.2 pt`. Do not add extra pane boundary lines or manual frames.
+- Match 2D axes by using inward ticks. In Matplotlib 3D, use `inward_factor=0.0` and `outward_factor=0.2`.
+- Use compact 3D label spacing: `tick_pad=-3.0` and `labelpad=-4.0`. Apply τ Style typography: `9 pt` axis labels, `8 pt` tick labels, and ordinary text for regular coordinate labels instead of mathtext.
+- When units are known, keep the square-bracket format, such as `X Position [mm]`.
+- Use color gradients for scalar values in addition to 3D spatial coordinates; place the colorbar outside the right side of the axes with more padding than 2D plots. The current 3D examples use `pad=0.16`, `fraction=0.035`, and `shrink=0.72`.
+- 3D figures are not constrained by the single-panel 2D XY axes-box size rule. Choose the canvas according to the view angle, data body, and right-side colorbar.
+
 ### Colors
 
 - The default palette favors cool tones, dark blue, blue, black, and gray.
@@ -283,6 +313,14 @@ The figures below show the scientific plotting style.
   </tr>
   <tr>
     <td colspan="2"><img src="example/tau_palette.svg" alt="τ palette example" width="100%"></td>
+  </tr>
+  <tr>
+    <td width="50%">3D Surface</td>
+    <td>4D Data Color Mapping</td>
+  </tr>
+  <tr>
+    <td><img src="example/surface_3d.svg" alt="3D surface example" height="190"></td>
+    <td><img src="example/data_4d.svg" alt="4D data color mapping example" height="190"></td>
   </tr>
   <tr>
     <td width="50%">XY Data and Linear Fit</td>

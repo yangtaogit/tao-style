@@ -58,6 +58,19 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Use minor tick width `0.5`.
 - Do not use grid lines by default.
 
+## Three-Dimensional Axes
+
+- For 3D scientific plots, use Matplotlib's default 3D coordinate box, panes, and grid by default, including the visible X/Y/Z axes.
+- Use perspective projection by default, `projection="persp"`.
+- Keep the three light-gray 3D pane backgrounds with pane color `#F2F2F2` (`0.95, 0.95, 0.95, 1.0` in Matplotlib RGBA).
+- Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E` (`0.62, 0.62, 0.62, 1.0`), linestyle `":"`, and linewidth `0.2 pt`. Do not add extra pane boundary lines or manual frames.
+- Use inward ticks. In Matplotlib 3D, set `inward_factor=0.0` and `outward_factor=0.2` for the current Tao Style visual direction.
+- Use compact 3D spacing with `tick_pad=-3.0` and `labelpad=-4.0`.
+- Apply Tao Style typography to 3D axes: ordinary text font, axis labels at `9 pt`, tick labels at `8 pt`, and Computer Modern only for real mathematical expressions.
+- Use plain `X`, `Y`, and `Z` labels unless Tao specifies physical quantities and units. When units are known, keep the same square-bracket format as 2D axes, such as `X Position [mm]`.
+- For 3D scalar fields, surfaces, or 4D data shown as spatial coordinates plus a value, encode the value with the preferred gradients and place the colorbar outside the right side of the axes. Use larger spacing than 2D figures; the current examples use `pad=0.16`, `fraction=0.035`, and `shrink=0.72`.
+- 3D figures are not constrained by the single-panel 2D XY axes-box rule; choose the canvas, view angle, and colorbar placement so the full 3D coordinate box and data remain readable.
+
 ## Log Axes
 
 - For base-10 log axes, format major tick labels visually as `10^{n}` rather than `1eN` or plain exponent notation.
@@ -182,6 +195,15 @@ plot_matplotlib_histogram(ax, data, bins, mode, unit="mm", color="#2A2F80", labe
 ```
 
 This helper draws the histogram as bin-edge steps with light fill; it does not connect bin centers.
+
+For Matplotlib 3D axes, keep the default 3D box and apply Tao typography with the helper when available:
+
+```python
+from scripts.apply_tao_style import apply_matplotlib_3d_style
+
+ax = fig.add_subplot(111, projection="3d")
+apply_matplotlib_3d_style(ax, xlabel="X", ylabel="Y", zlabel="Z")
+```
 
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
 
