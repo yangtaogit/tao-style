@@ -68,16 +68,17 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Color
 
-- Prefer a cool, restrained categorical palette by default: dark blue/Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, and gray `#808080`.
+- Prefer a cool, restrained categorical palette by default: deep blue `#2A2F80`, blue `#4378BC`, black `#000000`, gray `#808080`, and muted red `#B04A4A` as a low-priority accent.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding.
 - When red is needed, prefer muted red `#B04A4A` over saturated red.
 - For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients by default.
-- Use the bright high-contrast palette as an optional alternative when Tao asks for stronger visual separation, a bright presentation-style figure, or a high-contrast colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
-- Treat the bright high-contrast palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
-- Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the bright high-contrast palette.
-- Preferred dark-blue gradient: `#E6EEF6`, `#AFCBE3`, `#6CA6CD`, `#2F5F9F`, `#000080`.
+- Use the τ palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Treat the τ palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
+- Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the τ palette.
+- Preferred dark-blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
 - Preferred grayscale gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
-- Optional bright high-contrast gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Optional τ gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Colorbars should sit outside the right side of the corresponding axes, use a vertical layout, and keep a black outline with the same line width as the axes box.
 - Use these lists consistently across supported backends unless the user provides a data-specific color mapping.
 - Keep the lists easy to extend as Tao adds more preferred colors.
 
@@ -114,16 +115,17 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 - For legends inside the plotting frame, do not draw a legend border.
 - When many curves make the legend large or likely to cover data, place the legend outside the plotting frame on the right.
-- Outside legends should be vertical, single-column, and framed.
+- Outside legends should prefer a vertical single-column layout and be framed.
+- If an outside single-column legend exceeds the axes-box height, split the entries evenly into multiple columns to keep the legend compact.
 - Use the same frame color and line width as the XY axis box for outside legend borders: black, `1.0 pt`.
 - Prefer the outside-right legend for more than about five legend items, or earlier if the legend overlaps important data.
 
 ## Axes Box Size and Aspect Ratio
 
 - For a single-plot scientific figure, fix the physical size of the axes box, meaning the black XY plotting frame, rather than fixing the whole output canvas.
-- Use `3.0 in` as the default axes-box width when Tao does not specify the target medium.
-- Use `3:2` as the default axes-box width:height ratio, so the default axes box is `3.0 in x 2.0 in`.
-- With the same default axes-box width, `1:1` gives `3.0 in x 3.0 in`, and `5:3` gives `3.0 in x 1.8 in`.
+- Use `2.7 in` as the default axes-box width when Tao does not specify the target medium.
+- Use `3:2` as the default axes-box width:height ratio, so the default axes box is `2.7 in x 1.8 in`.
+- With the same default axes-box width, `1:1` gives `2.7 in x 2.7 in`, and `5:3` gives `2.7 in x 1.62 in`.
 - Keep `1:1`, `3:2`, and `5:3` as the common axes-box ratio options when Tao asks to choose or compare.
 - For default single-panel figures, also keep the exported canvas height fixed. With the default `3:2` axes box, the default canvas height is about `2.40 in`.
 - Use the configured left margin (`0.42 in`) as the initial layout margin, but do not treat it as a hard crop boundary. The exported canvas width may expand left or right as needed to include y tick labels, y-axis labels, outside legends, colorbars, and annotations.
@@ -176,7 +178,7 @@ For histograms, ask for the y-axis mode first, then use the helper when availabl
 from scripts.apply_tao_style import plot_matplotlib_histogram
 
 mode = "probability_density"  # or "count", after asking Tao
-plot_matplotlib_histogram(ax, data, bins, mode, unit="mm", color="#000080", label="Sample")
+plot_matplotlib_histogram(ax, data, bins, mode, unit="mm", color="#2A2F80", label="Sample")
 ```
 
 This helper draws the histogram as bin-edge steps with light fill; it does not connect bin centers.
@@ -223,7 +225,7 @@ python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 ## Open Preferences
 
 - TODO: Confirm Tao's default journal and slide figure sizes.
-- TODO: Extend the common categorical color list beyond Navy, black, and gray.
+- TODO: Confirm whether to extend the categorical palette beyond the current five-color core.
 - TODO: Confirm sequential and diverging colormaps.
 - TODO: Confirm final default errorbar cap size and errorbar line width after visual review.
 - TODO: Confirm final default fitted-line width and opacity after visual review.

@@ -18,13 +18,13 @@ except ImportError:  # pragma: no cover - Matplotlib installs usually include cy
 
 
 PALETTE = [
-    "#000080",
-    "#6CA6CD",
+    "#2A2F80",
+    "#4378BC",
     "#000000",
     "#808080",
     "#B04A4A",
 ]
-BRIGHT_HIGH_CONTRAST_PALETTE = [
+TAU_PALETTE = [
     "#2A2F80",
     "#3953A5",
     "#4378BC",
@@ -37,12 +37,12 @@ BRIGHT_HIGH_CONTRAST_PALETTE = [
 ]
 CATEGORICAL_PALETTES = {
     "default": PALETTE,
-    "bright-high-contrast": BRIGHT_HIGH_CONTRAST_PALETTE,
+    "tau": TAU_PALETTE,
 }
 GRADIENT_COLORMAPS = {
-    "dark-blue": ["#E6EEF6", "#AFCBE3", "#6CA6CD", "#2F5F9F", "#000080"],
+    "dark-blue": ["#EEF1F8", "#C8D2EA", "#8799CF", "#4E5CA4", "#2A2F80"],
     "gray": ["#EDEDED", "#C9C9C9", "#9A9A9A", "#5F5F5F", "#000000"],
-    "bright-high-contrast": BRIGHT_HIGH_CONTRAST_PALETTE,
+    "tau": TAU_PALETTE,
 }
 
 FONT_FAMILY = [
@@ -65,6 +65,7 @@ AXIS_LABEL_SIZE = 9
 TICK_LABEL_SIZE = 8
 LEGEND_FONT_SIZE = 8
 LEGEND_MANY_ITEMS_THRESHOLD = 5
+LEGEND_OUTSIDE_MAX_ROWS = 8
 LINE_WIDTH = 1.0
 FIT_LINE_WIDTH = LINE_WIDTH
 FIT_LINE_STYLES = ["-", "--", ":", "-."]
@@ -76,7 +77,7 @@ ERRORBAR_LINE_WIDTH = 0.6
 ERRORBAR_CAP_SIZE = 1.6
 HISTOGRAM_FILL_ALPHA = 0.28
 DEFAULT_ASPECT = "3:2"
-DEFAULT_AXES_WIDTH_IN = 3.0
+DEFAULT_AXES_WIDTH_IN = 2.7
 DEFAULT_CANVAS_LEFT_IN = 0.42
 DEFAULT_CANVAS_BOTTOM_IN = 0.35
 DEFAULT_CANVAS_RIGHT_IN = 0.08
@@ -267,15 +268,18 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "none") 
     }
 
 
-def matplotlib_legend_kwargs(outside: bool = False) -> dict[str, object]:
+def matplotlib_legend_kwargs(outside: bool = False, n_items: int | None = None) -> dict[str, object]:
     """Return Tao Style legend keyword arguments for Matplotlib."""
 
     if outside:
+        ncol = 1
+        if n_items is not None and n_items > LEGEND_OUTSIDE_MAX_ROWS:
+            ncol = math.ceil(n_items / LEGEND_OUTSIDE_MAX_ROWS)
         return {
             "loc": "center left",
             "bbox_to_anchor": (1.02, 0.5),
             "frameon": True,
-            "ncol": 1,
+            "ncol": ncol,
             "borderaxespad": 0.0,
         }
     return {"frameon": False}
@@ -284,11 +288,11 @@ def matplotlib_legend_kwargs(outside: bool = False) -> dict[str, object]:
 def apply_matplotlib_legend(ax, outside=None, **kwargs):
     """Apply Tao Style legend placement and frame styling to a Matplotlib axes."""
 
+    handles, labels = ax.get_legend_handles_labels()
     if outside is None:
-        _, labels = ax.get_legend_handles_labels()
         outside = len(labels) > LEGEND_MANY_ITEMS_THRESHOLD
 
-    legend_kwargs = matplotlib_legend_kwargs(outside)
+    legend_kwargs = matplotlib_legend_kwargs(outside, len(labels))
     legend_kwargs.update(kwargs)
     legend = ax.legend(**legend_kwargs)
     if outside and legend is not None:

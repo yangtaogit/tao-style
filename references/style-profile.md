@@ -24,7 +24,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Title size: TODO.
 - Axis label size: TODO.
 - Tick label size: TODO.
-- Legend size: TODO.
+- Legend size: inside legends have no frame; many-curve legends should sit outside the right side of the axes, preferably as a vertical single column with a black `1.0 pt` frame. If an outside single-column legend exceeds the axes-box height, split entries evenly into multiple columns.
 - Annotation size: TODO.
 - Font embedding: prefer editable text in final SVG/PDF when the required fonts are available; use path-converted SVG text for README/web previews where stable cross-machine appearance is more important than text editability.
 
@@ -39,9 +39,10 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 
 ## Color
 
-- Primary palette: Navy `#000080`, soft blue `#6CA6CD`, black `#000000`, gray `#808080`, muted red `#B04A4A` as a lower-priority accent.
-- Optional bright high-contrast palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a bright, high-contrast alternative is desired.
-- Sequential colormap: prefer dark-blue gradients and grayscale gradients for many curves or ordered series; use the bright high-contrast gradient as an optional alternative for high-contrast colorbars or heatmaps.
+- Primary palette: deep blue `#2A2F80`, blue `#4378BC`, black `#000000`, gray `#808080`, muted red `#B04A4A` as a lower-priority accent.
+- Optional τ palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger τ color alternative is desired.
+- Sequential colormap: prefer dark-blue gradients and grayscale gradients for many curves or ordered series; use the τ gradient as an optional alternative for dedicated colorbars or heatmaps.
+- Colorbar placement: put colorbars outside the right side of the corresponding axes, vertical, with a black outline matching the axes box.
 - Diverging colormap: TODO.
 - Categorical color count: TODO.
 - Accessibility: prefer colorblind-aware palettes and avoid encoding critical distinctions by color alone.
@@ -52,8 +53,8 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Margins: avoid clipped labels and overly tight legends.
 - Multi-panel spacing: TODO.
 - Shared axes: use when it improves comparison and does not hide important scale differences.
-- Axes box size: fix the physical size of the single-plot XY axes box rather than the whole canvas; use `3.0 in` as the default axes-box width when the target medium is not specified.
-- Aspect ratio: use `3:2` by default for a single-plot axes box, giving `3.0 in x 2.0 in`; keep the exported single-panel canvas height fixed by default; use `0.42 in` as the initial left layout margin, while allowing the exported canvas width to expand left or right to avoid cropped labels, legends, and colorbars. Multi-panel canvases should be sized by layout, panel axes boxes, label space, and data relationship rather than the single-plot default.
+- Axes box size: fix the physical size of the single-plot XY axes box rather than the whole canvas; use `2.7 in` as the default axes-box width when the target medium is not specified.
+- Aspect ratio: use `3:2` by default for a single-plot axes box, giving `2.7 in x 1.8 in`; keep the exported single-panel canvas height fixed by default; use `0.42 in` as the initial left layout margin, while allowing the exported canvas width to expand left or right to avoid cropped labels, legends, and colorbars. Multi-panel canvases should be sized by layout, panel axes boxes, label space, and data relationship rather than the single-plot default.
 - Annotations: keep them close to the data they describe and avoid covering important points.
 
 ## Generated Images and Diagrams

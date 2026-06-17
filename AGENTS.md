@@ -30,7 +30,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 ## Important Scientific Plotting Rules
 
 - Default plotting backend: Python/Matplotlib unless the user's stack is already different.
-- Default single-plot axes box size: `3.0 in x 2.0 in` (`3:2`); keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
+- Default single-plot axes box size: `2.7 in x 1.8 in` (`3:2`); keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
 - Common single-plot ratios: `1:1`, `3:2`, `5:3`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
@@ -40,8 +40,8 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Histograms must ask y-axis mode first: raw `Count` or `Probability Density [1/Unit]`.
 - Default histograms use stepped bin outlines with light fill, not connected bin-center lines.
 - Dense 2D data should usually use line-only rendering to avoid marker crowding.
-- Preferred palette: Navy `#000080`, soft blue `#6CA6CD`, black, gray, muted red as low-priority accent.
-- Optional bright high-contrast palette exists for special cases; it should not replace the default cool palette unless Tao asks.
+- Preferred palette: deep blue `#2A2F80`, blue `#4378BC`, black `#000000`, gray `#808080`, muted red `#B04A4A` as low-priority accent.
+- Optional τ palette exists for special cases; it should not replace the default cool palette unless Tao asks.
 
 ## README Audience Policy
 

@@ -29,7 +29,7 @@ from apply_tao_style import (  # noqa: E402
 
 def main() -> None:
     x = np.linspace(0, 12, 320)
-    temperatures = np.arange(80, 241, 20)
+    temperatures = np.arange(80, 221, 20)
     cmap = LinearSegmentedColormap.from_list("tao_dark_blue", GRADIENT_COLORMAPS["dark-blue"])
     colors = [cmap(value) for value in np.linspace(0.18, 1.0, len(temperatures))]
 

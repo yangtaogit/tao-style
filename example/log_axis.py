@@ -29,16 +29,18 @@ from apply_tao_style import (  # noqa: E402
 
 def main() -> None:
     x = np.linspace(0, 600, 260)
-    scales = [0.7, 1.3, 2.2]
-    offsets = [85, 130, 175]
+    bases = [1.1e-9, 2.8e-9, 7.0e-9]
+    growth_rates = [3.0, 3.35, 3.75]
+    curvature = [0.45, 0.62, 0.82]
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
 
-    for index, (scale, offset) in enumerate(zip(scales, offsets)):
+    for index, (base, growth, bend) in enumerate(zip(bases, growth_rates, curvature)):
         color = PALETTE[index]
-        y = 1e-10 + scale * 8e-11 * np.exp((x - offset) / 145.0)
-        y += scale * 1.8e-10 * (x / 600.0) ** 2
+        normalized_x = x / x.max()
+        y = base * 10 ** (growth * normalized_x)
+        y *= 1.0 + bend * normalized_x**2
         ax.plot(
             x,
             y,
@@ -51,7 +53,7 @@ def main() -> None:
     ax.set_xlabel("Bias Voltage [V]")
     ax.set_ylabel("Current [A]")
     ax.set_xlim(0, 600)
-    ax.set_ylim(1e-10, 1e-6)
+    ax.set_ylim(8e-10, 1e-4)
     ax.minorticks_on()
     apply_matplotlib_log10_axis(ax, axis="y")
     apply_matplotlib_legend(ax)
