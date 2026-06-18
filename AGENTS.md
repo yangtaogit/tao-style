@@ -30,8 +30,8 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 ## Important Scientific Plotting Rules
 
 - Default plotting backend: Python/Matplotlib unless the user's stack is already different.
-- Default single-plot axes box size: `2.7 in x 1.8 in` (`3:2`); keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
-- Common single-plot ratios: `1:1`, `3:2`, `5:3`.
+- Default single-plot axes box height: `1.8 in`; default `3:2` axes box is `2.7 in x 1.8 in`; keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
+- Common single-plot ratios use the same default axes-box height: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, `5:3 = 3.0 in x 1.8 in`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
 - Axis box: black boxed axes, inward ticks on all sides, axis linewidth `1.0 pt`, no grid by default.

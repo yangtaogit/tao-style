@@ -77,12 +77,14 @@ ERRORBAR_LINE_WIDTH = 0.6
 ERRORBAR_CAP_SIZE = 1.6
 HISTOGRAM_FILL_ALPHA = 0.28
 DEFAULT_ASPECT = "3:2"
+DEFAULT_AXES_HEIGHT_IN = 1.8
 DEFAULT_AXES_WIDTH_IN = 2.7
 DEFAULT_CANVAS_LEFT_IN = 0.42
 DEFAULT_CANVAS_BOTTOM_IN = 0.35
 DEFAULT_CANVAS_RIGHT_IN = 0.08
 DEFAULT_CANVAS_TOP_IN = 0.05
 DEFAULT_FIGURE_WIDTH_IN = DEFAULT_AXES_WIDTH_IN
+DEFAULT_PLOTLY_HEIGHT_PX = 400
 DEFAULT_PLOTLY_WIDTH_PX = 600
 HISTOGRAM_Y_MODES = ("count", "probability_density")
 FIGURE_ASPECTS = {
@@ -108,16 +110,33 @@ SUPERSCRIPT_TRANSLATION = str.maketrans(
 )
 
 
-def axes_box_size(aspect: str = DEFAULT_ASPECT, width: float = DEFAULT_AXES_WIDTH_IN) -> tuple[float, float]:
-    """Return the target physical size of the plotting axes box in inches."""
+def axes_box_size(
+    aspect: str = DEFAULT_ASPECT,
+    width: float | None = None,
+    height: float = DEFAULT_AXES_HEIGHT_IN,
+) -> tuple[float, float]:
+    """Return the target physical size of the plotting axes box in inches.
+
+    By default Tao Style fixes the axes-box height at 1.8 in and derives the
+    width from the requested ratio: 1:1 -> 1.8 x 1.8 in, 3:2 -> 2.7 x 1.8 in,
+    and 5:3 -> 3.0 x 1.8 in. Passing width keeps backward-compatible behavior
+    for target-medium-specific figures.
+    """
 
     if aspect not in FIGURE_ASPECTS:
         allowed = ", ".join(sorted(FIGURE_ASPECTS))
         raise ValueError(f"Unknown aspect ratio {aspect!r}. Allowed: {allowed}")
-    return (width, width / FIGURE_ASPECTS[aspect])
+    ratio = FIGURE_ASPECTS[aspect]
+    if width is not None:
+        return (width, width / ratio)
+    return (height * ratio, height)
 
 
-def figure_size(aspect: str = DEFAULT_ASPECT, width: float = DEFAULT_AXES_WIDTH_IN) -> tuple[float, float]:
+def figure_size(
+    aspect: str = DEFAULT_ASPECT,
+    width: float | None = None,
+    height: float = DEFAULT_AXES_HEIGHT_IN,
+) -> tuple[float, float]:
     """Return the legacy initial Matplotlib figure size for a target axes box.
 
     Tao Style now fixes the axes box size, not the final canvas size. Use this
@@ -126,15 +145,16 @@ def figure_size(aspect: str = DEFAULT_ASPECT, width: float = DEFAULT_AXES_WIDTH_
     changing the plotting box.
     """
 
-    return axes_box_size(aspect, width)
+    return axes_box_size(aspect, width=width, height=height)
 
 
 def set_fixed_axes_box(
     fig,
     ax,
     aspect: str = DEFAULT_ASPECT,
-    width: float = DEFAULT_AXES_WIDTH_IN,
+    width: float | None = None,
     *,
+    height: float = DEFAULT_AXES_HEIGHT_IN,
     left: float = DEFAULT_CANVAS_LEFT_IN,
     bottom: float = DEFAULT_CANVAS_BOTTOM_IN,
     right: float = DEFAULT_CANVAS_RIGHT_IN,
@@ -148,7 +168,7 @@ def set_fixed_axes_box(
     while the canvas width can expand for long y labels or outside legends.
     """
 
-    axes_width, axes_height = axes_box_size(aspect, width)
+    axes_width, axes_height = axes_box_size(aspect, width=width, height=height)
     figure_width = left + axes_width + right
     figure_height = bottom + axes_height + top
     fig.set_size_inches(figure_width, figure_height, forward=True)
@@ -197,13 +217,25 @@ def save_fixed_height_figure(fig, filename, *, pad_inches: float | None = None, 
     return fig.savefig(filename, **kwargs)
 
 
-def plotly_dimensions(aspect: str = DEFAULT_ASPECT, width: int = DEFAULT_PLOTLY_WIDTH_PX) -> dict[str, int]:
-    """Return Plotly pixel dimensions for a width:height aspect ratio."""
+def plotly_dimensions(
+    aspect: str = DEFAULT_ASPECT,
+    width: int | None = None,
+    height: int = DEFAULT_PLOTLY_HEIGHT_PX,
+) -> dict[str, int]:
+    """Return Plotly pixel dimensions for a width:height aspect ratio.
+
+    The default mirrors the Matplotlib fixed-height rule in pixel units: keep
+    height fixed and derive width from the selected ratio. Passing width keeps
+    backward-compatible behavior.
+    """
 
     if aspect not in FIGURE_ASPECTS:
         allowed = ", ".join(sorted(FIGURE_ASPECTS))
         raise ValueError(f"Unknown aspect ratio {aspect!r}. Allowed: {allowed}")
-    return {"width": width, "height": round(width / FIGURE_ASPECTS[aspect])}
+    ratio = FIGURE_ASPECTS[aspect]
+    if width is not None:
+        return {"width": width, "height": round(width / ratio)}
+    return {"width": round(height * ratio), "height": height}
 
 
 def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "none") -> dict[str, object]:

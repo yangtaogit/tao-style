@@ -47,8 +47,8 @@
 ### 坐标框尺寸与比例
 
 - 单图科研图固定黑色 XY 坐标框的物理尺寸，而不是固定整个 canvas。
-- 默认坐标框宽度为 `2.7 in`，默认比例为 `3:2`，即坐标框为 `2.7 in × 1.8 in`。
-- 常用比例为 `1:1`、`3:2`、`5:3`。
+- 默认坐标框高度固定为 `1.8 in`，默认比例为 `3:2`，即坐标框为 `2.7 in × 1.8 in`。
+- 常用比例为 `1:1`、`3:2`、`5:3`，且默认保持同一坐标框高度：`1:1 = 1.8 in × 1.8 in`，`3:2 = 2.7 in × 1.8 in`，`5:3 = 3.0 in × 1.8 in`。
 - 单图导出 canvas 高度默认固定；左侧布局边距初始值为 `0.42 in`。
 - 导出 canvas 宽度可以根据 y tick label、Y 轴标题、外置 legend、colorbar、annotation 等外围元素向左或向右自适应扩展，避免裁剪文字，同时保持 XY 坐标框物理尺寸和导出画布高度不变。
 - 多图排列不受单图尺寸/比例限制，应根据子图数量、panel 坐标框、排版和数据关系决定。
@@ -240,8 +240,8 @@ python3 scripts/install_skill.py --target all --mode copy --force
 ### Axes Box Size and Aspect Ratio
 
 - Single-panel scientific plots fix the physical size of the black XY axes box, not the whole canvas.
-- The default axes-box width is `2.7 in` with a `3:2` ratio, i.e. `2.7 in × 1.8 in`.
-- Common ratios are `1:1`, `3:2`, and `5:3`.
+- The default axes-box height is fixed at `1.8 in`; with the default `3:2` ratio, the axes box is `2.7 in × 1.8 in`.
+- Common ratios are `1:1`, `3:2`, and `5:3`, all using the same default axes-box height: `1:1 = 1.8 in × 1.8 in`, `3:2 = 2.7 in × 1.8 in`, and `5:3 = 3.0 in × 1.8 in`.
 - The exported single-panel canvas height is fixed by default. The initial left layout margin is `0.42 in`.
 - The exported canvas width may expand left or right to include y tick labels, y-axis labels, outside legends, colorbars, and annotations without cropping, while preserving the physical XY axes-box size and exported canvas height.
 - Multi-panel figures are not constrained by this single-panel rule; choose their canvas and panel boxes according to the number of panels, layout, and data relationships.

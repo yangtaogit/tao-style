@@ -136,11 +136,11 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 ## Axes Box Size and Aspect Ratio
 
 - For a single-plot scientific figure, fix the physical size of the axes box, meaning the black XY plotting frame, rather than fixing the whole output canvas.
-- Use `2.7 in` as the default axes-box width when Tao does not specify the target medium.
+- Use `1.8 in` as the default axes-box height when Tao does not specify the target medium.
 - Use `3:2` as the default axes-box width:height ratio, so the default axes box is `2.7 in x 1.8 in`.
-- With the same default axes-box width, `1:1` gives `2.7 in x 2.7 in`, and `5:3` gives `2.7 in x 1.62 in`.
+- Keep the axes-box height fixed across common single-plot ratios: `1:1` gives `1.8 in x 1.8 in`, `3:2` gives `2.7 in x 1.8 in`, and `5:3` gives `3.0 in x 1.8 in`.
 - Keep `1:1`, `3:2`, and `5:3` as the common axes-box ratio options when Tao asks to choose or compare.
-- For default single-panel figures, also keep the exported canvas height fixed. With the default `3:2` axes box, the default canvas height is about `2.40 in`.
+- For default single-panel figures, also keep the exported canvas height fixed. With the default `1.8 in` axes-box height, the default canvas height is about `2.40 in`.
 - Use the configured left margin (`0.42 in`) as the initial layout margin, but do not treat it as a hard crop boundary. The exported canvas width may expand left or right as needed to include y tick labels, y-axis labels, outside legends, colorbars, and annotations.
 - Prefer concise y tick formatting when labels become very long, but never crop tick labels or axis titles just to keep a fixed left canvas edge. These outside elements must not change the final physical size of the XY plotting frame or the fixed vertical canvas height.
 - Keep vertical elements within the fixed top and bottom margins. If needed, adjust tick-label alignment, axis limits, or annotation placement rather than allowing the exported canvas height to vary.
