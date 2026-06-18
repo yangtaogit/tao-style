@@ -1,7 +1,11 @@
 # τ Style
 
 <p align="center">
-  <img src="assets/logo-style.svg" alt="tau Style logo" width="420">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-style.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo-style-light.svg">
+    <img src="assets/logo-style-light.svg" alt="tau Style logo" width="420">
+  </picture>
 </p>
 
 <p align="center">
