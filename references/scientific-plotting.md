@@ -81,7 +81,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Color
 
-- Prefer a cool, restrained categorical palette by default: deep blue `#2A2F80`, blue `#4378BC`, black `#000000`, gray `#808080`, and muted red `#B04A4A` as a low-priority accent.
+- Prefer a cool, restrained core categorical palette by default: deep blue `#2A2F80`, black `#000000`, gray `#808080`; use muted red `#B04A4A` only for explicit emphasis.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding.
 - When red is needed, prefer muted red `#B04A4A` over saturated red.
 - For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients by default.

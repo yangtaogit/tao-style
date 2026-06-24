@@ -19,10 +19,14 @@ except ImportError:  # pragma: no cover - Matplotlib installs usually include cy
 
 PALETTE = [
     "#2A2F80",
-    "#4378BC",
     "#000000",
     "#808080",
     "#B04A4A",
+]
+EXTENDED_PALETTE = [
+    "#4378BC",
+    "#BDBDBD",
+    "#6FCCDE",
 ]
 TAU_PALETTE = [
     "#2A2F80",
@@ -37,6 +41,7 @@ TAU_PALETTE = [
 ]
 CATEGORICAL_PALETTES = {
     "default": PALETTE,
+    "extended": EXTENDED_PALETTE,
     "tau": TAU_PALETTE,
 }
 GRADIENT_COLORMAPS = {

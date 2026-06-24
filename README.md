@@ -76,9 +76,9 @@
 
 ### 颜色
 
-- 默认偏好冷色调、暗蓝、蓝、黑色和灰色。
-- 主色板为 deep blue `#2A2F80`、blue `#4378BC`、black `#000000`、gray `#808080`；muted red `#B04A4A` 仅作为低优先级强调色。
-- 多曲线或有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
+- 默认偏好冷色调、暗蓝、黑色和灰色。
+- 主色板为 deep blue `#2A2F80`、black `#000000`、gray `#808080`；muted red `#B04A4A` 仅在需要明确强调时使用。
+- 多条曲线默认优先使用 deep blue `#2A2F80`、black `#000000`、gray `#808080`；数量不足时再使用 blue `#4378BC`、浅灰或其他扩展色。没有明确强调语义时不使用红色。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
 - τ 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。
 - colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致。
 
@@ -102,7 +102,7 @@
 - 默认样式为阶梯状 bin 外轮廓加浅填充色；外轮廓沿 bin 边界绘制，不连接 bin 中点。
 - 只有 bin 宽较大、统计量较低或需要拟合并展示每个 bin 的不确定度时，才使用 marker + errorbar。
 
-## 科研报告 / Slides 风格
+## 学术报告 / Slides
 
 - 生成科研 slides 且未指定输出格式时，先询问是否使用 Beamer。
 - 使用 Beamer 时，基于 [`yangtaogit/tao-slides`](https://github.com/yangtaogit/tao-slides) 模板。
@@ -267,9 +267,9 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 ### Colors
 
-- The default palette favors cool tones, dark blue, blue, black, and gray.
-- The core palette is deep blue `#2A2F80`, blue `#4378BC`, black `#000000`, and gray `#808080`; muted red `#B04A4A` is a low-priority accent color.
-- For many curves or ordered data, prefer dark-blue gradients or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
+- The default palette favors cool tones, dark blue, black, and gray.
+- The core palette is deep blue `#2A2F80`, black `#000000`, and gray `#808080`; muted red `#B04A4A` is used only for explicit emphasis.
+- For multiple curves, prefer deep blue `#2A2F80`, black `#000000`, and gray `#808080` first; use blue `#4378BC`, light gray, or other extension colors only when more colors are needed. Do not use red without explicit emphasis semantics. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
 - The τ palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
 

@@ -39,7 +39,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 
 ## Color
 
-- Primary palette: deep blue `#2A2F80`, blue `#4378BC`, black `#000000`, gray `#808080`, muted red `#B04A4A` as a lower-priority accent.
+- Primary palette: deep blue `#2A2F80`, black `#000000`, gray `#808080`; use muted red `#B04A4A` only for explicit emphasis. For multiple curves, use deep blue, black, and gray first; use blue `#4378BC`, light gray, or other extension colors when more colors are needed; do not use red without emphasis semantics.
 - Optional τ palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger τ color alternative is desired.
 - Sequential colormap: prefer dark-blue gradients and grayscale gradients for many curves or ordered series; use the τ gradient as an optional alternative for dedicated colorbars or heatmaps.
 - Colorbar placement: put colorbars outside the right side of the corresponding axes, vertical, with a black outline matching the axes box.
