@@ -18,14 +18,17 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 2. Read `references/style-profile.md` for cross-cutting Tao Style preferences.
 3. For scientific plotting work, read `references/scientific-plotting.md`.
 4. For scientific slide reports or Beamer work, read `references/scientific-slides.md`.
-5. Use `scripts/apply_tao_style.py` as the Python/Matplotlib implementation helper.
+5. For academic documents or `tao-document` work, read `references/academic-documents.md`.
+6. Use `scripts/apply_tao_style.py` as the Python/Matplotlib implementation helper.
 
 ## Active Style Modules
 
 - Scientific plotting is the mature first module.
 - Scientific slides/Beamer is the active second module.
+- Academic documents with the `tao-document` template are the active third module.
 - When generating scientific slide reports, ask whether to use Beamer if the output format is not specified.
 - If Beamer is chosen, base the report on `https://github.com/yangtaogit/tao-slides` after inspecting the template structure.
+- When generating academic documents, ask whether to use `https://github.com/yangtaogit/tao-document/` if no template is specified; inspect the template structure before generating.
 
 ## Important Scientific Plotting Rules
 
@@ -61,6 +64,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - When a visual preference is confirmed, update `references/style-profile.md` and the relevant module reference.
 - When scientific plotting behavior changes, update `references/scientific-plotting.md` and regenerate affected examples.
 - When scientific slide behavior changes, update `references/scientific-slides.md`.
+- When academic document behavior changes, update `references/academic-documents.md`.
 - When helper behavior changes, update `scripts/apply_tao_style.py` and run representative examples.
 - Do not commit throwaway files from `test/`.
 
@@ -74,6 +78,7 @@ tao-style/
 |-- references/style-profile.md       # Overall τ Style preferences
 |-- references/scientific-plotting.md # Scientific plotting rules
 |-- references/scientific-slides.md   # Scientific report / slides and Beamer rules
+|-- references/academic-documents.md  # Academic document and tao-document rules
 |-- scripts/apply_tao_style.py        # Python plotting style helper
 |-- scripts/install_skill.py          # Install/update script
 |-- example/                          # Committed plotting examples and SVG outputs

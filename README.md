@@ -28,7 +28,8 @@
 
 - 科研绘图：默认 Python/Matplotlib；规则可迁移到 R、MATLAB、Julia、C++/ROOT、Plotly 和 LaTeX/pgfplots。
 - 科研报告：支持 Beamer；选择 Beamer 时使用 [`yangtaogit/tao-slides`](https://github.com/yangtaogit/tao-slides) 模板。
-- 规则文件：`references/style-profile.md`、`references/scientific-plotting.md`、`references/scientific-slides.md`。Python helper：`scripts/apply_tao_style.py`。
+- 学术文档：支持 [`yangtaogit/tao-document`](https://github.com/yangtaogit/tao-document/) 模板。
+- 规则文件：`references/style-profile.md`、`references/scientific-plotting.md`、`references/scientific-slides.md`、`references/academic-documents.md`。Python helper：`scripts/apply_tao_style.py`。
 
 ## 科研绘图风格
 
@@ -109,6 +110,13 @@
 - 生成前获取或定位模板，并检查 README、示例、主题文件和构建命令。
 - 在模板副本或新的报告项目目录中生成内容，不直接修改模板源，除非明确要求修改模板。
 - slides 中的新科研图仍遵守 τ Style 科研绘图规则。
+
+## 学术文档 / Documents
+
+- 生成学术文档、manuscript、report、note 或 handout 且未指定模板时，先询问是否使用 [`yangtaogit/tao-document`](https://github.com/yangtaogit/tao-document/) 模板。
+- 使用该模板时，生成前获取或定位模板，并检查 README、示例、样式文件、资源文件和构建命令。
+- 在模板副本或新的文档项目目录中生成内容，不直接修改模板源，除非明确要求修改模板。
+- 文档中新增科研图仍遵守 τ Style 科研绘图规则。
 
 ## 绘图风格样例
 
@@ -219,7 +227,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 - Scientific plotting defaults to Python/Matplotlib. Rules are portable to R, MATLAB, Julia, C++/ROOT, Plotly, and LaTeX/pgfplots.
 - Scientific reports support Beamer. When Beamer is selected, use the [`yangtaogit/tao-slides`](https://github.com/yangtaogit/tao-slides) template.
-- Rule files: `references/style-profile.md`, `references/scientific-plotting.md`, `references/scientific-slides.md`. Python helper: `scripts/apply_tao_style.py`.
+- Academic documents support the [`yangtaogit/tao-document`](https://github.com/yangtaogit/tao-document/) template.
+- Rule files: `references/style-profile.md`, `references/scientific-plotting.md`, `references/scientific-slides.md`, `references/academic-documents.md`. Python helper: `scripts/apply_tao_style.py`.
 
 ## Scientific Plotting Rules
 
@@ -300,6 +309,13 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - Before generating, fetch or locate the template and inspect its README, examples, theme files, and build commands. Do not assume template filenames or build commands without checking.
 - Generate content in a copied template or a new report project directory. Do not directly modify the template source unless explicitly requested.
 - New scientific figures used in slides should still follow the τ Style scientific plotting rules.
+
+## Academic Documents Style
+
+- When generating an academic document, manuscript, report, note, or handout and no template is specified, ask whether to use the [`yangtaogit/tao-document`](https://github.com/yangtaogit/tao-document/) template.
+- If `tao-document` is used, fetch or locate the template and inspect its README, examples, style files, assets, and build commands before generating.
+- Generate content in a copied template or a new document project directory. Do not directly modify the template source unless explicitly requested.
+- New scientific figures used in documents should still follow the τ Style scientific plotting rules.
 
 ## Plotting Examples
 
