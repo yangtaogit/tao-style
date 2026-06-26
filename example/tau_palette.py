@@ -67,7 +67,7 @@ def draw_map_panel(fig, ax, cax, cmap) -> None:
     cbar = fig.colorbar(image, cax=cax)
     cbar.set_label("Signal", labelpad=2)
     cbar.ax.tick_params(pad=1)
-    cbar.outline.set_linewidth(1.0)
+    cbar.outline.set_linewidth(0.8)
 
 
 def draw_contour_panel(fig, ax, cax, cmap) -> None:
@@ -83,7 +83,7 @@ def draw_contour_panel(fig, ax, cax, cmap) -> None:
     cbar = fig.colorbar(contour, cax=cax, ticks=levels[::2])
     cbar.set_label("Signal", labelpad=2)
     cbar.ax.tick_params(pad=1)
-    cbar.outline.set_linewidth(1.0)
+    cbar.outline.set_linewidth(0.8)
 
 
 def main() -> None:

@@ -24,7 +24,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Title size: TODO.
 - Axis label size: TODO.
 - Tick label size: TODO.
-- Legend size: inside legends have no frame; many-curve legends should sit outside the right side of the axes, preferably as a vertical single column with a black `1.0 pt` frame. If an outside single-column legend exceeds the axes-box height, split entries evenly into multiple columns.
+- Legend size: inside legends have no frame; many-curve legends should sit outside the right side of the axes, preferably as a vertical single column with a black `0.8 pt` frame. If an outside single-column legend exceeds the axes-box height, split entries evenly into multiple columns.
 - Annotation size: TODO.
 - Font embedding: prefer editable text in final SVG/PDF when the required fonts are available; use path-converted SVG text for README/web previews where stable cross-machine appearance is more important than text editability.
 

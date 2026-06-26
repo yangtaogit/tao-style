@@ -59,7 +59,7 @@
 
 - 默认封闭黑色坐标框；上下左右 spine 可见。
 - tick 向内；顶部和右侧也显示 tick。
-- 坐标轴线宽为 `1.0 pt`；主 tick 线宽为 `1.0`；副 tick 线宽为 `0.5`。
+- 坐标轴线宽为 `0.8 pt`；主 tick 线宽为 `0.8`；副 tick 线宽为 `0.4`。
 - 默认不使用 grid。
 - 单位格式：`Quantity [Unit]`，例如 `Bias Voltage [V]`、`Current [A]`。
 - base-10 log 主刻度使用普通文本上标，如 `10⁻⁶`；不用 Matplotlib mathtext；副 tick 默认保留。
@@ -258,7 +258,7 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 - Use a closed black axis box by default; all four spines are visible.
 - Ticks point inward; top and right ticks are shown.
-- Axis line width is `1.0 pt`; major tick width is `1.0`; minor tick width is `0.5`.
+- Axis line width is `0.8 pt`; major tick width is `0.8`; minor tick width is `0.4`.
 - Grid lines are off by default.
 - Units use square brackets, such as `Bias Voltage [V]` and `Current [A]`.
 - Base-10 log major ticks should be displayed as plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.

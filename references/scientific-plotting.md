@@ -49,13 +49,13 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 - Use a boxed axis by default for XY scientific curves: show left, right, top, and bottom spines.
 - Use black axis spines and black ticks.
-- Use axis line width `1.0`.
+- Use axis line width `0.8`.
 - Draw both major and minor ticks inward.
 - Show ticks on all four sides of the plotting box when the backend supports it.
 - Mirror all ticks in Plotly using `mirror="allticks"`.
 - Enable minor ticks for continuous numeric axes unless they make the axis visually crowded.
-- Use major tick width `1.0`.
-- Use minor tick width `0.5`.
+- Use major tick width `0.8`.
+- Use minor tick width `0.4`.
 - Do not use grid lines by default.
 
 ## Three-Dimensional Axes
@@ -130,7 +130,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - When many curves make the legend large or likely to cover data, place the legend outside the plotting frame on the right.
 - Outside legends should prefer a vertical single-column layout and be framed.
 - If an outside single-column legend exceeds the axes-box height, split the entries evenly into multiple columns to keep the legend compact.
-- Use the same frame color and line width as the XY axis box for outside legend borders: black, `1.0 pt`.
+- Use the same frame color and line width as the XY axis box for outside legend borders: black, `0.8 pt`.
 - Prefer the outside-right legend for more than about five legend items, or earlier if the legend overlaps important data.
 
 ## Axes Box Size and Aspect Ratio
