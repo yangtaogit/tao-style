@@ -37,6 +37,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Common single-plot ratios use the same default axes-box height: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, `5:3 = 3.0 in x 1.8 in`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
+- Font-stable vector export: default SVG text should be converted to paths; default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and target fonts are available.
 - Axis box: black boxed axes, inward ticks on all sides, axis linewidth `0.8 pt`, major tick width `0.8`, minor tick width `0.4`, no grid by default.
 - Units use square brackets: `Quantity [Unit]`.
 - Log tick labels use plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext.

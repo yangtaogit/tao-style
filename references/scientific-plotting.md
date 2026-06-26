@@ -229,10 +229,10 @@ python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 
 - Preview: PNG at 150-200 DPI.
 - Final raster: PNG or TIFF at 300 DPI unless the target venue requires otherwise.
-- Final vector: PDF or SVG for line art and editable figures.
-- Keep text editable in SVG/PDF when the backend supports it.
-- For README, web, or cross-machine previews where exact font appearance matters more than editability, export SVG text as paths using Matplotlib `svg.fonttype = "path"`.
-- For final editable SVG, use `svg.fonttype = "none"` only when the target machine or editor has the required fonts available.
+- Final vector: PDF or SVG for line art.
+- Default SVG export should be font-stable across viewing environments: convert text to paths using Matplotlib `svg.fonttype = "path"`.
+- Default PDF export should embed fonts so the visual appearance does not depend on fonts installed where the PDF is opened; in Matplotlib use `pdf.fonttype = 42` and keep `pdf.use14corefonts = False`.
+- Keep editable text in SVG/PDF only when the user explicitly needs text editing and the target machine or editor has the required fonts available.
 
 ## Figure QA Checklist
 

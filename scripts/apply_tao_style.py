@@ -243,8 +243,13 @@ def plotly_dimensions(
     return {"width": round(height * ratio), "height": height}
 
 
-def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "none") -> dict[str, object]:
-    """Return a starter rcParams dictionary for Tao Style plots."""
+def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") -> dict[str, object]:
+    """Return a starter rcParams dictionary for Tao Style plots.
+
+    The default SVG export converts text to paths so font appearance does not
+    depend on the fonts installed where the SVG is opened. PDF export keeps
+    embedded TrueType text by default via ``pdf.fonttype = 42``.
+    """
 
     if svg_fonttype not in {"none", "path"}:
         raise ValueError("svg_fonttype must be 'none' or 'path'")
@@ -300,7 +305,9 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "none") 
         "ytick.minor.width": MINOR_TICK_WIDTH,
         "legend.frameon": False,
         "pdf.fonttype": 42,
+        "pdf.use14corefonts": False,
         "ps.fonttype": 42,
+        "ps.useafm": False,
         "svg.fonttype": svg_fonttype,
     }
 

@@ -26,7 +26,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Tick label size: TODO.
 - Legend size: inside legends have no frame; many-curve legends should sit outside the right side of the axes, preferably as a vertical single column with a black `0.8 pt` frame. If an outside single-column legend exceeds the axes-box height, split entries evenly into multiple columns.
 - Annotation size: TODO.
-- Font embedding: prefer editable text in final SVG/PDF when the required fonts are available; use path-converted SVG text for README/web previews where stable cross-machine appearance is more important than text editability.
+- Font-stable export: default SVG text should be converted to paths, and default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and when the target environment has the required fonts.
 
 ## Lines, Markers, and Error Bars
 
