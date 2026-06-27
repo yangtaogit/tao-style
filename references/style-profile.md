@@ -39,10 +39,11 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 
 ## Color
 
-- Primary palette: deep blue `#2A2F80`, black `#000000`, gray `#808080`; use muted red `#B04A4A` only for explicit emphasis. For multiple curves, use deep blue, black, and gray first; use blue `#4378BC`, light gray, or other extension colors when more colors are needed; do not use red without emphasis semantics.
+- Core color anchors: deep blue `#2A2F80`, black `#000000`, gray `#808080`; use them first for ordinary multi-series plots and keep this order. Use muted red `#B04A4A` only for explicit emphasis.
+- Default multi-series color sequence: use `#2A2F80`, `#000000`, and `#808080` first. Only when there are more than three ordinary series, add extension colors with a reasonable visual order, prioritizing light gray first: `#BDBDBD`, then blue extensions `#4378BC`, `#6FCCDE`, then darker blue `#3953A5` if still needed. Red `#B04A4A` is not part of the default sequence and should be used only for emphasis.
 - Optional τ palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger τ color alternative is desired.
 - Sequential colormap: prefer dark-blue gradients and grayscale gradients for many curves or ordered series; use the τ gradient as an optional alternative for dedicated colorbars or heatmaps.
-- Colorbar placement: put colorbars outside the right side of the corresponding axes, vertical, with a black outline matching the axes box.
+- Colorbar placement: put colorbars outside the right side of the corresponding axes, vertical, with a black outline matching the axes box. For portrait single-panel figures, keep the axes-box width fixed and allow the canvas to expand rightward for the colorbar instead of squeezing or overlapping the axes.
 - Diverging colormap: TODO.
 - Categorical color count: TODO.
 - Accessibility: prefer colorblind-aware palettes and avoid encoding critical distinctions by color alone.
@@ -53,8 +54,8 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Margins: avoid clipped labels and overly tight legends.
 - Multi-panel spacing: TODO.
 - Shared axes: use when it improves comparison and does not hide important scale differences.
-- Axes box size: fix the physical size of the single-plot XY axes box rather than the whole canvas; use `1.8 in` as the default axes-box height when the target medium is not specified.
-- Aspect ratio: use `3:2` by default for a single-plot axes box, giving `2.7 in x 1.8 in`; keep the same `1.8 in` axes-box height for common ratios (`1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, `5:3 = 3.0 in x 1.8 in`); keep the exported single-panel canvas height fixed by default; use `0.42 in` as the initial left layout margin, while allowing the exported canvas width to expand left or right to avoid cropped labels, legends, and colorbars. Multi-panel canvases should be sized by layout, panel axes boxes, label space, and data relationship rather than the single-plot default.
+- Axes box size: fix the physical size of the single-plot XY axes box rather than the whole canvas; use `1.8 in` as the default reference size when the target medium is not specified.
+- Aspect ratio: use `3:2` by default for a single-plot axes box, giving `2.7 in x 1.8 in`; keep `1.8 in` as the fixed axes-box height for `1:1`, `3:2`, and `5:3` (`1.8 in x 1.8 in`, `2.7 in x 1.8 in`, `3.0 in x 1.8 in`); for portrait ratios, keep `1.8 in` as the fixed axes-box width (`2:3 = 1.8 in x 2.7 in`, `3:5 = 1.8 in x 3.0 in`). For landscape/square figures, keep the exported single-panel canvas height fixed by default; for portrait figures without right-side external elements, keep the exported single-panel canvas width fixed by default. If a portrait figure has a right-side colorbar or outside legend, allow the canvas to expand rightward while preserving the fixed axes-box width. Use `0.42 in` as the initial left layout margin, while allowing the exported canvas width/height to expand as needed to avoid cropped labels, legends, and colorbars. Multi-panel canvases should be sized by layout, panel axes boxes, label space, and data relationship rather than the single-plot default.
 - 3D axes: use perspective projection by default, keep light-gray pane backgrounds, show only major-tick grid lines as very thin gray dotted lines, do not add extra pane boundary lines or manual frames, use inward ticks, keep tick labels very close to axes and keep axis labels compact, and apply Tao Style fonts and sizes.
 - Annotations: keep them close to the data they describe and avoid covering important points.
 

@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
     GRADIENT_COLORMAPS,
+    CORE_PALETTE,
     PALETTE,
     TAU_PALETTE,
     matplotlib_rcparams,
@@ -59,19 +60,20 @@ def draw_gradient(ax, title: str, colors: list[str]) -> None:
 def main() -> None:
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
 
-    fig = plt.figure(figsize=(7.2, 4.2))
+    fig = plt.figure(figsize=(7.2, 4.9))
     grid = fig.add_gridspec(
-        nrows=5,
+        nrows=6,
         ncols=1,
-        height_ratios=[0.82, 0.82, 0.72, 0.72, 0.72],
+        height_ratios=[0.82, 0.82, 0.82, 0.72, 0.72, 0.72],
         hspace=0.95,
     )
 
-    draw_palette(fig.add_subplot(grid[0, 0]), "Core palette", PALETTE)
-    draw_palette(fig.add_subplot(grid[1, 0]), "τ palette", TAU_PALETTE)
-    draw_gradient(fig.add_subplot(grid[2, 0]), "Dark-blue gradient", GRADIENT_COLORMAPS["dark-blue"])
-    draw_gradient(fig.add_subplot(grid[3, 0]), "Gray gradient", GRADIENT_COLORMAPS["gray"])
-    draw_gradient(fig.add_subplot(grid[4, 0]), "τ gradient", GRADIENT_COLORMAPS["tau"])
+    draw_palette(fig.add_subplot(grid[0, 0]), "Core anchors", CORE_PALETTE)
+    draw_palette(fig.add_subplot(grid[1, 0]), "Default sequence", PALETTE)
+    draw_palette(fig.add_subplot(grid[2, 0]), "τ palette", TAU_PALETTE)
+    draw_gradient(fig.add_subplot(grid[3, 0]), "Dark-blue gradient", GRADIENT_COLORMAPS["dark-blue"])
+    draw_gradient(fig.add_subplot(grid[4, 0]), "Gray gradient", GRADIENT_COLORMAPS["gray"])
+    draw_gradient(fig.add_subplot(grid[5, 0]), "τ gradient", GRADIENT_COLORMAPS["tau"])
 
     output = Path(__file__).with_suffix(".svg")
     fig.savefig(output)

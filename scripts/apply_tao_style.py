@@ -17,16 +17,28 @@ except ImportError:  # pragma: no cover - Matplotlib installs usually include cy
     _cycler_factory = None
 
 
+CORE_PALETTE = [
+    "#2A2F80",
+    "#000000",
+    "#808080",
+]
+EMPHASIS_PALETTE = [
+    "#B04A4A",
+]
 PALETTE = [
     "#2A2F80",
     "#000000",
     "#808080",
-    "#B04A4A",
+    "#BDBDBD",
+    "#4378BC",
+    "#6FCCDE",
+    "#3953A5",
 ]
 EXTENDED_PALETTE = [
-    "#4378BC",
     "#BDBDBD",
+    "#4378BC",
     "#6FCCDE",
+    "#3953A5",
 ]
 TAU_PALETTE = [
     "#2A2F80",
@@ -41,7 +53,9 @@ TAU_PALETTE = [
 ]
 CATEGORICAL_PALETTES = {
     "default": PALETTE,
+    "core": CORE_PALETTE,
     "extended": EXTENDED_PALETTE,
+    "emphasis": EMPHASIS_PALETTE,
     "tau": TAU_PALETTE,
 }
 GRADIENT_COLORMAPS = {
@@ -81,6 +95,8 @@ MARKER_EDGE_WIDTH = 0.7
 ERRORBAR_LINE_WIDTH = 0.6
 ERRORBAR_CAP_SIZE = 1.6
 HISTOGRAM_FILL_ALPHA = 0.28
+COLORBAR_WIDTH_IN = 0.08
+COLORBAR_PAD_IN = 0.12
 DEFAULT_ASPECT = "3:2"
 DEFAULT_AXES_HEIGHT_IN = 1.8
 DEFAULT_AXES_WIDTH_IN = 2.7
@@ -96,7 +112,10 @@ FIGURE_ASPECTS = {
     "1:1": 1.0,
     "3:2": 3.0 / 2.0,
     "5:3": 5.0 / 3.0,
+    "2:3": 2.0 / 3.0,
+    "3:5": 3.0 / 5.0,
 }
+FIXED_WIDTH_ASPECTS = {"2:3", "3:5"}
 SUPERSCRIPT_TRANSLATION = str.maketrans(
     {
         "-": "⁻",
@@ -122,10 +141,12 @@ def axes_box_size(
 ) -> tuple[float, float]:
     """Return the target physical size of the plotting axes box in inches.
 
-    By default Tao Style fixes the axes-box height at 1.8 in and derives the
-    width from the requested ratio: 1:1 -> 1.8 x 1.8 in, 3:2 -> 2.7 x 1.8 in,
-    and 5:3 -> 3.0 x 1.8 in. Passing width keeps backward-compatible behavior
-    for target-medium-specific figures.
+    By default Tao Style fixes landscape/square axes-box height at 1.8 in and
+    derives the width from the requested ratio: 1:1 -> 1.8 x 1.8 in, 3:2 ->
+    2.7 x 1.8 in, and 5:3 -> 3.0 x 1.8 in. Portrait ratios are treated as the
+    rotated forms of the landscape sizes and fix width at 1.8 in: 2:3 -> 1.8 x
+    2.7 in and 3:5 -> 1.8 x 3.0 in. Passing width keeps backward-compatible
+    behavior for target-medium-specific figures.
     """
 
     if aspect not in FIGURE_ASPECTS:
@@ -134,6 +155,8 @@ def axes_box_size(
     ratio = FIGURE_ASPECTS[aspect]
     if width is not None:
         return (width, width / ratio)
+    if aspect in FIXED_WIDTH_ASPECTS:
+        return (height, height / ratio)
     return (height * ratio, height)
 
 
@@ -186,6 +209,74 @@ def set_fixed_axes_box(
     return fig, ax
 
 
+def _set_axes_position_inches(fig, ax, bounds: tuple[float, float, float, float]):
+    """Set an axes position from inch bounds in figure coordinates."""
+
+    figure_width, figure_height = fig.get_size_inches()
+    left, bottom, width, height = bounds
+    ax.set_position([
+        left / figure_width,
+        bottom / figure_height,
+        width / figure_width,
+        height / figure_height,
+    ])
+
+
+def add_matplotlib_colorbar(
+    fig,
+    ax,
+    mappable,
+    *,
+    side: str = "right",
+    width: float = COLORBAR_WIDTH_IN,
+    pad: float = COLORBAR_PAD_IN,
+    expand_canvas: bool = True,
+    **kwargs,
+):
+    """Add a Tao Style colorbar without changing the fixed axes-box size.
+
+    For a right-side vertical colorbar, the helper positions the colorbar in
+    physical inch units relative to the axes box. If needed, it expands the
+    canvas width and restores the original axes-box inch bounds, so portrait
+    figures keep their fixed plotting-box width while avoiding colorbar overlap.
+    """
+
+    side = side.lower()
+    if side not in {"right"}:
+        raise ValueError("Only side='right' is currently supported")
+
+    figure_width, figure_height = fig.get_size_inches()
+    ax_pos = ax.get_position()
+    ax_bounds = (
+        ax_pos.x0 * figure_width,
+        ax_pos.y0 * figure_height,
+        ax_pos.width * figure_width,
+        ax_pos.height * figure_height,
+    )
+    left, bottom, axes_width, axes_height = ax_bounds
+    cbar_left = left + axes_width + pad
+    cbar_bottom = bottom
+    cbar_width = width
+    cbar_height = axes_height
+    required_width = cbar_left + cbar_width + DEFAULT_CANVAS_RIGHT_IN
+
+    if expand_canvas and required_width > figure_width:
+        fig.set_size_inches(required_width, figure_height, forward=True)
+        _set_axes_position_inches(fig, ax, ax_bounds)
+        figure_width = required_width
+
+    cax = fig.add_axes([
+        cbar_left / figure_width,
+        cbar_bottom / figure_height,
+        cbar_width / figure_width,
+        cbar_height / figure_height,
+    ])
+    colorbar = fig.colorbar(mappable, cax=cax, **kwargs)
+    colorbar.outline.set_linewidth(AXIS_LINE_WIDTH)
+    fig._tao_style_right_external_artist = True
+    return colorbar
+
+
 def fixed_height_bbox_inches(fig, *, pad_inches: float | None = None):
     """Return a savefig bbox with fixed canvas height and adaptive width.
 
@@ -209,12 +300,70 @@ def fixed_height_bbox_inches(fig, *, pad_inches: float | None = None):
     return Bbox.from_extents(x0, 0.0, x1, float(figure_height))
 
 
+def fixed_width_bbox_inches(fig, *, pad_inches: float | None = None):
+    """Return a savefig bbox with fixed canvas width and adaptive height.
+
+    This is the portrait counterpart to fixed_height_bbox_inches(). The
+    horizontal export range is the full current figure width. The vertical range
+    expands as needed to include artists found by Matplotlib's tight-bbox pass.
+    """
+
+    from matplotlib import rcParams
+    from matplotlib.transforms import Bbox
+
+    if pad_inches is None:
+        pad_inches = float(rcParams.get("savefig.pad_inches", 0.03))
+
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    tight = fig.get_tightbbox(renderer)
+    figure_width, figure_height = fig.get_size_inches()
+    y0 = min(0.0, tight.y0 - pad_inches)
+    y1 = max(float(figure_height), tight.y1 + pad_inches)
+    return Bbox.from_extents(0.0, y0, float(figure_width), y1)
+
+
+def save_fixed_canvas_figure(
+    fig,
+    filename,
+    *,
+    aspect: str = DEFAULT_ASPECT,
+    fixed_dimension: str = "auto",
+    pad_inches: float | None = None,
+    **kwargs,
+):
+    """Save a single-panel Tao Style figure with the intended fixed dimension.
+
+    Landscape and square ratios keep canvas height fixed and let width expand.
+    Portrait ratios keep canvas width fixed by default. If a right-side colorbar
+    or outside legend was added with the Tao helper functions, auto mode keeps
+    canvas height fixed instead so width can expand without changing the axes
+    box. Use this after set_fixed_axes_box() for new figures.
+    """
+
+    if aspect not in FIGURE_ASPECTS:
+        allowed = ", ".join(sorted(FIGURE_ASPECTS))
+        raise ValueError(f"Unknown aspect ratio {aspect!r}. Allowed: {allowed}")
+    if fixed_dimension == "auto":
+        has_right_external = bool(getattr(fig, "_tao_style_right_external_artist", False))
+        fixed_dimension = "height" if has_right_external or aspect not in FIXED_WIDTH_ASPECTS else "width"
+    if fixed_dimension not in {"width", "height"}:
+        raise ValueError("fixed_dimension must be 'auto', 'width', or 'height'")
+    if fixed_dimension == "width":
+        bbox_inches = fixed_width_bbox_inches(fig, pad_inches=pad_inches)
+    else:
+        bbox_inches = fixed_height_bbox_inches(fig, pad_inches=pad_inches)
+    kwargs.setdefault("bbox_inches", bbox_inches)
+    kwargs.setdefault("pad_inches", 0.0)
+    return fig.savefig(filename, **kwargs)
+
+
 def save_fixed_height_figure(fig, filename, *, pad_inches: float | None = None, **kwargs):
     """Save a Matplotlib figure with fixed height and adaptive width.
 
-    Use this after set_fixed_axes_box() for single-panel Tao Style figures. It
-    avoids vertical variation from bbox_inches='tight' while preserving horizontal
-    growth for long tick labels, outside legends, and colorbars.
+    Use this after set_fixed_axes_box() for legacy landscape/square Tao Style
+    figures. Prefer save_fixed_canvas_figure() for new code so portrait ratios
+    automatically keep canvas width fixed instead.
     """
 
     kwargs.setdefault("bbox_inches", fixed_height_bbox_inches(fig, pad_inches=pad_inches))
@@ -229,9 +378,9 @@ def plotly_dimensions(
 ) -> dict[str, int]:
     """Return Plotly pixel dimensions for a width:height aspect ratio.
 
-    The default mirrors the Matplotlib fixed-height rule in pixel units: keep
-    height fixed and derive width from the selected ratio. Passing width keeps
-    backward-compatible behavior.
+    The default mirrors the Matplotlib size rule in pixel units: keep height
+    fixed for landscape/square ratios, and keep width fixed for portrait ratios.
+    Passing width keeps backward-compatible behavior.
     """
 
     if aspect not in FIGURE_ASPECTS:
@@ -240,6 +389,8 @@ def plotly_dimensions(
     ratio = FIGURE_ASPECTS[aspect]
     if width is not None:
         return {"width": width, "height": round(width / ratio)}
+    if aspect in FIXED_WIDTH_ASPECTS:
+        return {"width": round(height), "height": round(height / ratio)}
     return {"width": round(height * ratio), "height": height}
 
 
@@ -345,6 +496,7 @@ def apply_matplotlib_legend(ax, outside=None, **kwargs):
         frame.set_linewidth(AXIS_LINE_WIDTH)
         frame.set_facecolor("white")
         frame.set_alpha(1.0)
+        ax.figure._tao_style_right_external_artist = True
     return legend
 
 
@@ -547,7 +699,7 @@ def plotly_legend_style(outside: bool = False) -> dict[str, object]:
     }
 
 
-def plotly_layout_style(aspect: str = DEFAULT_ASPECT, width: int = DEFAULT_PLOTLY_WIDTH_PX) -> dict[str, object]:
+def plotly_layout_style(aspect: str = DEFAULT_ASPECT, width: int | None = None) -> dict[str, object]:
     """Return Tao Style layout settings that are independent of data traces."""
 
     return {
@@ -563,7 +715,7 @@ def plotly_layout_style(aspect: str = DEFAULT_ASPECT, width: int = DEFAULT_PLOTL
 def apply_plotly_style(
     fig,
     aspect: str = DEFAULT_ASPECT,
-    width: int = DEFAULT_PLOTLY_WIDTH_PX,
+    width: int | None = None,
     legend_outside: bool = False,
 ):
     """Apply Tao Style axis and layout settings to a Plotly figure."""
@@ -664,7 +816,9 @@ def main() -> None:
                 {
                     "aspect": args.aspect,
                     "axes_box_size": axes_box_size(args.aspect),
+                    "fixed_canvas_dimension": "width" if args.aspect in FIXED_WIDTH_ASPECTS else "height",
                     "fixed_canvas_height": axes_box_size(args.aspect)[1] + DEFAULT_CANVAS_BOTTOM_IN + DEFAULT_CANVAS_TOP_IN,
+                    "fixed_canvas_width": axes_box_size(args.aspect)[0] + DEFAULT_CANVAS_LEFT_IN + DEFAULT_CANVAS_RIGHT_IN,
                     "figure_size": figure_size(args.aspect),
                     "legend": {
                         "inside": matplotlib_legend_kwargs(False),

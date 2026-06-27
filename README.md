@@ -48,10 +48,13 @@
 ### 坐标框尺寸与比例
 
 - 单图科研图固定黑色 XY 坐标框的物理尺寸，不固定整个 canvas。
-- 默认坐标框高度固定为 `1.8 in`，默认比例为 `3:2`，即坐标框为 `2.7 in × 1.8 in`。
-- 常用比例为 `1:1`、`3:2`、`5:3`，且默认保持同一坐标框高度：`1:1 = 1.8 in × 1.8 in`，`3:2 = 2.7 in × 1.8 in`，`5:3 = 3.0 in × 1.8 in`。
-- 单图导出 canvas 高度默认固定；左侧布局边距初始值为 `0.42 in`。
-- 导出 canvas 宽度可随 y tick label、Y 轴标题、外置 legend、colorbar、annotation 自适应扩展；XY 坐标框尺寸和导出画布高度保持不变。
+- 默认参考尺寸为 `1.8 in`，默认比例为 `3:2`，即坐标框为 `2.7 in × 1.8 in`。
+- 横向和方形常用比例保持同一坐标框高度 `1.8 in`：`1:1 = 1.8 in × 1.8 in`，`3:2 = 2.7 in × 1.8 in`，`5:3 = 3.0 in × 1.8 in`。
+- 竖向比例视为横向尺寸的旋转，保持同一坐标框宽度 `1.8 in`：`2:3 = 1.8 in × 2.7 in`，`3:5 = 1.8 in × 3.0 in`。
+- 常用比例为 `1:1`、`3:2`、`5:3`、`2:3`、`3:5`。
+- 横向/方形单图导出 canvas 高度默认固定；无右侧外置元素的竖向单图导出 canvas 宽度默认固定；左侧布局边距初始值为 `0.42 in`。
+- 竖向单图如果带右侧 colorbar 或外置 legend，保持 XY 坐标框宽度固定，允许 canvas 向右扩展，避免 colorbar 和 tick label 重叠。
+- 导出 canvas 可在非固定方向上随 tick label、轴标题、外置 legend、colorbar、annotation 自适应扩展；XY 坐标框尺寸保持不变。
 - 多图排列不受单图尺寸/比例限制，由子图数量、panel 坐标框、排版和数据关系决定。
 - 论文栏宽、slides 占位、poster panel 或报告版式有固定宽度时，先确认目标尺寸。
 
@@ -78,10 +81,10 @@
 ### 颜色
 
 - 默认偏好冷色调、暗蓝、黑色和灰色。
-- 主色板为 deep blue `#2A2F80`、black `#000000`、gray `#808080`；muted red `#B04A4A` 仅在需要明确强调时使用。
-- 多条曲线默认优先使用 deep blue `#2A2F80`、black `#000000`、gray `#808080`；数量不足时再使用 blue `#4378BC`、浅灰或其他扩展色。没有明确强调语义时不使用红色。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
+- 核心颜色锚点为 deep blue `#2A2F80`、black `#000000`、gray `#808080`；普通多系列图优先使用这三色，并保持这个顺序。muted red `#B04A4A` 仅在需要明确强调时使用。
+- 多条曲线和多个直方图超过三个普通系列时才加入扩展色。扩展色也应保持合理顺序，优先补浅灰 `#BDBDBD`，再补蓝色扩展 `#4378BC`、`#6FCCDE`，仍不够时再用 darker blue `#3953A5`。没有明确强调语义时不使用红色。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
 - τ 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。
-- colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致。
+- colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
 
 ### 线条、marker 与 error bar
 
@@ -247,10 +250,13 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### Axes Box Size and Aspect Ratio
 
 - Single-panel scientific plots fix the physical size of the black XY axes box, not the whole canvas.
-- The default axes-box height is fixed at `1.8 in`; with the default `3:2` ratio, the axes box is `2.7 in × 1.8 in`.
-- Common ratios are `1:1`, `3:2`, and `5:3`, all using the same default axes-box height: `1:1 = 1.8 in × 1.8 in`, `3:2 = 2.7 in × 1.8 in`, and `5:3 = 3.0 in × 1.8 in`.
-- The exported single-panel canvas height is fixed by default. The initial left layout margin is `0.42 in`.
-- The exported canvas width may expand for y tick labels, y-axis labels, outside legends, colorbars, and annotations; the XY axes-box size and exported canvas height remain fixed.
+- The default reference size is `1.8 in`; with the default `3:2` ratio, the axes box is `2.7 in × 1.8 in`.
+- Landscape and square ratios keep the same default axes-box height `1.8 in`: `1:1 = 1.8 in × 1.8 in`, `3:2 = 2.7 in × 1.8 in`, and `5:3 = 3.0 in × 1.8 in`.
+- Portrait ratios are treated as rotated landscape sizes and keep the same default axes-box width `1.8 in`: `2:3 = 1.8 in × 2.7 in` and `3:5 = 1.8 in × 3.0 in`.
+- Common ratios are `1:1`, `3:2`, `5:3`, `2:3`, and `3:5`.
+- For landscape/square single-panel figures, the exported canvas height is fixed by default. For portrait single-panel figures without right-side external elements, the exported canvas width is fixed by default. The initial left layout margin is `0.42 in`.
+- If a portrait single-panel figure has a right-side colorbar or outside legend, keep the XY axes-box width fixed and allow the canvas to expand rightward to avoid overlap.
+- The exported canvas may expand in the non-fixed direction for tick labels, axis labels, outside legends, colorbars, and annotations; the XY axes-box size remains fixed.
 - Multi-panel figures are not constrained by this single-panel rule; size them by panel count, layout, and data relationships.
 - Confirm target size first when a paper column, slide placeholder, poster panel, or report layout has a fixed width.
 
@@ -277,8 +283,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### Colors
 
 - The default palette favors cool tones, dark blue, black, and gray.
-- The core palette is deep blue `#2A2F80`, black `#000000`, and gray `#808080`; muted red `#B04A4A` is used only for explicit emphasis.
-- For multiple curves, prefer deep blue `#2A2F80`, black `#000000`, and gray `#808080` first; use blue `#4378BC`, light gray, or other extension colors only when more colors are needed. Do not use red without explicit emphasis semantics. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
+- The core color anchors are deep blue `#2A2F80`, black `#000000`, and gray `#808080`; ordinary multi-series plots should use these three first and keep this order. Muted red `#B04A4A` is used only for explicit emphasis.
+- Add extension colors only when there are more than three ordinary series. Keep extension colors in a reasonable order, prioritizing light gray `#BDBDBD` first, then blue extensions `#4378BC`, `#6FCCDE`, then darker blue `#3953A5` if still needed. Do not use red without explicit emphasis semantics. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
 - The τ palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
 

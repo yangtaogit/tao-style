@@ -81,9 +81,9 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Color
 
-- Prefer a cool, restrained core categorical palette by default: deep blue `#2A2F80`, black `#000000`, gray `#808080`; use muted red `#B04A4A` only for explicit emphasis.
-- Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding.
-- When red is needed, prefer muted red `#B04A4A` over saturated red.
+- Prefer cool, restrained core color anchors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080`; for ordinary multi-series plots, use these three first and keep this order.
+- Only when there are more than three ordinary series, add extension colors. Keep extension colors visually reasonable and prioritize light gray first: `#BDBDBD`, then blue extensions `#4378BC`, `#6FCCDE`, then darker blue `#3953A5` if still needed.
+- Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding. When red is needed, prefer muted red `#B04A4A` over saturated red. Red is not part of the default ordinary multi-series sequence.
 - For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients by default.
 - Use the τ palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Treat the τ palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
@@ -91,7 +91,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Preferred dark-blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
 - Preferred grayscale gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
 - Optional τ gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
-- Colorbars should sit outside the right side of the corresponding axes, use a vertical layout, and keep a black outline with the same line width as the axes box.
+- Colorbars should sit outside the right side of the corresponding axes, use a vertical layout, and keep a black outline with the same line width as the axes box. For portrait single-panel figures, keep the axes-box width fixed and allow the canvas to expand rightward for the colorbar; do not squeeze the axes box or let the colorbar overlap tick labels.
 - Use these lists consistently across supported backends unless the user provides a data-specific color mapping.
 - Keep the lists easy to extend as Tao adds more preferred colors.
 
@@ -136,14 +136,15 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 ## Axes Box Size and Aspect Ratio
 
 - For a single-plot scientific figure, fix the physical size of the axes box, meaning the black XY plotting frame, rather than fixing the whole output canvas.
-- Use `1.8 in` as the default axes-box height when Tao does not specify the target medium.
+- Use `1.8 in` as the default reference size when Tao does not specify the target medium.
 - Use `3:2` as the default axes-box width:height ratio, so the default axes box is `2.7 in x 1.8 in`.
-- Keep the axes-box height fixed across common single-plot ratios: `1:1` gives `1.8 in x 1.8 in`, `3:2` gives `2.7 in x 1.8 in`, and `5:3` gives `3.0 in x 1.8 in`.
-- Keep `1:1`, `3:2`, and `5:3` as the common axes-box ratio options when Tao asks to choose or compare.
-- For default single-panel figures, also keep the exported canvas height fixed. With the default `1.8 in` axes-box height, the default canvas height is about `2.40 in`.
+- For landscape and square single-plot ratios, keep the axes-box height fixed at `1.8 in`: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, and `5:3 = 3.0 in x 1.8 in`.
+- For portrait ratios, treat them as rotated forms of the landscape sizes and keep the axes-box width fixed at `1.8 in`: `2:3 = 1.8 in x 2.7 in` and `3:5 = 1.8 in x 3.0 in`.
+- Keep `1:1`, `3:2`, `5:3`, `2:3`, and `3:5` as the common axes-box ratio options when Tao asks to choose or compare.
+- For default single-panel landscape/square figures, keep the exported canvas height fixed. For portrait figures without right-side external elements, keep the exported canvas width fixed. With the default margins, the default landscape canvas height is about `2.40 in` and the default portrait canvas width is about `2.30 in`. If a portrait figure has a right-side colorbar or outside legend, keep the axes-box width fixed but let the canvas expand horizontally.
 - Use the configured left margin (`0.42 in`) as the initial layout margin, but do not treat it as a hard crop boundary. The exported canvas width may expand left or right as needed to include y tick labels, y-axis labels, outside legends, colorbars, and annotations.
-- Prefer concise y tick formatting when labels become very long, but never crop tick labels or axis titles just to keep a fixed left canvas edge. These outside elements must not change the final physical size of the XY plotting frame or the fixed vertical canvas height.
-- Keep vertical elements within the fixed top and bottom margins. If needed, adjust tick-label alignment, axis limits, or annotation placement rather than allowing the exported canvas height to vary.
+- Prefer concise y tick formatting when labels become very long, but never crop tick labels or axis titles just to keep a fixed canvas edge. These outside elements must not change the final physical size of the XY plotting frame or the fixed canvas dimension.
+- For landscape/square figures, keep vertical elements within the fixed top and bottom margins. For portrait figures without right-side external elements, keep horizontal elements within the fixed left and right margins. For portrait figures with right-side colorbars or legends, reserve or expand right-side canvas space rather than moving or resizing the axes box.
 - Treat the ratio as the plotting-frame width:height ratio, not as an equal data-unit aspect constraint.
 - Multi-panel canvases are not constrained by the single-plot ratio rule. Choose the canvas size and panel axes-box sizes based on the number of panels, shared axes, label space, legend placement, and the data relationship.
 - If the target medium has a known final figure width, such as a journal column, slide placeholder, poster panel, or report layout, confirm or infer that target width first and choose the axes-box size and surrounding canvas so the figure is not heavily scaled later.
@@ -156,15 +157,16 @@ When using Matplotlib, import `scripts/apply_tao_style.py` if the skill files ar
 from scripts.apply_tao_style import (
     axes_box_size,
     matplotlib_rcparams,
-    save_fixed_height_figure,
+    save_fixed_canvas_figure,
     set_fixed_axes_box,
 )
 
 plt.rcParams.update(matplotlib_rcparams())
-fig, ax = plt.subplots(figsize=axes_box_size())
+aspect = "3:2"
+fig, ax = plt.subplots(figsize=axes_box_size(aspect))
 # After plotting labels/legends and before saving:
-set_fixed_axes_box(fig, ax)
-save_fixed_height_figure(fig, "figure.svg")
+set_fixed_axes_box(fig, ax, aspect=aspect)
+save_fixed_canvas_figure(fig, "figure.svg", aspect=aspect)
 ```
 
 For legends, use the helper when available:
@@ -184,6 +186,17 @@ apply_matplotlib_log10_axis(ax, axis="y")
 ```
 
 This helper formats major log tick labels as ordinary text with Unicode superscripts, preserving the same font family as other axis tick labels.
+
+For right-side colorbars, set the fixed axes box first, then add the colorbar with the helper so the canvas can expand without changing the axes-box size:
+
+```python
+from scripts.apply_tao_style import add_matplotlib_colorbar
+
+set_fixed_axes_box(fig, ax, aspect=aspect)
+cbar = add_matplotlib_colorbar(fig, ax, image, pad=0.13, width=0.08)
+cbar.set_label("Signal [Unit]")
+save_fixed_canvas_figure(fig, "figure.svg", aspect=aspect)
+```
 
 For histograms, ask for the y-axis mode first, then use the helper when available:
 

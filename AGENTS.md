@@ -33,8 +33,8 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 ## Important Scientific Plotting Rules
 
 - Default plotting backend: Python/Matplotlib unless the user's stack is already different.
-- Default single-plot axes box height: `1.8 in`; default `3:2` axes box is `2.7 in x 1.8 in`; keep exported single-panel canvas height fixed; use `0.42 in` as the initial left layout margin, but allow canvas width to expand left/right to avoid cropped labels and legends.
-- Common single-plot ratios use the same default axes-box height: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, `5:3 = 3.0 in x 1.8 in`.
+- Default single-plot axes-box reference size: `1.8 in`; default `3:2` axes box is `2.7 in x 1.8 in`. For landscape/square figures, keep exported single-panel canvas height fixed. For portrait figures without right-side external elements, keep exported single-panel canvas width fixed; with right-side colorbars or outside legends, keep the axes-box width fixed and allow rightward canvas expansion. Use `0.42 in` as the initial left layout margin, but allow the non-fixed canvas direction to expand to avoid cropped labels and legends.
+- Common landscape/square ratios use the same default axes-box height: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, `5:3 = 3.0 in x 1.8 in`. Common portrait ratios use the same default axes-box width: `2:3 = 1.8 in x 2.7 in`, `3:5 = 1.8 in x 3.0 in`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
 - Font-stable vector export: default SVG text should be converted to paths; default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and target fonts are available.
@@ -44,8 +44,9 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Histograms must ask y-axis mode first: raw `Count` or `Probability Density [1/Unit]`.
 - Default histograms use stepped bin outlines with light fill, not connected bin-center lines.
 - Dense 2D data should usually use line-only rendering to avoid marker crowding.
-- Preferred core palette: deep blue `#2A2F80`, black `#000000`, gray `#808080`; muted red `#B04A4A` only for explicit emphasis. For multiple curves, use deep blue, black, and gray first; use blue `#4378BC`, light gray, or other extension colors when more colors are needed; do not use red without emphasis semantics.
+- Preferred core color anchors: deep blue `#2A2F80`, black `#000000`, gray `#808080`; ordinary multi-series plots use these three first and in this order. Add extension colors only after three series, prioritizing `#BDBDBD`, then `#4378BC`, `#6FCCDE`, then `#3953A5` if still needed. Muted red `#B04A4A` is only for explicit emphasis and not part of the ordinary sequence.
 - Optional τ palette exists for special cases; it should not replace the default cool palette unless Tao asks.
+- Colorbar: outside right, vertical, black outline matching the axes box; portrait figures with right-side colorbars should expand canvas width rather than overlap or shrink the axes box.
 - 3D plots: use perspective projection `projection="persp"`; pane color `#F2F2F2`; major-tick grid only with color `#9E9E9E`, dotted linestyle `":"`, and linewidth `0.2 pt`; no extra pane boundary lines or manual frames; inward ticks using `inward_factor=0.0` and `outward_factor=0.2`; `tick_pad=-3.0`; `labelpad=-4.0`; right-side colorbars with example spacing `pad=0.16`, `fraction=0.035`, `shrink=0.72`.
 
 ## README Audience Policy
