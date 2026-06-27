@@ -54,7 +54,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Do not put personal development notes, local WSL paths, validation workflows, repository maintenance rules, or release-management reminders in `README.md` unless they are necessary for users.
 - Put agent/developer-facing instructions in `AGENTS.md` instead.
 - When the Skill changes, update corresponding user-facing README content only if public behavior, installation, usage, or documented style output changes.
-- Keep README English first; keep the Chinese version synchronized when changing user-facing content.
+- Keep README Chinese first; keep the English version synchronized when changing user-facing content.
 
 ## Development Workflow
 
