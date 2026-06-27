@@ -38,7 +38,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
 - Font-stable vector export: default SVG text should be converted to paths; default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and target fonts are available.
-- Axis box: black boxed axes, inward ticks on all sides, axis linewidth `0.8 pt`, major tick width `0.8`, minor tick width `0.4`, no grid by default.
+- Axis box: black boxed axes, inward ticks on all sides, axis linewidth `0.6 pt`, major tick width `0.6`, minor tick width `0.3`, no grid by default.
 - Units use square brackets: `Quantity [Unit]`.
 - Log tick labels use plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext.
 - Histograms must ask y-axis mode first: raw `Count` or `Probability Density [1/Unit]`.

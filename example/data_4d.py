@@ -82,7 +82,7 @@ def main() -> None:
     mappable.set_array([])
     cbar = fig.colorbar(mappable, ax=ax, fraction=0.035, pad=0.16, shrink=0.72)
     cbar.set_label("Value", labelpad=4)
-    cbar.outline.set_linewidth(0.8)
+    cbar.outline.set_linewidth(0.6)
 
     output = Path(__file__).with_suffix(".svg")
     fig.savefig(output, bbox_inches="tight", pad_inches=0.03)
