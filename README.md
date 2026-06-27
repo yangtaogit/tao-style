@@ -47,16 +47,10 @@
 
 ### 坐标框尺寸与比例
 
-- 单图科研图固定黑色 XY 坐标框的物理尺寸，不固定整个 canvas。
-- 默认参考尺寸为 `1.8 in`，默认比例为 `3:2`，即坐标框为 `2.7 in × 1.8 in`。
-- 横向和方形常用比例保持同一坐标框高度 `1.8 in`：`1:1 = 1.8 in × 1.8 in`，`3:2 = 2.7 in × 1.8 in`，`5:3 = 3.0 in × 1.8 in`。
-- 竖向比例视为横向尺寸的旋转，保持同一坐标框宽度 `1.8 in`：`2:3 = 1.8 in × 2.7 in`，`3:5 = 1.8 in × 3.0 in`。
-- 常用比例为 `1:1`、`3:2`、`5:3`、`2:3`、`3:5`。
-- 横向/方形单图导出 canvas 高度默认固定；无右侧外置元素的竖向单图导出 canvas 宽度默认固定；左侧布局边距初始值为 `0.42 in`。
-- 竖向单图如果带右侧 colorbar 或外置 legend，保持 XY 坐标框宽度固定，允许 canvas 向右扩展，避免 colorbar 和 tick label 重叠。
-- 导出 canvas 可在非固定方向上随 tick label、轴标题、外置 legend、colorbar、annotation 自适应扩展；XY 坐标框尺寸保持不变。
-- 多图排列不受单图尺寸/比例限制，由子图数量、panel 坐标框、排版和数据关系决定。
-- 论文栏宽、slides 占位、poster panel 或报告版式有固定宽度时，先确认目标尺寸。
+- 单图科研图固定黑色 XY 坐标框的物理尺寸，canvas 可随标签、legend、colorbar 等外置元素自适应扩展。
+- 默认比例为 `3:2`，坐标框尺寸为 `2.7 in × 1.8 in`。常用单图尺寸：`1:1 = 1.8 in × 1.8 in`，`3:2 = 2.7 in × 1.8 in`，`5:3 = 3.0 in × 1.8 in`，`2:3 = 1.8 in × 2.7 in`，`3:5 = 1.8 in × 3.0 in`。
+- 横向/方形图默认固定 canvas 高度；竖向图默认固定 canvas 宽度。竖向图带右侧 colorbar 或外置 legend 时，保持坐标框宽度不变并允许 canvas 向右扩展。
+- 多图排列、论文栏宽、slides 占位和 poster/report 版式不受单图默认尺寸限制，应按目标版式确定。
 
 ### 坐标轴、tick 与标签
 
@@ -249,16 +243,10 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 ### Axes Box Size and Aspect Ratio
 
-- Single-panel scientific plots fix the physical size of the black XY axes box, not the whole canvas.
-- The default reference size is `1.8 in`; with the default `3:2` ratio, the axes box is `2.7 in × 1.8 in`.
-- Landscape and square ratios keep the same default axes-box height `1.8 in`: `1:1 = 1.8 in × 1.8 in`, `3:2 = 2.7 in × 1.8 in`, and `5:3 = 3.0 in × 1.8 in`.
-- Portrait ratios are treated as rotated landscape sizes and keep the same default axes-box width `1.8 in`: `2:3 = 1.8 in × 2.7 in` and `3:5 = 1.8 in × 3.0 in`.
-- Common ratios are `1:1`, `3:2`, `5:3`, `2:3`, and `3:5`.
-- For landscape/square single-panel figures, the exported canvas height is fixed by default. For portrait single-panel figures without right-side external elements, the exported canvas width is fixed by default. The initial left layout margin is `0.42 in`.
-- If a portrait single-panel figure has a right-side colorbar or outside legend, keep the XY axes-box width fixed and allow the canvas to expand rightward to avoid overlap.
-- The exported canvas may expand in the non-fixed direction for tick labels, axis labels, outside legends, colorbars, and annotations; the XY axes-box size remains fixed.
-- Multi-panel figures are not constrained by this single-panel rule; size them by panel count, layout, and data relationships.
-- Confirm target size first when a paper column, slide placeholder, poster panel, or report layout has a fixed width.
+- Single-panel scientific plots fix the physical size of the black XY axes box; the canvas may expand for labels, legends, colorbars, and annotations.
+- The default ratio is `3:2`, with a `2.7 in × 1.8 in` axes box. Common single-panel sizes are `1:1 = 1.8 in × 1.8 in`, `3:2 = 2.7 in × 1.8 in`, `5:3 = 3.0 in × 1.8 in`, `2:3 = 1.8 in × 2.7 in`, and `3:5 = 1.8 in × 3.0 in`.
+- Landscape/square figures keep canvas height fixed by default; portrait figures keep canvas width fixed by default. For portrait figures with a right-side colorbar or outside legend, keep the axes-box width fixed and allow rightward canvas expansion.
+- Multi-panel figures, journal columns, slide placeholders, poster panels, and report layouts should be sized for the target layout rather than the single-panel default.
 
 ### Axes, Ticks, and Labels
 
