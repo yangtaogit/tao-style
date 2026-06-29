@@ -334,19 +334,17 @@ def save_fixed_canvas_figure(
 ):
     """Save a single-panel Tao Style figure with the intended fixed dimension.
 
-    Landscape and square ratios keep canvas height fixed and let width expand.
-    Portrait ratios keep canvas width fixed by default. If a right-side colorbar
-    or outside legend was added with the Tao helper functions, auto mode keeps
-    canvas height fixed instead so width can expand without changing the axes
-    box. Use this after set_fixed_axes_box() for new figures.
+    Auto mode keeps canvas height fixed and lets width expand for labels,
+    right-side colorbars, and outside legends. Use fixed_dimension="width" only
+    when a target layout explicitly requires fixed canvas width. Use this after
+    set_fixed_axes_box() for new figures.
     """
 
     if aspect not in FIGURE_ASPECTS:
         allowed = ", ".join(sorted(FIGURE_ASPECTS))
         raise ValueError(f"Unknown aspect ratio {aspect!r}. Allowed: {allowed}")
     if fixed_dimension == "auto":
-        has_right_external = bool(getattr(fig, "_tao_style_right_external_artist", False))
-        fixed_dimension = "height" if has_right_external or aspect not in FIXED_WIDTH_ASPECTS else "width"
+        fixed_dimension = "height"
     if fixed_dimension not in {"width", "height"}:
         raise ValueError("fixed_dimension must be 'auto', 'width', or 'height'")
     if fixed_dimension == "width":
@@ -361,9 +359,8 @@ def save_fixed_canvas_figure(
 def save_fixed_height_figure(fig, filename, *, pad_inches: float | None = None, **kwargs):
     """Save a Matplotlib figure with fixed height and adaptive width.
 
-    Use this after set_fixed_axes_box() for legacy landscape/square Tao Style
-    figures. Prefer save_fixed_canvas_figure() for new code so portrait ratios
-    automatically keep canvas width fixed instead.
+    Use this after set_fixed_axes_box() for legacy Tao Style figures. Prefer
+    save_fixed_canvas_figure() for new code.
     """
 
     kwargs.setdefault("bbox_inches", fixed_height_bbox_inches(fig, pad_inches=pad_inches))
@@ -378,9 +375,9 @@ def plotly_dimensions(
 ) -> dict[str, int]:
     """Return Plotly pixel dimensions for a width:height aspect ratio.
 
-    The default mirrors the Matplotlib size rule in pixel units: keep height
-    fixed for landscape/square ratios, and keep width fixed for portrait ratios.
-    Passing width keeps backward-compatible behavior.
+    The default mirrors the Matplotlib canvas rule in pixel units: keep height
+    fixed and derive width from the selected ratio. Passing width keeps
+    backward-compatible behavior for target-medium-specific figures.
     """
 
     if aspect not in FIGURE_ASPECTS:
@@ -389,8 +386,6 @@ def plotly_dimensions(
     ratio = FIGURE_ASPECTS[aspect]
     if width is not None:
         return {"width": width, "height": round(width / ratio)}
-    if aspect in FIXED_WIDTH_ASPECTS:
-        return {"width": round(height), "height": round(height / ratio)}
     return {"width": round(height * ratio), "height": height}
 
 
@@ -660,6 +655,71 @@ def apply_matplotlib_3d_style(
     return ax
 
 
+def hide_matplotlib_3d_axes(ax):
+    """Hide Matplotlib 3D axes, ticks, panes, and grid for data-first 3D figures."""
+
+    ax.set_axis_off()
+    ax.grid(False)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_zticks([])
+    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+        try:
+            axis.pane.set_visible(False)
+            axis.line.set_color((1, 1, 1, 0))
+        except AttributeError:
+            pass
+        try:
+            axis._axinfo["grid"]["color"] = (1, 1, 1, 0)
+            axis._axinfo["tick"]["color"] = (1, 1, 1, 0)
+        except (AttributeError, KeyError):
+            pass
+    ax.set_facecolor((1, 1, 1, 0))
+    return ax
+
+
+def add_matplotlib_3d_xyz_marker(
+    fig,
+    *,
+    elev: float,
+    azim: float,
+    position=(0.155, 0.145, 0.125, 0.125),
+    length: float = 0.78,
+    label_size: float = 6.5,
+    linewidth: float = 0.8,
+):
+    """Add a compact in-figure XYZ direction marker for hidden-axis 3D figures."""
+
+    marker = fig.add_axes(position, projection="3d")
+    marker.view_init(elev=elev, azim=azim)
+    marker.set_proj_type("persp")
+    hide_matplotlib_3d_axes(marker)
+
+    label_pos = length + 0.14
+    label_kw = {"color": AXIS_COLOR, "fontsize": label_size, "ha": "center", "va": "center"}
+    marker.quiver(0, 0, 0, length, 0, 0, color=AXIS_COLOR, linewidth=linewidth, arrow_length_ratio=0.22)
+    marker.quiver(0, 0, 0, 0, length, 0, color=AXIS_COLOR, linewidth=linewidth, arrow_length_ratio=0.22)
+    marker.quiver(0, 0, 0, 0, 0, length, color=AXIS_COLOR, linewidth=linewidth, arrow_length_ratio=0.22)
+    marker.text(label_pos, 0, 0, "X", **label_kw)
+    marker.text(0, label_pos, 0, "Y", **label_kw)
+    marker.text(0, 0, label_pos, "Z", **label_kw)
+    marker.set_xlim(0, 1.0)
+    marker.set_ylim(0, 1.0)
+    marker.set_zlim(0, 1.0)
+    marker.set_box_aspect((1, 1, 1))
+    return marker
+
+
+def apply_matplotlib_hidden_3d_style(ax, fig=None, *, elev: float | None = None, azim: float | None = None):
+    """Apply Tao Style's optional hidden-axis 3D layout helpers."""
+
+    ax.set_proj_type("persp")
+    hide_matplotlib_3d_axes(ax)
+    if fig is not None and elev is not None and azim is not None:
+        add_matplotlib_3d_xyz_marker(fig, elev=elev, azim=azim)
+    return ax
+
+
 def plotly_axis_style() -> dict[str, object]:
     """Return Tao Style axis settings for Plotly xaxes/yaxes."""
 
@@ -816,7 +876,7 @@ def main() -> None:
                 {
                     "aspect": args.aspect,
                     "axes_box_size": axes_box_size(args.aspect),
-                    "fixed_canvas_dimension": "width" if args.aspect in FIXED_WIDTH_ASPECTS else "height",
+                    "fixed_canvas_dimension": "height",
                     "fixed_canvas_height": axes_box_size(args.aspect)[1] + DEFAULT_CANVAS_BOTTOM_IN + DEFAULT_CANVAS_TOP_IN,
                     "fixed_canvas_width": axes_box_size(args.aspect)[0] + DEFAULT_CANVAS_LEFT_IN + DEFAULT_CANVAS_RIGHT_IN,
                     "figure_size": figure_size(args.aspect),

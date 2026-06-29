@@ -49,7 +49,7 @@
 
 - 单图科研图固定黑色 XY 坐标框的物理尺寸，canvas 可随标签、legend、colorbar 等外置元素自适应扩展。
 - 默认比例为 `3:2`，坐标框尺寸为 `2.7 in × 1.8 in`。常用单图尺寸：`1:1 = 1.8 in × 1.8 in`，`3:2 = 2.7 in × 1.8 in`，`5:3 = 3.0 in × 1.8 in`，`2:3 = 1.8 in × 2.7 in`，`3:5 = 1.8 in × 3.0 in`。
-- 横向/方形图默认固定 canvas 高度；竖向图默认固定 canvas 宽度。竖向图带右侧 colorbar 或外置 legend 时，保持坐标框宽度不变并允许 canvas 向右扩展。
+- 单图默认固定 canvas 高度；右侧 colorbar 或外置 legend 可使 canvas 向右扩展，但坐标框尺寸保持不变。
 - 多图排列、论文栏宽、slides 占位和 poster/report 版式不受单图默认尺寸限制，应按目标版式确定。
 
 ### 坐标轴、tick 与标签
@@ -71,6 +71,9 @@
 - 已知单位时继续使用方括号格式，例如 `X Position [mm]`。
 - 三维空间坐标之外的数值可用颜色梯度表示；colorbar 置于图框外右侧。当前 3D example 使用 `pad=0.16`、`fraction=0.035`、`shrink=0.72`。
 - 三维图不受二维单图 XY 坐标框尺寸规则约束。
+- 默认三维绘图仍显示坐标轴；只有明确要求隐藏坐标、弱化坐标框或突出数据主体时，才使用隐藏三维坐标轴风格。
+- 隐藏三维坐标轴风格会隐藏主 `X/Y/Z` 坐标轴、tick、tick label、轴标题、pane 背景和网格；在图内空白区域放置小型 `XYZ` 方向箭头，并在颜色表示数值时保留图内 colorbar。
+- 隐藏坐标轴图默认按内容自适应裁切，裁切范围包含数据主体、图内 `XYZ` 方向箭头和图内 colorbar，并保留少量安全边距；`XYZ` 方向箭头和 colorbar 不应遮挡数据主体。
 
 ### 颜色
 
@@ -129,36 +132,52 @@
     <td colspan="2"><img src="example/tau_palette.svg" alt="τ palette example" width="100%"></td>
   </tr>
   <tr>
+    <td width="50%">2:3 竖向曲线图</td>
+    <td>2:3 竖向等高线图</td>
+  </tr>
+  <tr>
+    <td><img src="example/portrait_2_3_curves.svg" alt="2:3 portrait curves example" height="285"></td>
+    <td><img src="example/portrait_2_3_contour.svg" alt="2:3 portrait contour example" height="285"></td>
+  </tr>
+  <tr>
     <td width="50%">三维曲面图</td>
     <td>4D 数据颜色映射</td>
   </tr>
   <tr>
-    <td><img src="example/surface_3d.svg" alt="3D surface example" height="190"></td>
-    <td><img src="example/data_4d.svg" alt="4D data color mapping example" height="190"></td>
+    <td><img src="example/surface_3d.svg" alt="3D surface example" height="220"></td>
+    <td><img src="example/data_4d.svg" alt="4D data color mapping example" height="220"></td>
+  </tr>
+  <tr>
+    <td width="50%">隐藏坐标三维曲面图</td>
+    <td>隐藏坐标 4D 数据图</td>
+  </tr>
+  <tr>
+    <td><img src="example/surface_3d_hidden_axes.svg" alt="Hidden-axis 3D surface example" height="220"></td>
+    <td><img src="example/data_4d_hidden_axes.svg" alt="Hidden-axis 4D data example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">XY 离散数据与拟合</td>
     <td>高斯分布样本误差棒</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="220"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">对数坐标</td>
     <td>多曲线与外置 Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="220"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">多个直方图填充</td>
     <td>曲线局部放大</td>
   </tr>
   <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
-    <td><img src="example/inset_zoom.svg" alt="Inset zoom example" height="190"></td>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="220"></td>
+    <td><img src="example/inset_zoom.svg" alt="Inset zoom example" height="220"></td>
   </tr>
 </table>
 
@@ -245,7 +264,7 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 - Single-panel scientific plots fix the physical size of the black XY axes box; the canvas may expand for labels, legends, colorbars, and annotations.
 - The default ratio is `3:2`, with a `2.7 in × 1.8 in` axes box. Common single-panel sizes are `1:1 = 1.8 in × 1.8 in`, `3:2 = 2.7 in × 1.8 in`, `5:3 = 3.0 in × 1.8 in`, `2:3 = 1.8 in × 2.7 in`, and `3:5 = 1.8 in × 3.0 in`.
-- Landscape/square figures keep canvas height fixed by default; portrait figures keep canvas width fixed by default. For portrait figures with a right-side colorbar or outside legend, keep the axes-box width fixed and allow rightward canvas expansion.
+- Single-panel figures keep canvas height fixed by default; right-side colorbars or outside legends may expand the canvas rightward while preserving the axes-box size.
 - Multi-panel figures, journal columns, slide placeholders, poster panels, and report layouts should be sized for the target layout rather than the single-panel default.
 
 ### Axes, Ticks, and Labels
@@ -267,6 +286,9 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - When units are known, keep the square-bracket format, such as `X Position [mm]`.
 - Use color gradients for scalar values in addition to 3D spatial coordinates; place the colorbar outside the right side of the axes with more padding than 2D plots. The current 3D examples use `pad=0.16`, `fraction=0.035`, and `shrink=0.72`.
 - 3D figures are not constrained by the single-panel 2D XY axes-box size rule. Choose the canvas according to the view angle, data body, and right-side colorbar.
+- By default, 3D plots still show coordinates. Use the hidden-axis 3D/4D style only when the request explicitly asks to hide coordinates, de-emphasize the coordinate box, or emphasize the data body.
+- Hidden-axis 3D/4D style hides the main `X/Y/Z` axes, ticks, tick labels, axis titles, pane backgrounds, and grid. It adds a compact in-figure `XYZ` direction marker and keeps an in-figure colorbar when color encodes scalar values.
+- Hidden-axis figures use content-adaptive cropping by default. The crop includes the data body, in-figure `XYZ` marker, and in-figure colorbar with a small safety margin; the marker and colorbar should not cover the data body.
 
 ### Colors
 
@@ -325,36 +347,52 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
     <td colspan="2"><img src="example/tau_palette.svg" alt="τ palette example" width="100%"></td>
   </tr>
   <tr>
+    <td width="50%">2:3 Portrait Curves</td>
+    <td>2:3 Portrait Contour</td>
+  </tr>
+  <tr>
+    <td><img src="example/portrait_2_3_curves.svg" alt="2:3 portrait curves example" height="285"></td>
+    <td><img src="example/portrait_2_3_contour.svg" alt="2:3 portrait contour example" height="285"></td>
+  </tr>
+  <tr>
     <td width="50%">3D Surface</td>
     <td>4D Data Color Mapping</td>
   </tr>
   <tr>
-    <td><img src="example/surface_3d.svg" alt="3D surface example" height="190"></td>
-    <td><img src="example/data_4d.svg" alt="4D data color mapping example" height="190"></td>
+    <td><img src="example/surface_3d.svg" alt="3D surface example" height="220"></td>
+    <td><img src="example/data_4d.svg" alt="4D data color mapping example" height="220"></td>
+  </tr>
+  <tr>
+    <td width="50%">Hidden-Axis 3D Surface</td>
+    <td>Hidden-Axis 4D Data</td>
+  </tr>
+  <tr>
+    <td><img src="example/surface_3d_hidden_axes.svg" alt="Hidden-axis 3D surface example" height="220"></td>
+    <td><img src="example/data_4d_hidden_axes.svg" alt="Hidden-axis 4D data example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">XY Data and Linear Fit</td>
     <td>Gaussian Error Bar</td>
   </tr>
   <tr>
-    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="190"></td>
-    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="190"></td>
+    <td><img src="example/xy_linear_fit.svg" alt="XY linear fit example" height="220"></td>
+    <td><img src="example/gaussian_errorbar.svg" alt="Gaussian error bar example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">Log Axis</td>
     <td>Many Curves with External Legend</td>
   </tr>
   <tr>
-    <td><img src="example/log_axis.svg" alt="Log axis example" height="190"></td>
-    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="190"></td>
+    <td><img src="example/log_axis.svg" alt="Log axis example" height="220"></td>
+    <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">Multiple Filled Histograms</td>
     <td>Inset Zoom</td>
   </tr>
   <tr>
-    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="190"></td>
-    <td><img src="example/inset_zoom.svg" alt="Inset zoom example" height="190"></td>
+    <td><img src="example/multiple_histograms.svg" alt="Multiple filled histograms example" height="220"></td>
+    <td><img src="example/inset_zoom.svg" alt="Inset zoom example" height="220"></td>
   </tr>
 </table>
 

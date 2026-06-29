@@ -33,7 +33,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 ## Important Scientific Plotting Rules
 
 - Default plotting backend: Python/Matplotlib unless the user's stack is already different.
-- Default single-plot axes-box reference size: `1.8 in`; default `3:2` axes box is `2.7 in x 1.8 in`. For landscape/square figures, keep exported single-panel canvas height fixed. For portrait figures without right-side external elements, keep exported single-panel canvas width fixed; with right-side colorbars or outside legends, keep the axes-box width fixed and allow rightward canvas expansion. Use `0.42 in` as the initial left layout margin, but allow the non-fixed canvas direction to expand to avoid cropped labels and legends.
+- Default single-plot axes-box reference size: `1.8 in`; default `3:2` axes box is `2.7 in x 1.8 in`. Keep exported single-panel canvas height fixed by default; allow rightward canvas expansion for right-side colorbars, outside legends, and long labels while preserving the axes-box size. Use `0.42 in` as the initial left layout margin.
 - Common landscape/square ratios use the same default axes-box height: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, `5:3 = 3.0 in x 1.8 in`. Common portrait ratios use the same default axes-box width: `2:3 = 1.8 in x 2.7 in`, `3:5 = 1.8 in x 3.0 in`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
@@ -48,6 +48,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Optional τ palette exists for special cases; it should not replace the default cool palette unless Tao asks.
 - Colorbar: outside right, vertical, black outline matching the axes box; portrait figures with right-side colorbars should expand canvas width rather than overlap or shrink the axes box.
 - 3D plots: use perspective projection `projection="persp"`; pane color `#F2F2F2`; major-tick grid only with color `#9E9E9E`, dotted linestyle `":"`, and linewidth `0.2 pt`; no extra pane boundary lines or manual frames; inward ticks using `inward_factor=0.0` and `outward_factor=0.2`; `tick_pad=-3.0`; `labelpad=-4.0`; right-side colorbars with example spacing `pad=0.16`, `fraction=0.035`, `shrink=0.72`.
+- Hidden-axis 3D/4D plots are optional, not default. Use them only when Tao asks to hide coordinates or emphasize the data body. Hide the main coordinate box, add a compact in-figure `XYZ` marker using the same view, place colorbar/marker in empty regions without covering data, and save with content-adaptive cropping plus a small safety margin.
 
 ## README Audience Policy
 
