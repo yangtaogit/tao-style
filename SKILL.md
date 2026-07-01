@@ -7,7 +7,7 @@ description: Portable personal visual-style guidance for Tao's preferred output 
 
 ## Overview
 
-Use this skill to apply Tao's personal visual style across portable AI tools and local development environments. Treat the current profile as a draft template: preserve confirmed preferences, mark unknowns as TODO, and avoid inventing strict requirements when the style has not been specified yet.
+Use this skill to apply Tao's personal visual style across portable AI tools and local development environments. Treat the current profile as the authoritative style specification: follow confirmed rules exactly, keep genuinely unspecified areas conservative, and avoid inventing strict requirements when the style has not been specified yet.
 
 The current repository location is only a development and validation workspace. Do not assume WSL, Python, or any local path is available when the installed skill is used elsewhere.
 
@@ -19,7 +19,7 @@ The current repository location is only a development and validation workspace. 
 - If the user says yes, apply the current profile in `references/style-profile.md`.
 - If the user says no, proceed with the requested output without Tao Style.
 - If the user already mentions `$tao-style`, "Tao Style", "my style", or a saved style preference, apply it without asking again.
-- If a required style detail is still TODO and materially affects the result, ask one concise question or use a neutral publication-style default and state the assumption.
+- If a required style detail is explicitly unspecified and materially affects the result, ask one concise question or use a neutral publication-style default and state the assumption.
 
 ## Plotting Workflow
 
@@ -48,7 +48,7 @@ The current repository location is only a development and validation workspace. 
 
 ## Resource Map
 
-- `references/style-profile.md`: Canonical style profile and TODO list for Tao's preferences.
+- `references/style-profile.md`: Canonical style profile and shared Tao Style preferences.
 - `references/scientific-plotting.md`: First concrete module, focused on research data visualization across plotting languages.
 - `references/scientific-slides.md`: Scientific slide report rules, including Beamer template selection.
 - `references/academic-documents.md`: Academic document rules, including the `yangtaogit/tao-document` template.

@@ -10,7 +10,7 @@
 
 <p align="center">
   <img alt="Skill: tao-style" src="https://img.shields.io/badge/Skill-tao--style-2A2F80">
-  <img alt="Scientific plotting" src="https://img.shields.io/badge/Scientific%20Plotting-Matplotlib-6CA6CD">
+  <img alt="Scientific plotting" src="https://img.shields.io/badge/Scientific%20Plotting-Matplotlib-4378BC">
   <img alt="Slides: Beamer" src="https://img.shields.io/badge/Slides-Beamer-808080">
   <img alt="Codex" src="https://img.shields.io/badge/Codex-ready-000000">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-ready-B04A4A">
@@ -95,7 +95,7 @@
 ### Legend
 
 - 框内 legend 不加边框。
-- 曲线很多或遮挡数据时，legend 置于图框外右侧，优先竖向单列，黑色 `1.0 pt` 边框。
+- 曲线很多或遮挡数据时，legend 置于图框外右侧，优先竖向单列，黑色 `0.6 pt` 边框。
 - 框外单列 legend 超出图框高度时，条目均分为多列。
 
 ### 直方图
@@ -311,7 +311,7 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### Legends
 
 - Legends inside the plotting box should not have a frame.
-- If many curves are present or the legend overlaps the data, place the legend outside the right side of the axes, preferably as a vertical single column, with a black `1.0 pt` frame matching the axis box.
+- If many curves are present or the legend overlaps the data, place the legend outside the right side of the axes, preferably as a vertical single column, with a black `0.6 pt` frame matching the axis box.
 - If an outside single-column legend exceeds the height of the axes box, split the entries evenly into multiple columns to keep the legend compact.
 
 ### Histograms
