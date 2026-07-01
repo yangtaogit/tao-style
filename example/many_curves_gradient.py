@@ -21,7 +21,7 @@ from apply_tao_style import (  # noqa: E402
     LINE_WIDTH,
     apply_matplotlib_legend,
     axes_box_size,
-    save_fixed_height_figure,
+    save_adaptive_figure,
     set_fixed_axes_box,
     matplotlib_rcparams,
 )
@@ -60,7 +60,7 @@ def main() -> None:
     set_fixed_axes_box(fig, ax, DEFAULT_ASPECT)
 
     output = Path(__file__).with_suffix(".svg")
-    save_fixed_height_figure(fig, output)
+    save_adaptive_figure(fig, output)
     plt.close(fig)
     print(output)
 

@@ -15,7 +15,7 @@ from scripts.apply_tao_style import (  # noqa: E402
     axes_box_size,
     gradient_colormap,
     matplotlib_rcparams,
-    save_fixed_canvas_figure,
+    save_adaptive_figure,
     set_fixed_axes_box,
 )
 
@@ -50,5 +50,5 @@ ax.yaxis.set_minor_locator(AutoMinorLocator(2))
 set_fixed_axes_box(fig, ax, aspect=ASPECT)
 cbar = add_matplotlib_colorbar(fig, ax, filled, pad=0.13, width=0.08)
 cbar.set_label("Signal [Unit]")
-save_fixed_canvas_figure(fig, OUT / "portrait_2_3_contour.svg", aspect=ASPECT)
+save_adaptive_figure(fig, OUT / "portrait_2_3_contour.svg")
 plt.close(fig)

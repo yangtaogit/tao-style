@@ -33,8 +33,9 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 ## Important Scientific Plotting Rules
 
 - Default plotting backend: Python/Matplotlib unless the user's stack is already different.
-- Default single-plot axes-box reference size: `1.8 in`; default `3:2` axes box is `2.7 in x 1.8 in`. Keep exported single-panel canvas height fixed by default; allow rightward canvas expansion for right-side colorbars, outside legends, and long labels while preserving the axes-box size. Use `0.42 in` as the initial left layout margin.
-- Common landscape/square ratios use the same default axes-box height: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, `5:3 = 3.0 in x 1.8 in`. Common portrait ratios use the same default axes-box width: `2:3 = 1.8 in x 2.7 in`, `3:5 = 1.8 in x 3.0 in`.
+- Default single-plot axes-box reference size: `2.0 in`; default `3:2` axes box is `3.0 in x 2.0 in`. Do not fix exported canvas height or width by default; save with content-adaptive cropping so titles, labels, legends, colorbars, and annotations expand the canvas while preserving the axes-box size.
+- Equal-unit XY plots are an exception: when X/Y are comparable physical lengths or positions, fix the X-axis box width at `3.0 in`, compute Y-axis box height as `3.0 in * Y range / X range`, and use equal data aspect.
+- Common landscape/square ratios use the same default axes-box height: `1:1 = 2.0 in x 2.0 in`, `3:2 = 3.0 in x 2.0 in`, `5:3 = 3.33 in x 2.0 in`. Common portrait ratios use the same default axes-box width: `2:3 = 2.0 in x 3.0 in`, `3:5 = 2.0 in x 3.33 in`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
 - Font-stable vector export: default SVG text should be converted to paths; default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and target fonts are available.

@@ -14,7 +14,7 @@ from scripts.apply_tao_style import (  # noqa: E402
     apply_matplotlib_legend,
     axes_box_size,
     matplotlib_rcparams,
-    save_fixed_canvas_figure,
+    save_adaptive_figure,
     set_fixed_axes_box,
 )
 
@@ -39,5 +39,5 @@ ax.yaxis.set_minor_locator(AutoMinorLocator(2))
 apply_matplotlib_legend(ax, outside=False, loc="upper right")
 
 set_fixed_axes_box(fig, ax, aspect=ASPECT)
-save_fixed_canvas_figure(fig, OUT / "portrait_2_3_curves.svg", aspect=ASPECT)
+save_adaptive_figure(fig, OUT / "portrait_2_3_curves.svg")
 plt.close(fig)

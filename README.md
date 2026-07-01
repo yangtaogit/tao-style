@@ -48,8 +48,9 @@
 ### 坐标框尺寸与比例
 
 - 单图科研图固定黑色 XY 坐标框的物理尺寸，canvas 可随标签、legend、colorbar 等外置元素自适应扩展。
-- 默认比例为 `3:2`，坐标框尺寸为 `2.7 in × 1.8 in`。常用单图尺寸：`1:1 = 1.8 in × 1.8 in`，`3:2 = 2.7 in × 1.8 in`，`5:3 = 3.0 in × 1.8 in`，`2:3 = 1.8 in × 2.7 in`，`3:5 = 1.8 in × 3.0 in`。
-- 单图默认固定 canvas 高度；右侧 colorbar 或外置 legend 可使 canvas 向右扩展，但坐标框尺寸保持不变。
+- 默认比例为 `3:2`，坐标框尺寸为 `3.0 in × 2.0 in`。常用单图尺寸：`1:1 = 2.0 in × 2.0 in`，`3:2 = 3.0 in × 2.0 in`，`5:3 = 3.33 in × 2.0 in`，`2:3 = 2.0 in × 3.0 in`，`3:5 = 2.0 in × 3.33 in`。
+- 默认不固定导出 canvas 的高度或宽度；固定坐标框后，canvas 按标题、tick label、坐标轴标题、legend、colorbar 和 annotation 等可见内容自适应裁切，并保留少量安全边距。
+- 等比例 XY 图是单图比例规则的例外。若 X/Y 都是长度、位置、空间坐标、几何尺寸等需要真实比例关系的量，默认固定 X 坐标框长度为 `3.0 in`，Y 坐标框高度按显示范围比例自适应：`Y 高度 = 3.0 in × (Y range / X range)`，并使用等比例数据显示。
 - 多图排列、论文栏宽、slides 占位和 poster/report 版式不受单图默认尺寸限制，应按目标版式确定。
 
 ### 坐标轴、tick 与标签
@@ -263,8 +264,9 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### Axes Box Size and Aspect Ratio
 
 - Single-panel scientific plots fix the physical size of the black XY axes box; the canvas may expand for labels, legends, colorbars, and annotations.
-- The default ratio is `3:2`, with a `2.7 in × 1.8 in` axes box. Common single-panel sizes are `1:1 = 1.8 in × 1.8 in`, `3:2 = 2.7 in × 1.8 in`, `5:3 = 3.0 in × 1.8 in`, `2:3 = 1.8 in × 2.7 in`, and `3:5 = 1.8 in × 3.0 in`.
-- Single-panel figures keep canvas height fixed by default; right-side colorbars or outside legends may expand the canvas rightward while preserving the axes-box size.
+- The default ratio is `3:2`, with a `3.0 in × 2.0 in` axes box. Common single-panel sizes are `1:1 = 2.0 in × 2.0 in`, `3:2 = 3.0 in × 2.0 in`, `5:3 = 3.33 in × 2.0 in`, `2:3 = 2.0 in × 3.0 in`, and `3:5 = 2.0 in × 3.33 in`.
+- Exported canvas height and width are not fixed by default. After the axes box is fixed, crop the canvas adaptively around visible content such as titles, tick labels, axis labels, legends, colorbars, and annotations, with a small safety margin.
+- Equal-unit XY plots are an exception to the default single-panel ratios. When X and Y are both physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, fix the X-axis box width at `3.0 in` and compute the Y-axis box height from the displayed range ratio: `Y height = 3.0 in × (Y range / X range)`, using equal data aspect.
 - Multi-panel figures, journal columns, slide placeholders, poster panels, and report layouts should be sized for the target layout rather than the single-panel default.
 
 ### Axes, Ticks, and Labels

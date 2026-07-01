@@ -141,15 +141,17 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 ## Axes Box Size and Aspect Ratio
 
 - For a single-plot scientific figure, fix the physical size of the axes box, meaning the black XY plotting frame, rather than fixing the whole output canvas.
-- Use `1.8 in` as the default reference size when Tao does not specify the target medium.
-- Use `3:2` as the default axes-box width:height ratio, so the default axes box is `2.7 in x 1.8 in`.
-- For landscape and square single-plot ratios, keep the axes-box height fixed at `1.8 in`: `1:1 = 1.8 in x 1.8 in`, `3:2 = 2.7 in x 1.8 in`, and `5:3 = 3.0 in x 1.8 in`.
-- For portrait ratios, treat them as rotated forms of the landscape sizes and keep the axes-box width fixed at `1.8 in`: `2:3 = 1.8 in x 2.7 in` and `3:5 = 1.8 in x 3.0 in`.
+- Use `2.0 in` as the default reference size when Tao does not specify the target medium.
+- Use `3:2` as the default axes-box width:height ratio, so the default axes box is `3.0 in x 2.0 in`.
+- For landscape and square single-plot ratios, keep the axes-box height fixed at `2.0 in`: `1:1 = 2.0 in x 2.0 in`, `3:2 = 3.0 in x 2.0 in`, and `5:3 = 3.33 in x 2.0 in`.
+- For portrait ratios, treat them as rotated forms of the landscape sizes and keep the axes-box width fixed at `2.0 in`: `2:3 = 2.0 in x 3.0 in` and `3:5 = 2.0 in x 3.33 in`.
 - Keep `1:1`, `3:2`, `5:3`, `2:3`, and `3:5` as the common axes-box ratio options when Tao asks to choose or compare.
-- For default single-panel figures, keep the exported canvas height fixed. With the default margins, the default landscape canvas height is about `2.40 in`. Right-side colorbars, outside legends, long y tick labels, and y-axis labels may expand the canvas horizontally while the axes-box size remains fixed.
-- Use the configured left margin (`0.42 in`) as the initial layout margin, but do not treat it as a hard crop boundary. The exported canvas width may expand left or right as needed to include y tick labels, y-axis labels, outside legends, colorbars, and annotations.
-- Prefer concise y tick formatting when labels become very long, but never crop tick labels or axis titles just to keep a fixed canvas edge. These outside elements must not change the final physical size of the XY plotting frame or the fixed canvas dimension.
-- Keep vertical elements within the fixed top and bottom margins. Reserve or expand horizontal canvas space for long labels, right-side colorbars, and outside legends rather than moving or resizing the axes box.
+- Equal-unit XY plots are an exception to the default single-plot ratios. Use this when X and Y both represent comparable physical lengths, positions, spatial coordinates, map coordinates, device geometry, or other quantities where one X unit and one Y unit should have the same visual length.
+- For equal-unit XY plots, fix the X-axis box width at `3.0 in` by default and compute the Y-axis box height from the displayed data range: `Y box height = 3.0 in * (Y range / X range)`. Use equal data aspect, such as Matplotlib `ax.set_aspect("equal", adjustable="box")`.
+- Equal-unit XY plots are not constrained by `1:1`, `3:2`, `5:3`, `2:3`, or `3:5` default ratios. The exported canvas still adapts to all visible titles, labels, legends, colorbars, and annotations. If the resulting height is extreme, ask Tao whether to change the fixed X width or crop/limit the displayed data range.
+- Do not fix the exported canvas height or width by default. After fixing the axes-box size, let the exported canvas adapt to all visible content, including titles, tick labels, axis labels, legends, colorbars, and annotations.
+- Use content-adaptive cropping with a small safety margin, such as `pad_inches=0.02-0.04`. Never crop text, legends, colorbars, annotations, or tick labels to preserve a canvas edge.
+- Outside elements must not change the final physical size of the XY plotting frame. They should expand the surrounding canvas instead of moving or resizing the axes box.
 - Treat the ratio as the plotting-frame width:height ratio, not as an equal data-unit aspect constraint.
 - Multi-panel canvases are not constrained by the single-plot ratio rule. Choose the canvas size and panel axes-box sizes based on the number of panels, shared axes, label space, legend placement, and the data relationship.
 - If the target medium has a known final figure width, such as a journal column, slide placeholder, poster panel, or report layout, confirm or infer that target width first and choose the axes-box size and surrounding canvas so the figure is not heavily scaled later.
@@ -162,8 +164,9 @@ When using Matplotlib, import `scripts/apply_tao_style.py` if the skill files ar
 from scripts.apply_tao_style import (
     axes_box_size,
     matplotlib_rcparams,
-    save_fixed_canvas_figure,
+    save_adaptive_figure,
     set_fixed_axes_box,
+    set_equal_xy_axes_box,
 )
 
 plt.rcParams.update(matplotlib_rcparams())
@@ -171,7 +174,17 @@ aspect = "3:2"
 fig, ax = plt.subplots(figsize=axes_box_size(aspect))
 # After plotting labels/legends and before saving:
 set_fixed_axes_box(fig, ax, aspect=aspect)
-save_fixed_canvas_figure(fig, "figure.svg", aspect=aspect)
+save_adaptive_figure(fig, "figure.svg")
+```
+
+For equal-unit XY plots such as spatial coordinates or geometry, fix the X-axis box width and let the Y-axis height follow the data range:
+
+```python
+from scripts.apply_tao_style import set_equal_xy_axes_box, save_adaptive_figure
+
+# After setting x/y limits for physical coordinates:
+set_equal_xy_axes_box(fig, ax, xlim=(0, 10), ylim=(0, 5))
+save_adaptive_figure(fig, "equal_xy_figure.svg")
 ```
 
 For legends, use the helper when available:
@@ -192,7 +205,7 @@ apply_matplotlib_log10_axis(ax, axis="y")
 
 This helper formats major log tick labels as ordinary text with Unicode superscripts, preserving the same font family as other axis tick labels.
 
-For right-side colorbars, set the fixed axes box first, then add the colorbar with the helper so the canvas can expand without changing the axes-box size:
+For right-side colorbars, set the fixed axes box first, then add the colorbar with the helper so the adaptive canvas can include it without changing the axes-box size:
 
 ```python
 from scripts.apply_tao_style import add_matplotlib_colorbar
@@ -200,7 +213,7 @@ from scripts.apply_tao_style import add_matplotlib_colorbar
 set_fixed_axes_box(fig, ax, aspect=aspect)
 cbar = add_matplotlib_colorbar(fig, ax, image, pad=0.13, width=0.08)
 cbar.set_label("Signal [Unit]")
-save_fixed_canvas_figure(fig, "figure.svg", aspect=aspect)
+save_adaptive_figure(fig, "figure.svg")
 ```
 
 For histograms, ask for the y-axis mode first, then use the helper when available:
