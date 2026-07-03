@@ -777,12 +777,21 @@ def apply_matplotlib_3d_style(
     ylabel: str = "Y",
     zlabel: str = "Z",
     labelpad: float = -3.0,
+    zlabelpad: float | None = -6.0,
     tick_pad: float = -1.5,
     zoom: float | None = 1.2,
     max_ticks: int | None = 5,
     projection: str = "ortho",
 ):
     """Apply Tao typography to Matplotlib's default 3D axes style.
+
+    The Z axis title needs a tighter pad than X/Y: Matplotlib offsets each
+    axis title from the outer edge of its tick labels, and Z tick numbers
+    are horizontal text whose width, not height, sets that edge, so a
+    uniform labelpad leaves the Z title visually far from its numbers.
+    ``zlabelpad`` defaults tighter than ``labelpad``; pass None to reuse
+    ``labelpad``. Keeping Z tick text short via unit scaling also narrows
+    the gap.
 
     Orthographic projection is the Tao Style default: the vertical Z axis
     stays vertical on screen and heights remain comparable along the depth
@@ -817,7 +826,7 @@ def apply_matplotlib_3d_style(
 
     ax.set_xlabel(xlabel, labelpad=labelpad)
     ax.set_ylabel(ylabel, labelpad=labelpad)
-    ax.set_zlabel(zlabel, labelpad=labelpad)
+    ax.set_zlabel(zlabel, labelpad=labelpad if zlabelpad is None else zlabelpad)
     ax.tick_params(labelsize=TICK_LABEL_SIZE, colors=AXIS_COLOR, pad=tick_pad)
     ax.grid(True)
 
