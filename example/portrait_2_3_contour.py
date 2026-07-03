@@ -33,7 +33,7 @@ zz = (
 )
 
 levels = np.linspace(zz.min(), zz.max(), 9)
-cmap = matplotlib_colormap("tau-blue", n=len(levels) - 1)
+cmap = matplotlib_colormap("tao-blue", n=len(levels) - 1)
 norm = BoundaryNorm(levels, cmap.N)
 
 fig, ax = plt.subplots(figsize=axes_box_size(ASPECT))

@@ -70,12 +70,12 @@ def main() -> None:
     )
 
     draw_palette(fig.add_subplot(grid[0, 0]), "Core anchors", CORE_PALETTE)
-    draw_palette(fig.add_subplot(grid[1, 0]), "\u03c4 palette", categorical_palette("tau"))
-    draw_gradient(fig.add_subplot(grid[2, 0]), "\u03c4 blue gradient", "tau-blue")
-    draw_gradient(fig.add_subplot(grid[3, 0]), "\u03c4 gray gradient", "tau-gray")
-    draw_gradient(fig.add_subplot(grid[4, 0]), "\u03c4 green gradient", "tau-green")
-    draw_gradient(fig.add_subplot(grid[5, 0]), "\u03c4 red gradient", "tau-red")
-    draw_gradient(fig.add_subplot(grid[6, 0]), "\u03c4 gradient", "tau")
+    draw_palette(fig.add_subplot(grid[1, 0]), "tao palette", categorical_palette("tao"))
+    draw_gradient(fig.add_subplot(grid[2, 0]), "tao blue gradient", "tao-blue")
+    draw_gradient(fig.add_subplot(grid[3, 0]), "tao gray gradient", "tao-gray")
+    draw_gradient(fig.add_subplot(grid[4, 0]), "tao green gradient", "tao-green")
+    draw_gradient(fig.add_subplot(grid[5, 0]), "tao red gradient", "tao-red")
+    draw_gradient(fig.add_subplot(grid[6, 0]), "tao gradient", "tao")
 
     output = Path(__file__).with_suffix(".svg")
     fig.savefig(output, bbox_inches="tight", pad_inches=0.03)

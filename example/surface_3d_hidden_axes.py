@@ -35,7 +35,7 @@ def main() -> None:
     zz += 0.48 * np.exp(-0.55 * ((xx - 1.05) ** 2 + 1.5 * (yy + 0.45) ** 2))
     zz -= 0.18 * np.exp(-0.65 * ((xx + 1.35) ** 2 + 1.25 * (yy - 0.7) ** 2))
 
-    cmap = matplotlib_colormap("tau-blue")
+    cmap = matplotlib_colormap("tao-blue")
     elev, azim = 24, -58
 
     fig = plt.figure(figsize=(4.8, 3.15))
