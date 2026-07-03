@@ -68,7 +68,16 @@ CATEGORICAL_PALETTES = {
 GRADIENT_COLORMAPS = {
     "tao-blue": ["#EEF1F8", "#C8D2EA", "#8799CF", "#4E5CA4", "#2A2F80"],
     "tao-gray": ["#EDEDED", "#C9C9C9", "#9A9A9A", "#5F5F5F", "#000000"],
-    "tao-green": ["#F2F8EC", "#D8EBC7", "#B8D98E", "#99CB6F", "#4F7F2F"],
+    "tao-green": [
+        "#EEF6EB",
+        "#C6E3C0",
+        "#94CB96",
+        "#5CA86C",
+        "#35854C",
+        "#1D6336",
+        "#124424",
+        "#0C2B17",
+    ],
     "tao-red": ["#F8EEEE", "#E5BFC0", "#D08888", "#B04A4A", "#7D1415"],
     "tao": TAO_PALETTE,
 }
