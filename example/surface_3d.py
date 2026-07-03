@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
+    add_matplotlib_3d_colorbar,
     apply_matplotlib_3d_style,
     matplotlib_colormap,
     matplotlib_rcparams,
@@ -73,9 +74,8 @@ def main() -> None:
         zoom=1.2,
     )
 
-    cbar = fig.colorbar(surface, ax=ax, fraction=0.035, pad=0.16, shrink=0.72)
+    cbar = add_matplotlib_3d_colorbar(fig, ax, surface)
     cbar.set_label("Value", labelpad=4)
-    cbar.outline.set_linewidth(0.6)
 
     output = Path(__file__).with_suffix(".svg")
     fig.savefig(output, bbox_inches="tight", pad_inches=0.03)
