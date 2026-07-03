@@ -86,8 +86,10 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Color
 
-- Prefer cool, restrained core color anchors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080`; for ordinary multi-series plots, use these three first and keep this order.
-- Only when there are more than three ordinary series, add extension colors. Keep extension colors visually reasonable and prioritize light gray first: `#BDBDBD`, then blue extensions `#4378BC`, `#6FCCDE`, then darker blue `#3953A5` if still needed.
+- Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors. Deep blue and black are hard to tell apart, so they must never be adjacent in a series order, and black enters only from three series onward.
+- Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`. 6: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#4378BC`, `#808080`. 7: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#3953A5`, `#808080`, `#4378BC`.
+- For cases outside the tables, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder the full sequence so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
+- `#6FCCDE` belongs to the τ palette and τ gradient only; as a standalone categorical color use `#8799CF`, taken from the dark-blue gradient, so the light-blue slot stays in the same visual family.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding. When red is needed, prefer muted red `#B04A4A` over saturated red. Red is not part of the default ordinary multi-series sequence.
 - For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients by default.
 - Use the τ palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
@@ -111,7 +113,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Histograms
 
-- Before plotting a histogram, ask which y-axis mode to use: raw `Count` or normalized `Probability Density [1/Unit]`.
+- If the y-axis mode is unspecified and not clear from context, default to raw `Count` and state the assumption; ask only when normalization materially affects the result, such as comparing datasets with different sample sizes.
 - Use `Count` for raw bin counts. Label the y axis `Count`.
 - Use `Probability Density [1/Unit]` when Tao asks for normalized histograms. The unit should be the inverse of the x-axis unit, for example `Probability Density [1/mm]`.
 - In Matplotlib, use `density=True` for `Probability Density [1/Unit]`.
@@ -158,7 +160,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Python Starter
 
-When using Matplotlib, import `scripts/apply_tao_style.py` if the skill files are available locally:
+When using Matplotlib, import `scripts/apply_tao_style.py` if the skill files are available locally. The import requires the skill root as the working directory or on `sys.path`; otherwise use the CLI fallback below to generate the values path-independently.
 
 ```python
 from scripts.apply_tao_style import (
@@ -175,6 +177,14 @@ fig, ax = plt.subplots(figsize=axes_box_size(aspect))
 # After plotting labels/legends and before saving:
 set_fixed_axes_box(fig, ax, aspect=aspect)
 save_adaptive_figure(fig, "figure.svg")
+```
+
+For five or more ordinary series, assign colors explicitly with the per-count helper; the fixed `prop_cycle` matches the per-count orders only up to four series:
+
+```python
+from scripts.apply_tao_style import series_colors
+
+colors = series_colors(5)
 ```
 
 For equal-unit XY plots such as spatial coordinates or geometry, fix the X-axis box width and let the Y-axis height follow the data range:
@@ -211,7 +221,7 @@ For right-side colorbars, set the fixed axes box first, then add the colorbar wi
 from scripts.apply_tao_style import add_matplotlib_colorbar
 
 set_fixed_axes_box(fig, ax, aspect=aspect)
-cbar = add_matplotlib_colorbar(fig, ax, image, pad=0.13, width=0.08)
+cbar = add_matplotlib_colorbar(fig, ax, image, pad=0.12, width=0.08)
 cbar.set_label("Signal [Unit]")
 save_adaptive_figure(fig, "figure.svg")
 ```
@@ -221,7 +231,7 @@ For histograms, ask for the y-axis mode first, then use the helper when availabl
 ```python
 from scripts.apply_tao_style import plot_matplotlib_histogram
 
-mode = "probability_density"  # or "count", after asking Tao
+mode = "count"  # default; use "probability_density" when Tao asks for normalized histograms
 plot_matplotlib_histogram(ax, data, bins, mode, unit="mm", color="#2A2F80", label="Sample")
 ```
 
@@ -278,9 +288,5 @@ python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 ## Open Preferences
 
 - TODO: Confirm Tao's default journal and slide figure sizes.
-- TODO: Confirm whether to extend the categorical palette beyond the current five-color core.
-- TODO: Confirm sequential and diverging colormaps.
-- TODO: Confirm final default errorbar cap size and errorbar line width after visual review.
-- TODO: Confirm final default fitted-line width and opacity after visual review.
+- TODO: Confirm a diverging colormap for signed data.
 - TODO: Confirm preferred major tick length and minor tick length.
-- TODO: Add representative input data and expected figure examples.

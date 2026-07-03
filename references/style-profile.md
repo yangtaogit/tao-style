@@ -8,6 +8,7 @@ Status: active style profile. Follow the confirmed rules in this file and the re
 - For scientific slide reports, ask whether to use Beamer when the output format is not already specified.
 - For academic documents, ask whether to use the `yangtaogit/tao-document` template when the template is not already specified.
 - Apply Tao Style directly when the user invokes `$tao-style`, says "Tao Style", or asks for "my style".
+- Combine any needed questions—style opt-in, output format or template, and required details—into one concise message instead of asking sequentially.
 
 ## Scientific Plot Defaults
 
@@ -16,7 +17,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Default backend: Python/Matplotlib when the user does not specify a plotting stack.
 - Formal output: prefer vector formats such as SVG and PDF.
 - Font-stable export: default SVG text should be converted to paths, and default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and when the target environment has the required fonts.
-- Histograms: ask whether the y axis should be raw `Count` or normalized `Probability Density [1/Unit]` before plotting; render default histograms as stepped bin outlines with light fill, not as connected bin-center lines.
+- Histograms: if the y-axis mode is unspecified and not clear from context, default to raw `Count` and state the assumption; ask only when normalization materially affects the result. Render default histograms as stepped bin outlines with light fill, not as connected bin-center lines.
 
 ## Typography
 
@@ -44,9 +45,11 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 
 ## Color
 
-- Core color anchors: deep blue `#2A2F80`, black `#000000`, gray `#808080`; use them first for ordinary multi-series plots and keep this order. Use muted red `#B04A4A` only for explicit emphasis.
-- Default multi-series color sequence: use `#2A2F80`, `#000000`, and `#808080` first. Only when there are more than three ordinary series, add extension colors with a reasonable visual order, prioritizing light gray first: `#BDBDBD`, then blue extensions `#4378BC`, `#6FCCDE`, then darker blue `#3953A5` if still needed. Red `#B04A4A` is not part of the default sequence and should be used only for emphasis.
-- Optional τ palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger τ color alternative is desired.
+- Core color anchors: deep blue `#2A2F80`, black `#000000`, gray `#808080`. Deep blue and black are hard to tell apart, so they must never be adjacent in a series order, and black enters only from three series onward. Use muted red `#B04A4A` only for explicit emphasis; it is never part of the ordinary sequence.
+- Per-count series colors: the color set and its order both depend on the number of ordinary series. Use the sequence for the actual series count; do not truncate or extend another count's sequence. 1 series: `#2A2F80`. 2 series: `#2A2F80`, `#808080`. 3 series: `#2A2F80`, `#808080`, `#000000`. 4 series: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5 series: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`. 6 series: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#4378BC`, `#808080`. 7 series: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#3953A5`, `#808080`, `#4378BC`.
+- Extension color pool and priority for cases outside the tables: `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`. When reordering, keep `#2A2F80` first and make adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
+- Above about five ordinary series, prefer switching to a dark-blue or grayscale gradient instead of extending the categorical sequence.
+- Optional τ palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger τ color alternative is desired. `#6FCCDE` stays in the τ palette and τ gradient but is not used as a standalone categorical color; the standalone light blue is `#8799CF` from the dark-blue gradient.
 - Sequential colormap: prefer dark-blue gradients and grayscale gradients for many curves or ordered series; use the τ gradient as an optional alternative for dedicated colorbars or heatmaps.
 - Preferred dark-blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
 - Preferred grayscale gradient: white to black.

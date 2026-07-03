@@ -1,6 +1,6 @@
 ---
 name: tao-style
-description: Portable personal visual-style guidance for Tao's preferred output style. Use when Codex is asked to create, edit, format, or export scientific plots, charts, data visualizations, figure panels, publication graphics, scientific slide reports, Beamer presentations, academic documents, manuscripts, reports, notes, handouts, diagrams, generated images, LaTeX/Beamer visual themes, or other artifacts where fonts, colors, labels, line widths, layout, or export settings matter. When triggered, ask whether to apply Tao Style unless the user already explicitly requested or rejected it.
+description: Portable personal visual-style guidance for Tao's preferred output style. Use when the assistant is asked to create, edit, format, or export scientific plots, charts, data visualizations, figure panels, publication graphics, scientific slide reports, Beamer presentations, academic documents, manuscripts, reports, notes, handouts, diagrams, generated images, LaTeX/Beamer visual themes, or other artifacts where fonts, colors, labels, line widths, layout, or export settings matter. When triggered, ask whether to apply Tao Style unless the user already explicitly requested or rejected it.
 ---
 
 # Tao Style
@@ -20,6 +20,7 @@ The current repository location is only a development and validation workspace. 
 - If the user says no, proceed with the requested output without Tao Style.
 - If the user already mentions `$tao-style`, "Tao Style", "my style", or a saved style preference, apply it without asking again.
 - If a required style detail is explicitly unspecified and materially affects the result, ask one concise question or use a neutral publication-style default and state the assumption.
+- Combine any needed questions—style opt-in, output format or template, and required details—into one concise message instead of asking sequentially.
 
 ## Plotting Workflow
 

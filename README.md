@@ -79,8 +79,9 @@
 ### 颜色
 
 - 默认偏好冷色调、暗蓝、黑色和灰色。
-- 核心颜色锚点为 deep blue `#2A2F80`、black `#000000`、gray `#808080`；普通多系列图优先使用这三色，并保持这个顺序。muted red `#B04A4A` 仅在需要明确强调时使用。
-- 多条曲线和多个直方图超过三个普通系列时才加入扩展色。扩展色也应保持合理顺序，优先补浅灰 `#BDBDBD`，再补蓝色扩展 `#4378BC`、`#6FCCDE`，仍不够时再用 darker blue `#3953A5`。没有明确强调语义时不使用红色。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
+- 核心颜色锚点为 deep blue `#2A2F80`、black `#000000`、gray `#808080`。deep blue 与黑色不易区分：两者在任何系列顺序中不相邻，黑色从三个系列起才引入。muted red `#B04A4A` 仅在需要明确强调时使用，不进入普通序列。
+- 颜色按系列数查表：集合与顺序都由普通系列数决定，直接使用对应系列数的色表，不从其他系列数的色表截断或追加。1 系列：`#2A2F80`；2 系列：`#2A2F80`、`#808080`；3 系列：`#2A2F80`、`#808080`、`#000000`；4 系列：`#2A2F80`、`#808080`、`#000000`、`#BDBDBD`；5 系列：`#2A2F80`、`#BDBDBD`、`#4378BC`、`#000000`、`#808080`；6 系列：`#2A2F80`、`#8799CF`、`#000000`、`#BDBDBD`、`#4378BC`、`#808080`；7 系列：`#2A2F80`、`#8799CF`、`#000000`、`#BDBDBD`、`#3953A5`、`#808080`、`#4378BC`。
+- 表外更多系列时，从 `#BDBDBD`、`#4378BC`、`#8799CF`、`#3953A5` 补色并整体重排，保证相邻系列在色相和明度上都可分；超过约 5 个系列时优先改用暗蓝梯度或灰度梯度。`#6FCCDE` 仅保留在 τ 色板和 τ 梯度中，单独作分类色时以暗蓝梯度中的 `#8799CF` 代替。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
 - τ 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。
 - colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
 
@@ -100,7 +101,7 @@
 
 ### 直方图
 
-- 绘制前询问 y 轴使用 raw `Count` 还是归一化 `Probability Density [1/Unit]`。
+- y 轴模式未指定且上下文不明确时，默认使用 raw `Count` 并说明假设；仅在归一化会实质影响结果时询问是否使用 `Probability Density [1/Unit]`。
 - 默认样式为阶梯状 bin 外轮廓加浅填充色；外轮廓沿 bin 边界绘制，不连接 bin 中点。
 - 只有 bin 宽较大、统计量较低或需要拟合并展示每个 bin 的不确定度时，才使用 marker + errorbar。
 
@@ -295,8 +296,9 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### Colors
 
 - The default palette favors cool tones, dark blue, black, and gray.
-- The core color anchors are deep blue `#2A2F80`, black `#000000`, and gray `#808080`; ordinary multi-series plots should use these three first and keep this order. Muted red `#B04A4A` is used only for explicit emphasis.
-- Add extension colors only when there are more than three ordinary series. Keep extension colors in a reasonable order, prioritizing light gray `#BDBDBD` first, then blue extensions `#4378BC`, `#6FCCDE`, then darker blue `#3953A5` if still needed. Do not use red without explicit emphasis semantics. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
+- The core color anchors are deep blue `#2A2F80`, black `#000000`, and gray `#808080`. Deep blue and black are hard to tell apart, so they are never adjacent in a series order, and black enters only from three series onward. Muted red `#B04A4A` is used only for explicit emphasis and never enters the ordinary sequence.
+- Series colors are looked up by count; both the set and the order depend on the number of ordinary series. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`. 6: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#4378BC`, `#808080`. 7: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#3953A5`, `#808080`, `#4378BC`.
+- Beyond the tables, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness; above about five series, prefer a dark-blue or grayscale gradient instead. `#6FCCDE` remains only in the τ palette and τ gradient; the standalone light blue is `#8799CF`. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
 - The τ palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
 
@@ -316,7 +318,7 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 ### Histograms
 
-- Before plotting, ask whether the y-axis should be raw `Count` or normalized `Probability Density [1/Unit]`.
+- If the y-axis mode is unspecified and not clear from context, default to raw `Count` and state the assumption; ask about normalized `Probability Density [1/Unit]` only when normalization materially affects the result.
 - The default histogram style is a stepped bin outline with a light fill, meaning the outline follows bin edges. It is not a line connecting bin centers.
 - Use marker + errorbar only for special cases such as wide bins, low statistics, or fitted binned data with uncertainty shown for each bin.
 

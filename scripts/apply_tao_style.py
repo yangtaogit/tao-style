@@ -19,27 +19,36 @@ except ImportError:  # pragma: no cover - Matplotlib installs usually include cy
 
 CORE_PALETTE = [
     "#2A2F80",
-    "#000000",
     "#808080",
+    "#000000",
 ]
 EMPHASIS_PALETTE = [
     "#B04A4A",
 ]
 PALETTE = [
     "#2A2F80",
-    "#000000",
     "#808080",
+    "#000000",
     "#BDBDBD",
     "#4378BC",
-    "#6FCCDE",
+    "#8799CF",
     "#3953A5",
 ]
 EXTENDED_PALETTE = [
     "#BDBDBD",
     "#4378BC",
-    "#6FCCDE",
+    "#8799CF",
     "#3953A5",
 ]
+SERIES_COLOR_ORDERS = {
+    1: ["#2A2F80"],
+    2: ["#2A2F80", "#808080"],
+    3: ["#2A2F80", "#808080", "#000000"],
+    4: ["#2A2F80", "#808080", "#000000", "#BDBDBD"],
+    5: ["#2A2F80", "#BDBDBD", "#4378BC", "#000000", "#808080"],
+    6: ["#2A2F80", "#8799CF", "#000000", "#BDBDBD", "#4378BC", "#808080"],
+    7: ["#2A2F80", "#8799CF", "#000000", "#BDBDBD", "#3953A5", "#808080", "#4378BC"],
+}
 TAU_PALETTE = [
     "#2A2F80",
     "#3953A5",
@@ -84,6 +93,8 @@ AXIS_LABEL_SIZE = 9
 TICK_LABEL_SIZE = 8
 LEGEND_FONT_SIZE = 8
 LEGEND_MANY_ITEMS_THRESHOLD = 5
+# Approximates the profile rule "split when the outside legend exceeds the
+# axes-box height": about eight 8 pt rows fit the default 2.0 in axes box.
 LEGEND_OUTSIDE_MAX_ROWS = 8
 LINE_WIDTH = 1.0
 FIT_LINE_WIDTH = LINE_WIDTH
@@ -335,7 +346,6 @@ def add_matplotlib_colorbar(
     ])
     colorbar = fig.colorbar(mappable, cax=cax, **kwargs)
     colorbar.outline.set_linewidth(AXIS_LINE_WIDTH)
-    fig._tao_style_right_external_artist = True
     return colorbar
 
 
@@ -432,7 +442,7 @@ def save_fixed_canvas_figure(
         allowed = ", ".join(sorted(FIGURE_ASPECTS))
         raise ValueError(f"Unknown aspect ratio {aspect!r}. Allowed: {allowed}")
     if fixed_dimension == "auto":
-        fixed_dimension = "height"
+        fixed_dimension = "width" if aspect in FIXED_WIDTH_ASPECTS else "height"
     if fixed_dimension not in {"width", "height"}:
         raise ValueError("fixed_dimension must be 'auto', 'width', or 'height'")
     if fixed_dimension == "width":
@@ -483,6 +493,10 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") 
     The default SVG export converts text to paths so font appearance does not
     depend on the fonts installed where the SVG is opened. PDF export keeps
     embedded TrueType text by default via ``pdf.fonttype = 42``.
+
+    The color prop_cycle matches the Tao Style per-count series orders only up
+    to four series; for five or more series, assign colors explicitly with
+    ``series_colors(n)``.
     """
 
     if svg_fonttype not in {"none", "path"}:
@@ -579,7 +593,6 @@ def apply_matplotlib_legend(ax, outside=None, **kwargs):
         frame.set_linewidth(AXIS_LINE_WIDTH)
         frame.set_facecolor("white")
         frame.set_alpha(1.0)
-        ax.figure._tao_style_right_external_artist = True
     return legend
 
 
@@ -819,6 +832,7 @@ def plotly_axis_style() -> dict[str, object]:
         "ticks": "inside",
         "tickwidth": MAJOR_TICK_WIDTH,
         "tickcolor": AXIS_COLOR,
+        "automargin": True,
         "mirror": "allticks",
         "minor_ticks": "inside",
         "minor_tickwidth": MINOR_TICK_WIDTH,
@@ -874,6 +888,25 @@ def apply_plotly_style(
     fig.update_xaxes(**axis_style)
     fig.update_yaxes(**axis_style)
     return fig
+
+
+def series_colors(n: int) -> list[str]:
+    """Return the Tao Style per-count color order for n ordinary series.
+
+    The color set and its order both depend on the series count; do not
+    truncate or extend another count's sequence. The rcParams prop_cycle
+    matches these orders only up to four series, so assign colors explicitly
+    from this function when plotting five or more series.
+    """
+
+    if n < 1:
+        raise ValueError("n must be at least 1")
+    if n not in SERIES_COLOR_ORDERS:
+        raise ValueError(
+            "No categorical order for more than 7 ordinary series; "
+            "use gradient_colormap('dark-blue') or gradient_colormap('gray') instead"
+        )
+    return list(SERIES_COLOR_ORDERS[n])
 
 
 def categorical_palette(name: str = "default") -> list[str]:
@@ -950,6 +983,7 @@ def main() -> None:
                     },
                     "gradients": GRADIENT_COLORMAPS,
                     "palettes": CATEGORICAL_PALETTES,
+                    "series_orders": SERIES_COLOR_ORDERS,
                 },
                 indent=2,
                 sort_keys=True,
@@ -972,6 +1006,7 @@ def main() -> None:
                     },
                     "gradients": GRADIENT_COLORMAPS,
                     "palettes": CATEGORICAL_PALETTES,
+                    "series_orders": SERIES_COLOR_ORDERS,
                     "histogram": {
                         "y_modes": HISTOGRAM_Y_MODES,
                         "fill_alpha": HISTOGRAM_FILL_ALPHA,
