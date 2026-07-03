@@ -33,9 +33,10 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 
 ## Lines, Markers, and Error Bars
 
-- Continuous curves and fitted curves: default line width `1.0 pt`.
+- Ordinary continuous curves and fitted curves: default line width `1.0 pt`.
 - Dense 2D XY data: prefer line-only plots to avoid overcrowded markers.
-- Multi-curve line styles: solid, dashed, dotted, then dash-dot.
+- Multi-curve categorical line styles: solid, dashed, dotted, then dash-dot.
+- Multi-curve gradient color schemes: use solid lines for all curves.
 - Marker size: `3.2 pt`.
 - Marker edge width: `0.7 pt`.
 - Error bar line width: `0.6 pt`.

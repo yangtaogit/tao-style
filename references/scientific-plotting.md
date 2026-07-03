@@ -130,9 +130,10 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Lines and Fits
 
-- Use line width `1.0 pt` for fitted curves and ordinary continuous curves by default.
+- Use line width `1.0 pt` for ordinary continuous curves and fitted curves by default.
 - Use line-only rendering for dense 2D data unless the user explicitly wants markers or the markers carry additional meaning.
-- When multiple fitted curves appear in the same plot, distinguish them with both color and line style. Use solid, dashed, dotted, then dash-dot as the default sequence.
+- When multiple ordinary curves or fitted curves appear in the same plot with categorical colors, distinguish them with both color and line style. Use solid, dashed, dotted, then dash-dot as the default line-style sequence.
+- When curves use a gradient color scheme, keep all curves solid so the gradient order remains visually clear.
 - Use the same color for a fitted curve and its corresponding data markers/error bars unless another mapping is specified.
 - Keep fitted curves visually secondary to the data points when judging fit quality; adjust line width or opacity if the fit overpowers markers/error bars.
 

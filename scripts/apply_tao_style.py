@@ -97,9 +97,12 @@ LEGEND_MANY_ITEMS_THRESHOLD = 5
 # axes-box height": about eight 8 pt rows fit the default 2.0 in axes box.
 LEGEND_OUTSIDE_MAX_ROWS = 8
 LINE_WIDTH = 1.0
+LINE_STYLES = ["-", "--", ":", "-."]
+LINE_STYLE = LINE_STYLES[0]
+# Backward-compatible aliases for existing plotting scripts.
 FIT_LINE_WIDTH = LINE_WIDTH
-FIT_LINE_STYLES = ["-", "--", ":", "-."]
-FIT_LINE_STYLE = FIT_LINE_STYLES[0]
+FIT_LINE_STYLES = LINE_STYLES
+FIT_LINE_STYLE = LINE_STYLE
 FIT_LINE_ALPHA = 1.0
 MARKER_SIZE = 3.2
 MARKER_EDGE_WIDTH = 0.7

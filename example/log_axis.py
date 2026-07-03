@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
     DEFAULT_ASPECT,
-    FIT_LINE_STYLES,
+    LINE_STYLES,
     LINE_WIDTH,
     PALETTE,
     apply_matplotlib_legend,
@@ -45,7 +45,7 @@ def main() -> None:
             x,
             y,
             color=color,
-            linestyle=FIT_LINE_STYLES[index],
+            linestyle=LINE_STYLES[index],
             linewidth=LINE_WIDTH,
             label=f"Sample {index + 1}",
         )

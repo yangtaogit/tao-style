@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
     DEFAULT_ASPECT,
-    FIT_LINE_STYLES,
+    LINE_STYLES,
     LINE_WIDTH,
     MARKER_SIZE,
     series_colors,
@@ -58,7 +58,7 @@ def main() -> None:
         ax.plot(
             fit_x,
             np.polyval(fit, fit_x),
-            linestyle=FIT_LINE_STYLES[index],
+            linestyle=LINE_STYLES[index],
             linewidth=LINE_WIDTH,
             color=color,
         )

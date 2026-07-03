@@ -89,7 +89,8 @@
 
 - 普通连续曲线和拟合曲线默认 line width 为 `1.0 pt`。
 - 二维 XY 数据点密集时优先只用线条，避免 marker 拥挤。
-- 多条拟合曲线用颜色和线型区分；线型顺序为 solid、dashed、dotted、dash-dot。
+- 多条普通曲线或拟合曲线使用分类颜色时，用颜色和线型共同区分；线型顺序为 solid、dashed、dotted、dash-dot。
+- 使用梯度色系表示多条曲线时，所有曲线均使用实线。
 - 默认 marker size 为 `3.2 pt`，marker edge width 为 `0.7 pt`。
 - 默认 error bar line width 为 `0.6 pt`，cap size 为 `1.6 pt`。
 
@@ -306,7 +307,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 - Regular continuous curves and fitted curves default to a line width of `1.0 pt`.
 - For dense two-dimensional XY data, prefer line-only plots to avoid overcrowded markers.
-- Multiple fitted curves should be distinguished by both color and line style, with the default order solid, dashed, dotted, and dash-dot.
+- Multiple ordinary or fitted curves with categorical colors should be distinguished by both color and line style, with the default order solid, dashed, dotted, and dash-dot.
+- When curves use a gradient color scheme, keep all curves solid.
 - Default marker size is `3.2 pt`; marker edge width is `0.7 pt`.
 - Default error-bar line width is `0.6 pt`; cap size is `1.6 pt`.
 

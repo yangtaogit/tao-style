@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
     DEFAULT_ASPECT,
-    FIT_LINE_STYLES,
+    LINE_STYLE,
     LINE_WIDTH,
     apply_matplotlib_legend,
     axes_box_size,
@@ -44,7 +44,7 @@ def main() -> None:
             x,
             y,
             color=color,
-            linestyle=FIT_LINE_STYLES[index % len(FIT_LINE_STYLES)],
+            linestyle=LINE_STYLE,
             linewidth=LINE_WIDTH,
             label=f"{temperature} K",
         )

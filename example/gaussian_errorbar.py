@@ -17,7 +17,7 @@ from apply_tao_style import (  # noqa: E402
     DEFAULT_ASPECT,
     ERRORBAR_CAP_SIZE,
     ERRORBAR_LINE_WIDTH,
-    FIT_LINE_STYLES,
+    LINE_STYLES,
     LINE_WIDTH,
     MARKER_SIZE,
     series_colors,
@@ -67,7 +67,7 @@ def main() -> None:
             x_fit,
             gaussian_pdf(x_fit, sigma),
             color=color,
-            linestyle=FIT_LINE_STYLES[index],
+            linestyle=LINE_STYLES[index],
             linewidth=LINE_WIDTH,
         )
 
