@@ -99,11 +99,6 @@ LEGEND_OUTSIDE_MAX_ROWS = 8
 LINE_WIDTH = 1.0
 LINE_STYLES = ["-", "--", ":", "-."]
 LINE_STYLE = LINE_STYLES[0]
-# Backward-compatible aliases for existing plotting scripts.
-FIT_LINE_WIDTH = LINE_WIDTH
-FIT_LINE_STYLES = LINE_STYLES
-FIT_LINE_STYLE = LINE_STYLE
-FIT_LINE_ALPHA = 1.0
 MARKER_SIZE = 3.2
 MARKER_EDGE_WIDTH = 0.7
 ERRORBAR_LINE_WIDTH = 0.6
@@ -111,6 +106,7 @@ ERRORBAR_CAP_SIZE = 1.6
 HISTOGRAM_FILL_ALPHA = 0.28
 COLORBAR_WIDTH_IN = 0.08
 COLORBAR_PAD_IN = 0.12
+COLORBAR_3D_PAD_IN = 0.28
 DEFAULT_ASPECT = "3:2"
 DEFAULT_AXES_HEIGHT_IN = 2.0
 DEFAULT_AXES_WIDTH_IN = 3.0
@@ -358,7 +354,7 @@ def add_matplotlib_3d_colorbar(
     mappable,
     *,
     width: float = COLORBAR_WIDTH_IN,
-    pad: float = COLORBAR_PAD_IN,
+    pad: float = COLORBAR_3D_PAD_IN,
     shrink: float = 0.72,
     expand_canvas: bool = True,
     **kwargs,
@@ -369,7 +365,7 @@ def add_matplotlib_3d_colorbar(
     labels and axis titles are drawn outside that rectangle, so a plain
     fig.colorbar(pad=...) can overlap them, especially with box zoom. This
     helper measures the axes' tight bounding box, which includes the labels,
-    places the colorbar to its right in inch units, and expands the canvas
+    places the colorbar to its right in inch units with a larger default gap than 2D colorbars, and expands the canvas
     width if needed. Call it after the 3D content, style, view angle, and
     box aspect are final, because the label extent depends on all of them.
     """

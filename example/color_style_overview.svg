@@ -1173,7 +1173,7 @@ z
    </g>
    <g id="matplotlib.axis_4"/>
    <g id="text_14">
-    <!-- τ palette -->
+    <!-- tao palette -->
     <g transform="translate(21.055 64.306447) scale(0.09 -0.09)">
      <defs>
       <path id="Arimo-3c4" d="M 878 2972 
@@ -1449,7 +1449,7 @@ L 422.815 124.930706
 " style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_20">
-    <!-- τ blue gradient -->
+    <!-- tao blue gradient -->
     <g transform="translate(21.055 119.930706) scale(0.09 -0.09)">
      <defs>
       <path id="Arimo-62" d="M 3291 1706 
@@ -1787,7 +1787,7 @@ L 422.815 176.01749
 " style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_26">
-    <!-- τ gray gradient -->
+    <!-- tao gray gradient -->
     <g transform="translate(21.055 171.01749) scale(0.09 -0.09)">
      <defs>
       <path id="Arimo-79" d="M 597 -1328 
@@ -2011,7 +2011,7 @@ L 422.815 227.104274
 " style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_32">
-    <!-- τ green gradient -->
+    <!-- tao green gradient -->
     <g transform="translate(21.055 222.104274) scale(0.09 -0.09)">
      <use xlink:href="#Arimo-3c4"/>
      <use xlink:href="#Arimo-20" x="39.501953"/>
@@ -2213,7 +2213,7 @@ L 422.815 278.191058
 " style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_38">
-    <!-- τ red gradient -->
+    <!-- tao red gradient -->
     <g transform="translate(21.055 273.191058) scale(0.09 -0.09)">
      <use xlink:href="#Arimo-3c4"/>
      <use xlink:href="#Arimo-20" x="39.501953"/>
@@ -2509,7 +2509,7 @@ L 422.815 329.277842
 " style="fill: none; stroke: #000000; stroke-width: 0.6; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_48">
-    <!-- τ gradient -->
+    <!-- tao gradient -->
     <g transform="translate(21.055 324.277842) scale(0.09 -0.09)">
      <use xlink:href="#Arimo-3c4"/>
      <use xlink:href="#Arimo-20" x="39.501953"/>

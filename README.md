@@ -1,4 +1,4 @@
-# τ Style
+# tao Style
 
 <p align="center">
   <picture>
@@ -22,7 +22,7 @@
 
 <a id="chinese-version"></a>
 
-`τ Style` 是面向科研绘图和科研报告生成的个人视觉风格 Skill。Codex 或 Claude Code 可在生成图表、slides 和相关科研视觉材料时调用。
+`tao Style` 是面向科研绘图和科研报告生成的个人视觉风格 Skill。Codex 或 Claude Code 可在生成图表、slides 和相关科研视觉材料时调用。
 
 ## 范围
 
@@ -68,7 +68,7 @@
 - 默认正交投影：`projection="ortho"`，Z 轴在屏幕上保持垂直、等高沿深度方向可比；仅在演示需要景深效果时使用透视投影（可配合较大 `focal_length` 减小畸变）。三面 pane 背景为 `#F2F2F2`。
 - 3D 网格只显示主 tick 对应的灰色点线，颜色为 `#9E9E9E`，线型为 dotted `":"`，线宽为 `0.2 pt`；不额外添加 pane 边界线或手动画框。
 - 3D tick 方向与 2D 坐标统一为向内；Matplotlib 3D 中使用 `inward_factor=0.0`、`outward_factor=0.2`。
-- 3D 空间分层回收：先用 `set_box_aspect(None, zoom=1.2)` 放大数据框并依靠内容自适应裁切收掉外圈空白；再限制每轴约 5 个主 tick，并用单位换算缩短 tick 数字；最后用温和的 `tick_pad=-1.5`、`labelpad=-3.0` 收紧剩余间距（起始值，按最终视角确认）。字体、字号和普通文本规则使用 τ Style。
+- 3D 空间分层回收：先用 `set_box_aspect(None, zoom=1.2)` 放大数据框并依靠内容自适应裁切收掉外圈空白；再限制每轴约 5 个主 tick，并用单位换算缩短 tick 数字；最后用温和的 `tick_pad=-1.5`、`labelpad=-3.0` 收紧剩余间距（起始值，按最终视角确认）。字体、字号和普通文本规则使用 tao Style。
 - 已知单位时继续使用方括号格式，例如 `X Position [mm]`。
 - 三维空间坐标之外的数值可用颜色梯度表示；colorbar 置于图框外右侧。3D 的 tick 数字和轴标题画在轴矩形之外，直接用 `fig.colorbar(pad=...)` 可能与其重叠；应按含标签的 tight bounding box 定位 colorbar（helper：`add_matplotlib_3d_colorbar`，保持 `shrink=0.72`，必要时向右扩展 canvas），并在内容、视角和 box aspect 定稿后再添加。
 - 三维图不受二维单图 XY 坐标框尺寸规则约束。
@@ -82,8 +82,8 @@
 - 默认偏好冷色调、暗蓝、黑色和灰色。
 - 核心颜色锚点为 deep blue `#2A2F80`、black `#000000`、gray `#808080`。deep blue 与黑色不易区分：两者在任何系列顺序中不相邻，黑色从三个系列起才引入。muted red `#B04A4A` 仅在需要明确强调时使用，不进入普通序列。
 - 颜色按系列数查表：集合与顺序都由普通系列数决定，直接使用对应系列数的色表，不从其他系列数的色表截断或追加。1 系列：`#2A2F80`；2 系列：`#2A2F80`、`#808080`；3 系列：`#2A2F80`、`#808080`、`#000000`；4 系列：`#2A2F80`、`#808080`、`#000000`、`#BDBDBD`；5 系列：`#2A2F80`、`#BDBDBD`、`#4378BC`、`#000000`、`#808080`。
-- 超过 5 个系列时，优先改用暗蓝梯度或灰度梯度，而非继续扩展分类色；仅当类别无序、梯度会误导时，才从 `#BDBDBD`、`#4378BC`、`#8799CF`、`#3953A5` 补色并整体重排，保证相邻系列在色相和明度上都可分。`#6FCCDE` 仅保留在 τ 色板和 τ 梯度中，单独作分类色时以暗蓝梯度中的 `#8799CF` 代替。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
-- τ 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。- colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
+- 超过 5 个系列时，优先改用暗蓝梯度或灰度梯度，而非继续扩展分类色；仅当类别无序、梯度会误导时，才从 `#BDBDBD`、`#4378BC`、`#8799CF`、`#3953A5` 补色并整体重排，保证相邻系列在色相和明度上都可分。`#6FCCDE` 仅保留在 tao 色板和 tao 梯度中，单独作分类色时以暗蓝梯度中的 `#8799CF` 代替。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
+- tao 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。- colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
 
 ### 线条、marker 与 error bar
 
@@ -112,27 +112,27 @@
 - 使用 Beamer 时，基于 [`yangtaogit/tao-slides`](https://github.com/yangtaogit/tao-slides) 模板。
 - 生成前获取或定位模板，并检查 README、示例、主题文件和构建命令。
 - 在模板副本或新的报告项目目录中生成内容，不直接修改模板源，除非明确要求修改模板。
-- slides 中的新科研图仍遵守 τ Style 科研绘图规则。
+- slides 中的新科研图仍遵守 tao Style 科研绘图规则。
 
 ## 学术文档 / Documents
 
 - 生成学术文档、manuscript、report、note 或 handout 且未指定模板时，先询问是否使用 [`yangtaogit/tao-document`](https://github.com/yangtaogit/tao-document/) 模板。
 - 使用该模板时，生成前获取或定位模板，并检查 README、示例、样式文件、资源文件和构建命令。
 - 在模板副本或新的文档项目目录中生成内容，不直接修改模板源，除非明确要求修改模板。
-- 文档中新增科研图仍遵守 τ Style 科研绘图规则。
+- 文档中新增科研图仍遵守 tao Style 科研绘图规则。
 
 ## 绘图风格样例
 
 ### 色系规则总览
 
-<img src="example/color_style_overview.svg" alt="τ Style color overview" width="100%">
+<img src="example/color_style_overview.svg" alt="tao Style color overview" width="100%">
 
 <table width="100%">
   <tr>
     <td colspan="2">色板展示</td>
   </tr>
   <tr>
-    <td colspan="2"><img src="example/tau_palette.svg" alt="τ palette example" width="100%"></td>
+    <td colspan="2"><img src="example/tao_palette.svg" alt="tao palette example" width="100%"></td>
   </tr>
   <tr>
     <td width="50%">2:3 竖向曲线图</td>
@@ -234,13 +234,13 @@ symlink 安装：更新本仓库即可。
 请用 $tao-style 生成这张科研图。
 ```
 
-Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘图时，AI 应先询问是否采用 τ Style。
+Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘图时，AI 应先询问是否采用 tao Style。
 
 ## English Version
 
 <a id="english-version"></a>
 
-`τ Style` is a personal visual-style Skill for scientific plots and scientific reports. Codex or Claude Code can apply it when generating plots, slides, and related scientific visual materials.
+`tao Style` is a personal visual-style Skill for scientific plots and scientific reports. Codex or Claude Code can apply it when generating plots, slides, and related scientific visual materials.
 
 ## Scope
 
@@ -286,9 +286,9 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - Use orthographic projection by default, `projection="ortho"`, so the Z axis stays vertical on screen and heights remain comparable along depth; use perspective (optionally with a larger `focal_length`) only for presentation-style depth effects. Keep the three light-gray 3D pane backgrounds with pane color `#F2F2F2`.
 - Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E`, linestyle `":"`, and linewidth `0.2 pt`. Do not add extra pane boundary lines or manual frames.
 - Match 2D axes by using inward ticks. In Matplotlib 3D, use `inward_factor=0.0` and `outward_factor=0.2`.
-- Reclaim 3D space in layers: enlarge the data box with `set_box_aspect(None, zoom=1.2)` and rely on content-adaptive cropping; limit each axis to about five major ticks and shorten tick text with unit scaling; then close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0` (starting values; verify at the final view angle). Apply τ Style typography: `9 pt` axis labels, `8 pt` tick labels, and ordinary text for regular coordinate labels instead of mathtext.
+- Reclaim 3D space in layers: enlarge the data box with `set_box_aspect(None, zoom=1.2)` and rely on content-adaptive cropping; limit each axis to about five major ticks and shorten tick text with unit scaling; then close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0` (starting values; verify at the final view angle). Apply tao Style typography: `9 pt` axis labels, `8 pt` tick labels, and ordinary text for regular coordinate labels instead of mathtext.
 - When units are known, keep the square-bracket format, such as `X Position [mm]`.
-- Use color gradients for scalar values in addition to 3D spatial coordinates; place the colorbar outside the right side of the axes. Matplotlib draws 3D tick and axis labels outside the axes rectangle, so a plain `fig.colorbar(pad=...)` can overlap them; position the colorbar from the axes' tight bounding box instead (helper: `add_matplotlib_3d_colorbar`, keeping `shrink=0.72`, expanding the canvas to the right when needed), and add it only after the content, view angle, and box aspect are final.
+- Use color gradients for scalar values in addition to 3D spatial coordinates; place the colorbar outside the right side of the axes. Matplotlib draws 3D tick and axis labels outside the axes rectangle, so a plain `fig.colorbar(pad=...)` can overlap them; position the colorbar from the axes' tight bounding box instead (helper: `add_matplotlib_3d_colorbar`, default `pad=0.28 in`, keeping `shrink=0.72`, expanding the canvas to the right when needed), and add it only after the content, view angle, and box aspect are final.
 - 3D figures are not constrained by the single-panel 2D XY axes-box size rule. Choose the canvas according to the view angle, data body, and right-side colorbar.
 - Equal-unit 3D plots are an exception to the default box: when X, Y, and Z all represent comparable physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, set the box aspect from the displayed data ranges (`set_box_aspect((x_range, y_range, z_range))`) so one data unit has equal visual length on all three axes; ask before cropping the displayed range if the ratio is extreme.
 - By default, 3D plots still show coordinates. Use the hidden-axis 3D/4D style only when the request explicitly asks to hide coordinates, de-emphasize the coordinate box, or emphasize the data body.
@@ -300,8 +300,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - The default palette favors cool tones, dark blue, black, and gray.
 - The core color anchors are deep blue `#2A2F80`, black `#000000`, and gray `#808080`. Deep blue and black are hard to tell apart, so they are never adjacent in a series order, and black enters only from three series onward. Muted red `#B04A4A` is used only for explicit emphasis and never enters the ordinary sequence.
 - Series colors are looked up by count; both the set and the order depend on the number of ordinary series. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`.
-- With more than five ordinary series, switch to a ? blue or ? gray gradient instead of extending the categorical sequence; only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness. `#6FCCDE` remains only in the τ palette and τ gradient; the standalone light blue is `#8799CF`. For ordered data, prefer ? blue or ? gray gradients by default; the ? blue gradient/colorbar is derived from deep blue `#2A2F80`.
-- The τ palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.- Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
+- With more than five ordinary series, switch to a tao blue or tao gray gradient instead of extending the categorical sequence; only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness. `#6FCCDE` remains only in the tao palette and tao gradient; the standalone light blue is `#8799CF`. For ordered data, prefer tao blue or tao gray gradients by default; the tao blue gradient/colorbar is derived from deep blue `#2A2F80`.
+- The tao palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.- Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
 
 ### Lines, Markers, and Error Bars
 
@@ -330,27 +330,27 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - If Beamer is used, base the report on the `yangtaogit/tao-slides` template: `https://github.com/yangtaogit/tao-slides`.
 - Before generating, fetch or locate the template and inspect its README, examples, theme files, and build commands. Do not assume template filenames or build commands without checking.
 - Generate content in a copied template or a new report project directory. Do not directly modify the template source unless explicitly requested.
-- New scientific figures used in slides should still follow the τ Style scientific plotting rules.
+- New scientific figures used in slides should still follow the tao Style scientific plotting rules.
 
 ## Academic Documents Style
 
 - When generating an academic document, manuscript, report, note, or handout and no template is specified, ask whether to use the [`yangtaogit/tao-document`](https://github.com/yangtaogit/tao-document/) template.
 - If `tao-document` is used, fetch or locate the template and inspect its README, examples, style files, assets, and build commands before generating.
 - Generate content in a copied template or a new document project directory. Do not directly modify the template source unless explicitly requested.
-- New scientific figures used in documents should still follow the τ Style scientific plotting rules.
+- New scientific figures used in documents should still follow the tao Style scientific plotting rules.
 
 ## Plotting Examples
 
 ### Color System Overview
 
-<img src="example/color_style_overview.svg" alt="τ Style color overview" width="100%">
+<img src="example/color_style_overview.svg" alt="tao Style color overview" width="100%">
 
 <table width="100%">
   <tr>
     <td colspan="2">Palette Display</td>
   </tr>
   <tr>
-    <td colspan="2"><img src="example/tau_palette.svg" alt="τ palette example" width="100%"></td>
+    <td colspan="2"><img src="example/tao_palette.svg" alt="tao palette example" width="100%"></td>
   </tr>
   <tr>
     <td width="50%">2:3 Portrait Curves</td>
@@ -452,4 +452,4 @@ Explicit call:
 Please use $tao-style to generate this scientific figure.
 ```
 
-Claude Code can call `/tao-style`. If the task involves scientific plotting but does not explicitly call the Skill, the AI should ask whether to apply τ Style.
+Claude Code can call `/tao-style`. If the task involves scientific plotting but does not explicitly call the Skill, the AI should ask whether to apply tao Style.

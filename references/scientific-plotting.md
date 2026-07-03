@@ -71,7 +71,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Apply Tao Style typography to 3D axes: ordinary text font, axis labels at `9 pt`, tick labels at `8 pt`, and Computer Modern only for real mathematical expressions.
 - Use plain `X`, `Y`, and `Z` labels unless Tao specifies physical quantities and units. When units are known, keep the same square-bracket format as 2D axes, such as `X Position [mm]`.
 - For 3D scalar fields, surfaces, or 4D data shown as spatial coordinates plus a value, encode the value with the preferred gradients and place the colorbar outside the right side of the axes.
-- Position 3D colorbars from the axes' tight bounding box, not the axes rectangle: Matplotlib draws 3D tick and axis labels outside the axes rectangle, so `fig.colorbar(pad=...)` can overlap them. Use the helper `add_matplotlib_3d_colorbar(fig, ax, mappable)`, which measures the label extent, keeps `shrink=0.72`, and expands the canvas to the right when needed. Add the colorbar only after the content, style, view angle, and box aspect are final.
+- Position 3D colorbars from the axes' tight bounding box, not the axes rectangle: Matplotlib draws 3D tick and axis labels outside the axes rectangle, so `fig.colorbar(pad=...)` can overlap them. Use the helper `add_matplotlib_3d_colorbar(fig, ax, mappable)`, which measures the label extent, uses a larger default gap (`pad=0.28 in`) than 2D colorbars, keeps `shrink=0.72`, and expands the canvas to the right when needed. Add the colorbar only after the content, style, view angle, and box aspect are final.
 - 3D figures are not constrained by the single-panel 2D XY axes-box rule; choose the canvas, view angle, and colorbar placement so the full 3D coordinate box and data remain readable.
 - Equal-unit 3D plots are an exception to the default box: when X, Y, and Z all represent comparable physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, set the 3D box aspect from the displayed data ranges so one data unit has equal visual length on all three axes. In Matplotlib use `ax.set_box_aspect((x_range, y_range, z_range))` or the helper `set_equal_xyz_box_aspect`, after setting the displayed limits.
 - If the equal-unit range ratio is extreme and the box becomes hard to read, ask Tao whether to crop the displayed range or fall back to the default box, and state the deviation.
@@ -93,16 +93,16 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 - Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors. Deep blue and black are hard to tell apart, so they must never be adjacent in a series order, and black enters only from three series onward.
 - Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`.
-- More than five ordinary series: switch to a ? blue or ? gray gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
-- `#6FCCDE` belongs to the τ palette and τ gradient only; as a standalone categorical color use `#8799CF`, taken from the ? blue gradient, so the light-blue slot stays in the same visual family.
+- More than five ordinary series: switch to a tao blue or tao gray gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
+- `#6FCCDE` belongs to the tao palette and tao gradient only; as a standalone categorical color use `#8799CF`, taken from the tao blue gradient, so the light-blue slot stays in the same visual family.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding. When red is needed, prefer muted red `#B04A4A` over saturated red. Red is not part of the default ordinary multi-series sequence.
-- For many curves or ordered series that need a color gradient, prefer ? blue gradients or ? gray gradients by default.
-- Use the τ palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
-- Treat the τ palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
-- Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the τ palette.
-- Preferred ? blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
-- Preferred ? gray gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
-- Optional τ gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- For many curves or ordered series that need a color gradient, prefer tao blue gradients or tao gray gradients by default.
+- Use the tao palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Treat the tao palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
+- Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the tao palette.
+- Preferred tao blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
+- Preferred tao gray gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
+- Optional tao gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Colorbars should sit outside the right side of the corresponding axes, use a vertical layout, and keep a black outline with the same line width as the axes box. For portrait single-panel figures, keep the axes-box width fixed and allow the canvas to expand rightward for the colorbar; do not squeeze the axes box or let the colorbar overlap tick labels.
 - Use these lists consistently across supported backends unless the user provides a data-specific color mapping.
 - Keep the lists easy to extend as Tao adds more preferred colors.
@@ -265,7 +265,7 @@ For 3D colorbars, add them last, after the content, style, view angle, and box a
 ```python
 from scripts.apply_tao_style import add_matplotlib_3d_colorbar
 
-cbar = add_matplotlib_3d_colorbar(fig, ax, surface)
+cbar = add_matplotlib_3d_colorbar(fig, ax, surface)  # default pad=0.28 in
 cbar.set_label("Signal [Unit]")
 ```
 
