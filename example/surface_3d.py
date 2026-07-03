@@ -11,7 +11,6 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 
 
@@ -19,9 +18,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
-    GRADIENT_COLORMAPS,
     apply_matplotlib_3d_style,
+    matplotlib_colormap,
     matplotlib_rcparams,
+    set_equal_xyz_box_aspect,
 )
 
 
@@ -35,7 +35,7 @@ def main() -> None:
     zz = 0.42 * np.cos(1.7 * radius) * np.exp(-0.12 * radius**2)
     zz += 0.18 * np.exp(-0.55 * ((xx - 1.05) ** 2 + 1.5 * (yy + 0.45) ** 2))
 
-    cmap = LinearSegmentedColormap.from_list("tao_dark_blue", GRADIENT_COLORMAPS["dark-blue"])
+    cmap = matplotlib_colormap("dark-blue")
     fig = plt.figure(figsize=(4.8, 3.15))
     ax = fig.add_subplot(111, projection="3d")
     surface = ax.plot_surface(
@@ -53,9 +53,25 @@ def main() -> None:
     ax.set_xlim(float(x.min()), float(x.max()))
     ax.set_ylim(float(y.min()), float(y.max()))
     ax.set_zlim(float(zz.min()) * 1.08, float(zz.max()) * 1.08)
-    ax.set_box_aspect((1.0, 0.88, 0.58))
     ax.view_init(elev=24, azim=-58)
-    apply_matplotlib_3d_style(ax, xlabel="X", ylabel="Y", zlabel="Z")
+    apply_matplotlib_3d_style(
+        ax,
+        xlabel="X",
+        ylabel="Y",
+        zlabel="Z",
+        zoom=1.2,
+        max_ticks=5,
+        tick_pad=-1.5,
+        labelpad=-3.0,
+    )
+
+    set_equal_xyz_box_aspect(
+        ax,
+        xlim=(float(x.min()), float(x.max())),
+        ylim=(float(y.min()), float(y.max())),
+        zlim=(float(zz.min()) * 1.08, float(zz.max()) * 1.08),
+        zoom=1.2,
+    )
 
     cbar = fig.colorbar(surface, ax=ax, fraction=0.035, pad=0.16, shrink=0.72)
     cbar.set_label("Value", labelpad=4)

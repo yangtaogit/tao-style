@@ -65,13 +65,14 @@
 ### 三维坐标
 
 - 三维科研图使用 Matplotlib 默认 3D 坐标框、pane 和 grid，包括 `X`、`Y`、`Z` 坐标轴。
-- 默认透视投影：`projection="persp"`；三面 pane 背景为 `#F2F2F2`。
+- 默认正交投影：`projection="ortho"`，Z 轴在屏幕上保持垂直、等高沿深度方向可比；仅在演示需要景深效果时使用透视投影（可配合较大 `focal_length` 减小畸变）。三面 pane 背景为 `#F2F2F2`。
 - 3D 网格只显示主 tick 对应的灰色点线，颜色为 `#9E9E9E`，线型为 dotted `":"`，线宽为 `0.2 pt`；不额外添加 pane 边界线或手动画框。
 - 3D tick 方向与 2D 坐标统一为向内；Matplotlib 3D 中使用 `inward_factor=0.0`、`outward_factor=0.2`。
-- 3D 间距：`tick_pad=-3.0`，`labelpad=-4.0`；字体、字号和普通文本规则使用 τ Style。
+- 3D 空间分层回收：先用 `set_box_aspect(None, zoom=1.2)` 放大数据框并依靠内容自适应裁切收掉外圈空白；再限制每轴约 5 个主 tick，并用单位换算缩短 tick 数字；最后用温和的 `tick_pad=-1.5`、`labelpad=-3.0` 收紧剩余间距（起始值，按最终视角确认）。字体、字号和普通文本规则使用 τ Style。
 - 已知单位时继续使用方括号格式，例如 `X Position [mm]`。
-- 三维空间坐标之外的数值可用颜色梯度表示；colorbar 置于图框外右侧。当前 3D example 使用 `pad=0.16`、`fraction=0.035`、`shrink=0.72`。
+- 三维空间坐标之外的数值可用颜色梯度表示；colorbar 置于图框外右侧。3D 的 tick 数字和轴标题画在轴矩形之外，直接用 `fig.colorbar(pad=...)` 可能与其重叠；应按含标签的 tight bounding box 定位 colorbar（helper：`add_matplotlib_3d_colorbar`，保持 `shrink=0.72`，必要时向右扩展 canvas），并在内容、视角和 box aspect 定稿后再添加。
 - 三维图不受二维单图 XY 坐标框尺寸规则约束。
+- 等比例 3D 图是默认坐标框的例外：若 X/Y/Z 都是长度、位置、空间坐标、几何尺寸等需要真实比例关系的量，按显示范围设置 `set_box_aspect((X range, Y range, Z range))`，使三个方向上一个数据单位的视觉长度相等；范围比例极端时先询问是否裁剪显示范围。
 - 默认三维绘图仍显示坐标轴；只有明确要求隐藏坐标、弱化坐标框或突出数据主体时，才使用隐藏三维坐标轴风格。
 - 隐藏三维坐标轴风格会隐藏主 `X/Y/Z` 坐标轴、tick、tick label、轴标题、pane 背景和网格；在图内空白区域放置小型 `XYZ` 方向箭头，并在颜色表示数值时保留图内 colorbar。
 - 隐藏坐标轴图默认按内容自适应裁切，裁切范围包含数据主体、图内 `XYZ` 方向箭头和图内 colorbar，并保留少量安全边距；`XYZ` 方向箭头和 colorbar 不应遮挡数据主体。
@@ -80,9 +81,10 @@
 
 - 默认偏好冷色调、暗蓝、黑色和灰色。
 - 核心颜色锚点为 deep blue `#2A2F80`、black `#000000`、gray `#808080`。deep blue 与黑色不易区分：两者在任何系列顺序中不相邻，黑色从三个系列起才引入。muted red `#B04A4A` 仅在需要明确强调时使用，不进入普通序列。
-- 颜色按系列数查表：集合与顺序都由普通系列数决定，直接使用对应系列数的色表，不从其他系列数的色表截断或追加。1 系列：`#2A2F80`；2 系列：`#2A2F80`、`#808080`；3 系列：`#2A2F80`、`#808080`、`#000000`；4 系列：`#2A2F80`、`#808080`、`#000000`、`#BDBDBD`；5 系列：`#2A2F80`、`#BDBDBD`、`#4378BC`、`#000000`、`#808080`；6 系列：`#2A2F80`、`#8799CF`、`#000000`、`#BDBDBD`、`#4378BC`、`#808080`；7 系列：`#2A2F80`、`#8799CF`、`#000000`、`#BDBDBD`、`#3953A5`、`#808080`、`#4378BC`。
-- 表外更多系列时，从 `#BDBDBD`、`#4378BC`、`#8799CF`、`#3953A5` 补色并整体重排，保证相邻系列在色相和明度上都可分；超过约 5 个系列时优先改用暗蓝梯度或灰度梯度。`#6FCCDE` 仅保留在 τ 色板和 τ 梯度中，单独作分类色时以暗蓝梯度中的 `#8799CF` 代替。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
+- 颜色按系列数查表：集合与顺序都由普通系列数决定，直接使用对应系列数的色表，不从其他系列数的色表截断或追加。1 系列：`#2A2F80`；2 系列：`#2A2F80`、`#808080`；3 系列：`#2A2F80`、`#808080`、`#000000`；4 系列：`#2A2F80`、`#808080`、`#000000`、`#BDBDBD`；5 系列：`#2A2F80`、`#BDBDBD`、`#4378BC`、`#000000`、`#808080`。
+- 超过 5 个系列时，优先改用暗蓝梯度或灰度梯度，而非继续扩展分类色；仅当类别无序、梯度会误导时，才从 `#BDBDBD`、`#4378BC`、`#8799CF`、`#3953A5` 补色并整体重排，保证相邻系列在色相和明度上都可分。`#6FCCDE` 仅保留在 τ 色板和 τ 梯度中，单独作分类色时以暗蓝梯度中的 `#8799CF` 代替。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
 - τ 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。
+- 可选 rainbow-muted 色板：`#2A2F80`、`#3596B5`、`#5FA04A`、`#C98526`、`#B04A4A`。用于恰好 5 个有序系列、且彩虹顺序本身携带语义的场景；饱和度与主体系一致，保留深蓝与 muted red 锚点，细线对白底对比度均不低于约 3:1。灰度下亮度非单调，红绿色盲下绿/琥珀/红有混淆风险，必须配合线型区分；不替代默认色表。
 - colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
 
 ### 线条、marker 与 error bar
@@ -282,13 +284,14 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### 3D Axes
 
 - 3D scientific plots should use Matplotlib's default 3D coordinate box, panes, and grid by default, including the `X`, `Y`, and `Z` axes.
-- Use perspective projection by default, `projection="persp"`. Keep the three light-gray 3D pane backgrounds with pane color `#F2F2F2`.
+- Use orthographic projection by default, `projection="ortho"`, so the Z axis stays vertical on screen and heights remain comparable along depth; use perspective (optionally with a larger `focal_length`) only for presentation-style depth effects. Keep the three light-gray 3D pane backgrounds with pane color `#F2F2F2`.
 - Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E`, linestyle `":"`, and linewidth `0.2 pt`. Do not add extra pane boundary lines or manual frames.
 - Match 2D axes by using inward ticks. In Matplotlib 3D, use `inward_factor=0.0` and `outward_factor=0.2`.
-- Use compact 3D label spacing: `tick_pad=-3.0` and `labelpad=-4.0`. Apply τ Style typography: `9 pt` axis labels, `8 pt` tick labels, and ordinary text for regular coordinate labels instead of mathtext.
+- Reclaim 3D space in layers: enlarge the data box with `set_box_aspect(None, zoom=1.2)` and rely on content-adaptive cropping; limit each axis to about five major ticks and shorten tick text with unit scaling; then close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0` (starting values; verify at the final view angle). Apply τ Style typography: `9 pt` axis labels, `8 pt` tick labels, and ordinary text for regular coordinate labels instead of mathtext.
 - When units are known, keep the square-bracket format, such as `X Position [mm]`.
-- Use color gradients for scalar values in addition to 3D spatial coordinates; place the colorbar outside the right side of the axes with more padding than 2D plots. The current 3D examples use `pad=0.16`, `fraction=0.035`, and `shrink=0.72`.
+- Use color gradients for scalar values in addition to 3D spatial coordinates; place the colorbar outside the right side of the axes. Matplotlib draws 3D tick and axis labels outside the axes rectangle, so a plain `fig.colorbar(pad=...)` can overlap them; position the colorbar from the axes' tight bounding box instead (helper: `add_matplotlib_3d_colorbar`, keeping `shrink=0.72`, expanding the canvas to the right when needed), and add it only after the content, view angle, and box aspect are final.
 - 3D figures are not constrained by the single-panel 2D XY axes-box size rule. Choose the canvas according to the view angle, data body, and right-side colorbar.
+- Equal-unit 3D plots are an exception to the default box: when X, Y, and Z all represent comparable physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, set the box aspect from the displayed data ranges (`set_box_aspect((x_range, y_range, z_range))`) so one data unit has equal visual length on all three axes; ask before cropping the displayed range if the ratio is extreme.
 - By default, 3D plots still show coordinates. Use the hidden-axis 3D/4D style only when the request explicitly asks to hide coordinates, de-emphasize the coordinate box, or emphasize the data body.
 - Hidden-axis 3D/4D style hides the main `X/Y/Z` axes, ticks, tick labels, axis titles, pane backgrounds, and grid. It adds a compact in-figure `XYZ` direction marker and keeps an in-figure colorbar when color encodes scalar values.
 - Hidden-axis figures use content-adaptive cropping by default. The crop includes the data body, in-figure `XYZ` marker, and in-figure colorbar with a small safety margin; the marker and colorbar should not cover the data body.
@@ -297,9 +300,10 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 - The default palette favors cool tones, dark blue, black, and gray.
 - The core color anchors are deep blue `#2A2F80`, black `#000000`, and gray `#808080`. Deep blue and black are hard to tell apart, so they are never adjacent in a series order, and black enters only from three series onward. Muted red `#B04A4A` is used only for explicit emphasis and never enters the ordinary sequence.
-- Series colors are looked up by count; both the set and the order depend on the number of ordinary series. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`. 6: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#4378BC`, `#808080`. 7: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#3953A5`, `#808080`, `#4378BC`.
-- Beyond the tables, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness; above about five series, prefer a dark-blue or grayscale gradient instead. `#6FCCDE` remains only in the τ palette and τ gradient; the standalone light blue is `#8799CF`. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
+- Series colors are looked up by count; both the set and the order depend on the number of ordinary series. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`.
+- With more than five ordinary series, switch to a dark-blue or grayscale gradient instead of extending the categorical sequence; only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness. `#6FCCDE` remains only in the τ palette and τ gradient; the standalone light blue is `#8799CF`. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
 - The τ palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
+- Optional rainbow-muted palette: `#2A2F80`, `#3596B5`, `#5FA04A`, `#C98526`, `#B04A4A`, for exactly five ordered series where the rainbow order itself carries meaning. It is muted to the Tao Style saturation level, keeps the deep-blue and muted-red anchors, and stays at or above ~3:1 contrast on white for thin lines. Always pair it with distinct line styles (non-monotonic grayscale luminance; green/amber/red can blur under red-green color-vision deficiency); it does not replace the default per-count sequences.
 - Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
 
 ### Lines, Markers, and Error Bars

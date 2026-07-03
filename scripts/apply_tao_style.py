@@ -46,8 +46,6 @@ SERIES_COLOR_ORDERS = {
     3: ["#2A2F80", "#808080", "#000000"],
     4: ["#2A2F80", "#808080", "#000000", "#BDBDBD"],
     5: ["#2A2F80", "#BDBDBD", "#4378BC", "#000000", "#808080"],
-    6: ["#2A2F80", "#8799CF", "#000000", "#BDBDBD", "#4378BC", "#808080"],
-    7: ["#2A2F80", "#8799CF", "#000000", "#BDBDBD", "#3953A5", "#808080", "#4378BC"],
 }
 TAU_PALETTE = [
     "#2A2F80",
@@ -60,12 +58,25 @@ TAU_PALETTE = [
     "#EE2024",
     "#7D1415",
 ]
+# Optional ordered five-series palette with rainbow hue order, muted to the
+# Tao Style saturation level. Use only when the five series are ordered and
+# the rainbow order itself carries meaning; always pair with distinct line
+# styles (luminance is not monotonic in grayscale, and green/amber/red can
+# blur under red-green color-vision deficiency).
+RAINBOW_MUTED_PALETTE = [
+    "#2A2F80",
+    "#3596B5",
+    "#5FA04A",
+    "#C98526",
+    "#B04A4A",
+]
 CATEGORICAL_PALETTES = {
     "default": PALETTE,
     "core": CORE_PALETTE,
     "extended": EXTENDED_PALETTE,
     "emphasis": EMPHASIS_PALETTE,
     "tau": TAU_PALETTE,
+    "rainbow-muted": RAINBOW_MUTED_PALETTE,
 }
 GRADIENT_COLORMAPS = {
     "dark-blue": ["#EEF1F8", "#C8D2EA", "#8799CF", "#4E5CA4", "#2A2F80"],
@@ -342,6 +353,64 @@ def add_matplotlib_colorbar(
         cbar_left / figure_width,
         cbar_bottom / figure_height,
         cbar_width / figure_width,
+        cbar_height / figure_height,
+    ])
+    colorbar = fig.colorbar(mappable, cax=cax, **kwargs)
+    colorbar.outline.set_linewidth(AXIS_LINE_WIDTH)
+    return colorbar
+
+
+def add_matplotlib_3d_colorbar(
+    fig,
+    ax,
+    mappable,
+    *,
+    width: float = COLORBAR_WIDTH_IN,
+    pad: float = COLORBAR_PAD_IN,
+    shrink: float = 0.72,
+    expand_canvas: bool = True,
+    **kwargs,
+):
+    """Add a right-side colorbar that clears 3D tick and axis labels.
+
+    Matplotlib measures colorbar pad from the axes rectangle, but 3D tick
+    labels and axis titles are drawn outside that rectangle, so a plain
+    fig.colorbar(pad=...) can overlap them, especially with box zoom. This
+    helper measures the axes' tight bounding box, which includes the labels,
+    places the colorbar to its right in inch units, and expands the canvas
+    width if needed. Call it after the 3D content, style, view angle, and
+    box aspect are final, because the label extent depends on all of them.
+    """
+
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    tight = ax.get_tightbbox(renderer)
+    dpi = float(fig.dpi)
+    figure_width, figure_height = fig.get_size_inches()
+    ax_pos = ax.get_position()
+    ax_bounds = (
+        ax_pos.x0 * figure_width,
+        ax_pos.y0 * figure_height,
+        ax_pos.width * figure_width,
+        ax_pos.height * figure_height,
+    )
+    labels_right_in = tight.x1 / dpi
+    axes_bottom_in = ax_bounds[1]
+    axes_height_in = ax_bounds[3]
+    cbar_height = axes_height_in * shrink
+    cbar_bottom = axes_bottom_in + (axes_height_in - cbar_height) / 2.0
+    cbar_left = labels_right_in + pad
+    required_width = cbar_left + width + DEFAULT_CANVAS_RIGHT_IN
+
+    if expand_canvas and required_width > figure_width:
+        fig.set_size_inches(required_width, figure_height, forward=True)
+        _set_axes_position_inches(fig, ax, ax_bounds)
+        figure_width = required_width
+
+    cax = fig.add_axes([
+        cbar_left / figure_width,
+        cbar_bottom / figure_height,
+        width / figure_width,
         cbar_height / figure_height,
     ])
     colorbar = fig.colorbar(mappable, cax=cax, **kwargs)
@@ -719,14 +788,44 @@ def apply_matplotlib_3d_style(
     xlabel: str = "X",
     ylabel: str = "Y",
     zlabel: str = "Z",
-    labelpad: float = -4.0,
-    tick_pad: float = -3.0,
-    projection: str = "persp",
+    labelpad: float = -3.0,
+    tick_pad: float = -1.5,
+    zoom: float | None = 1.2,
+    max_ticks: int | None = 5,
+    projection: str = "ortho",
 ):
-    """Apply Tao typography to Matplotlib's default 3D axes style."""
+    """Apply Tao typography to Matplotlib's default 3D axes style.
+
+    Orthographic projection is the Tao Style default: the vertical Z axis
+    stays vertical on screen and heights remain comparable along the depth
+    direction. Pass projection="persp" (optionally with a larger
+    focal_length via ax.set_proj_type) only for presentation-style depth.
+
+    Space is reclaimed in layers rather than with aggressive negative padding:
+    ``zoom`` enlarges the data box within the axes area (outer whitespace is
+    removed by content-adaptive cropping at save time), ``max_ticks`` limits
+    major-tick density so tick text stays short, and the mild negative pads
+    close the remaining gap. The zoom and pad defaults are starting values;
+    verify them at the final view angle and label length.
+
+    For equal-unit spatial data where X, Y, and Z require true scale, call
+    set_equal_xyz_box_aspect() after this function and after setting limits.
+    """
 
     if projection:
         ax.set_proj_type(projection)
+
+    if zoom is not None:
+        try:
+            ax.set_box_aspect(None, zoom=zoom)
+        except (AttributeError, TypeError):
+            pass
+
+    if max_ticks is not None:
+        from matplotlib.ticker import MaxNLocator
+
+        for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+            axis.set_major_locator(MaxNLocator(max_ticks))
 
     ax.set_xlabel(xlabel, labelpad=labelpad)
     ax.set_ylabel(ylabel, labelpad=labelpad)
@@ -753,6 +852,51 @@ def apply_matplotlib_3d_style(
         label.set_size(AXIS_LABEL_SIZE)
         label.set_color("#111111")
 
+    return ax
+
+
+def set_equal_xyz_box_aspect(
+    ax,
+    *,
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
+    zlim: tuple[float, float] | None = None,
+    zoom: float = 1.2,
+):
+    """Set the 3D box aspect so one data unit has equal visual length on X, Y, and Z.
+
+    Use for equal-unit 3D data where X, Y, and Z all represent comparable
+    physical lengths, positions, spatial coordinates, or geometry dimensions
+    that require true scale. Matplotlib's default box stretches each axis
+    independently and distorts such data. Call this after setting the
+    displayed limits and after apply_matplotlib_3d_style(), because both set
+    the box aspect.
+    """
+
+    if xlim is None:
+        xlim = ax.get_xlim3d()
+    else:
+        ax.set_xlim3d(*xlim)
+    if ylim is None:
+        ylim = ax.get_ylim3d()
+    else:
+        ax.set_ylim3d(*ylim)
+    if zlim is None:
+        zlim = ax.get_zlim3d()
+    else:
+        ax.set_zlim3d(*zlim)
+
+    ranges = (
+        abs(float(xlim[1]) - float(xlim[0])),
+        abs(float(ylim[1]) - float(ylim[0])),
+        abs(float(zlim[1]) - float(zlim[0])),
+    )
+    if min(ranges) <= 0:
+        raise ValueError("x, y, and z ranges must be positive for equal XYZ aspect")
+    try:
+        ax.set_box_aspect(ranges, zoom=zoom)
+    except TypeError:
+        ax.set_box_aspect(ranges)
     return ax
 
 
@@ -788,12 +932,17 @@ def add_matplotlib_3d_xyz_marker(
     length: float = 0.78,
     label_size: float = 6.5,
     linewidth: float = 0.8,
+    projection: str = "ortho",
 ):
-    """Add a compact in-figure XYZ direction marker for hidden-axis 3D figures."""
+    """Add a compact in-figure XYZ direction marker for hidden-axis 3D figures.
+
+    Use the same elev, azim, and projection as the main 3D view so the marker
+    directions match the data body.
+    """
 
     marker = fig.add_axes(position, projection="3d")
     marker.view_init(elev=elev, azim=azim)
-    marker.set_proj_type("persp")
+    marker.set_proj_type(projection)
     hide_matplotlib_3d_axes(marker)
 
     label_pos = length + 0.14
@@ -811,13 +960,20 @@ def add_matplotlib_3d_xyz_marker(
     return marker
 
 
-def apply_matplotlib_hidden_3d_style(ax, fig=None, *, elev: float | None = None, azim: float | None = None):
+def apply_matplotlib_hidden_3d_style(
+    ax,
+    fig=None,
+    *,
+    elev: float | None = None,
+    azim: float | None = None,
+    projection: str = "ortho",
+):
     """Apply Tao Style's optional hidden-axis 3D layout helpers."""
 
-    ax.set_proj_type("persp")
+    ax.set_proj_type(projection)
     hide_matplotlib_3d_axes(ax)
     if fig is not None and elev is not None and azim is not None:
-        add_matplotlib_3d_xyz_marker(fig, elev=elev, azim=azim)
+        add_matplotlib_3d_xyz_marker(fig, elev=elev, azim=azim, projection=projection)
     return ax
 
 
@@ -896,14 +1052,16 @@ def series_colors(n: int) -> list[str]:
     The color set and its order both depend on the series count; do not
     truncate or extend another count's sequence. The rcParams prop_cycle
     matches these orders only up to four series, so assign colors explicitly
-    from this function when plotting five or more series.
+    from this function when plotting five series. With more than five
+    ordinary series, Tao Style switches to a dark-blue or grayscale gradient
+    instead of extending the categorical sequence.
     """
 
     if n < 1:
         raise ValueError("n must be at least 1")
     if n not in SERIES_COLOR_ORDERS:
         raise ValueError(
-            "No categorical order for more than 7 ordinary series; "
+            "No categorical order for more than 5 ordinary series; "
             "use gradient_colormap('dark-blue') or gradient_colormap('gray') instead"
         )
     return list(SERIES_COLOR_ORDERS[n])
@@ -919,12 +1077,28 @@ def categorical_palette(name: str = "default") -> list[str]:
 
 
 def gradient_colormap(name: str = "dark-blue") -> list[str]:
-    """Return a preferred Tao Style color gradient."""
+    """Return a preferred Tao Style color gradient as a plain color list."""
 
     if name not in GRADIENT_COLORMAPS:
         allowed = ", ".join(sorted(GRADIENT_COLORMAPS))
         raise ValueError(f"Unknown gradient colormap {name!r}. Allowed: {allowed}")
     return GRADIENT_COLORMAPS[name]
+
+
+def gradient_stops(name: str = "dark-blue") -> list[tuple[float, str]]:
+    """Return evenly spaced (position, color) stops for a Tao Style gradient."""
+
+    colors = gradient_colormap(name)
+    last = len(colors) - 1
+    return [(i / last, color) for i, color in enumerate(colors)]
+
+
+def matplotlib_colormap(name: str = "dark-blue", n: int = 256):
+    """Build a Matplotlib LinearSegmentedColormap for a Tao Style gradient."""
+
+    from matplotlib.colors import LinearSegmentedColormap
+
+    return LinearSegmentedColormap.from_list(f"tao-{name}", gradient_stops(name), N=n)
 
 
 def _cycler_expr(key: str, values: list[str]) -> str:

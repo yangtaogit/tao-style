@@ -4,7 +4,7 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.colors import BoundaryNorm, LinearSegmentedColormap
+from matplotlib.colors import BoundaryNorm
 from matplotlib.ticker import AutoMinorLocator
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.apply_tao_style import (  # noqa: E402
     add_matplotlib_colorbar,
     axes_box_size,
-    gradient_colormap,
+    matplotlib_colormap,
     matplotlib_rcparams,
     save_adaptive_figure,
     set_fixed_axes_box,
@@ -33,7 +33,7 @@ zz = (
 )
 
 levels = np.linspace(zz.min(), zz.max(), 9)
-cmap = LinearSegmentedColormap.from_list("tao_dark_blue", gradient_colormap("dark-blue"), N=len(levels) - 1)
+cmap = matplotlib_colormap("dark-blue", n=len(levels) - 1)
 norm = BoundaryNorm(levels, cmap.N)
 
 fig, ax = plt.subplots(figsize=axes_box_size(ASPECT))

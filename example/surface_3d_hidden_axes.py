@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test: 3D surface with hidden axes, inside colorbar, and compact XYZ marker."""
+"""Example: 3D surface with hidden axes, inside colorbar, and compact XYZ marker."""
 
 from __future__ import annotations
 
@@ -11,16 +11,15 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
-    GRADIENT_COLORMAPS,
     add_matplotlib_3d_xyz_marker,
     hide_matplotlib_3d_axes,
+    matplotlib_colormap,
     matplotlib_rcparams,
 )
 
@@ -35,7 +34,7 @@ def main() -> None:
     zz = 0.42 * np.cos(1.7 * radius) * np.exp(-0.12 * radius**2)
     zz += 0.18 * np.exp(-0.55 * ((xx - 1.05) ** 2 + 1.5 * (yy + 0.45) ** 2))
 
-    cmap = LinearSegmentedColormap.from_list("tao_dark_blue", GRADIENT_COLORMAPS["dark-blue"])
+    cmap = matplotlib_colormap("dark-blue")
     elev, azim = 24, -58
 
     fig = plt.figure(figsize=(4.8, 3.15))

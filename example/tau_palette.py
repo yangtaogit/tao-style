@@ -11,7 +11,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-from matplotlib.colors import BoundaryNorm, LinearSegmentedColormap, ListedColormap
+from matplotlib.colors import BoundaryNorm, ListedColormap
 import numpy as np
 
 
@@ -19,8 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
-    GRADIENT_COLORMAPS,
     LINE_WIDTH,
+    matplotlib_colormap,
     matplotlib_rcparams,
 )
 
@@ -102,7 +102,7 @@ def main() -> None:
     )
 
     for row_index, (display_name, key) in enumerate(zip(gradient_names, gradient_keys)):
-        cmap = LinearSegmentedColormap.from_list(f"tao_{key}", GRADIENT_COLORMAPS[key])
+        cmap = matplotlib_colormap(key)
 
         label_ax = fig.add_subplot(grid[row_index, 0])
         label_ax.axis("off")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test: 4D voxel data with hidden axes and a compact XYZ direction marker."""
+"""Example: 4D voxel data with hidden axes and a compact XYZ direction marker."""
 
 from __future__ import annotations
 
@@ -12,16 +12,16 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 from matplotlib.cm import ScalarMappable
-from matplotlib.colors import LinearSegmentedColormap, Normalize
+from matplotlib.colors import Normalize
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
-    GRADIENT_COLORMAPS,
     add_matplotlib_3d_xyz_marker,
     hide_matplotlib_3d_axes,
+    matplotlib_colormap,
     matplotlib_rcparams,
 )
 
@@ -49,7 +49,7 @@ def main() -> None:
     voxels = (radius_c - 0.7) ** 2 + (z_c + 0.2 * np.cos(theta_c * 2.0)) ** 2 < 0.2**2
     value = 0.55 * theta_c / (np.pi * 2.0) + 0.30 * radius_c + 0.15 * (z_c + 0.5)
 
-    cmap = LinearSegmentedColormap.from_list("tao_tau", GRADIENT_COLORMAPS["tau"])
+    cmap = matplotlib_colormap("dark-blue")
     norm = Normalize(vmin=float(value[voxels].min()), vmax=float(value[voxels].max()))
     facecolors = cmap(norm(value))
     facecolors[..., 3] = 0.9

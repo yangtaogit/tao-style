@@ -18,7 +18,7 @@ from apply_tao_style import (  # noqa: E402
     FIT_LINE_STYLES,
     LINE_WIDTH,
     MARKER_SIZE,
-    PALETTE,
+    series_colors,
     apply_matplotlib_legend,
     axes_box_size,
     save_adaptive_figure,
@@ -40,8 +40,9 @@ def main() -> None:
     fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
 
     fit_x = np.linspace(0.0, 10.0, 300)
+    colors = series_colors(len(series))
     for index, (slope, intercept, label) in enumerate(series):
-        color = PALETTE[index]
+        color = colors[index]
         y = slope * x + intercept + rng.normal(0.0, 0.12, size=x.size)
         fit = np.polyfit(x, y, deg=1)
 

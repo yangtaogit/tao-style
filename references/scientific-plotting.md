@@ -61,15 +61,20 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 ## Three-Dimensional Axes
 
 - For 3D scientific plots, use Matplotlib's default 3D coordinate box, panes, and grid by default, including the visible X/Y/Z axes.
-- Use perspective projection by default, `projection="persp"`.
+- Use orthographic projection by default, `projection="ortho"`: vertical lines stay vertical on screen and equal heights remain comparable along the depth direction. Perspective tilts the Z axis toward a vanishing point and distorts height comparison.
+- Use perspective (`projection="persp"`, optionally with a larger `focal_length` such as 4 to reduce distortion) only when Tao asks for a presentation-style depth effect.
 - Keep the three light-gray 3D pane backgrounds with pane color `#F2F2F2` (`0.95, 0.95, 0.95, 1.0` in Matplotlib RGBA).
 - Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E` (`0.62, 0.62, 0.62, 1.0`), linestyle `":"`, and linewidth `0.2 pt`. Do not add extra pane boundary lines or manual frames.
 - Use inward ticks. In Matplotlib 3D, set `inward_factor=0.0` and `outward_factor=0.2` for the current Tao Style visual direction.
-- Use compact 3D spacing with `tick_pad=-3.0` and `labelpad=-4.0`.
+- Reclaim 3D space in layers rather than with aggressive negative padding: first enlarge the data box within the axes area using `ax.set_box_aspect(None, zoom=1.2)` and rely on content-adaptive cropping to remove outer whitespace; then limit each axis to about five major ticks and shorten tick text with unit scaling, putting the scale in the axis label, such as `Time [μs]`; finally close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0`.
+- Treat `zoom` and the pad values as starting values and verify them at the final view angle, because negative pads depend on the view angle and tick-label length.
 - Apply Tao Style typography to 3D axes: ordinary text font, axis labels at `9 pt`, tick labels at `8 pt`, and Computer Modern only for real mathematical expressions.
 - Use plain `X`, `Y`, and `Z` labels unless Tao specifies physical quantities and units. When units are known, keep the same square-bracket format as 2D axes, such as `X Position [mm]`.
-- For 3D scalar fields, surfaces, or 4D data shown as spatial coordinates plus a value, encode the value with the preferred gradients and place the colorbar outside the right side of the axes. Use larger spacing than 2D figures; the current examples use `pad=0.16`, `fraction=0.035`, and `shrink=0.72`.
+- For 3D scalar fields, surfaces, or 4D data shown as spatial coordinates plus a value, encode the value with the preferred gradients and place the colorbar outside the right side of the axes.
+- Position 3D colorbars from the axes' tight bounding box, not the axes rectangle: Matplotlib draws 3D tick and axis labels outside the axes rectangle, so `fig.colorbar(pad=...)` can overlap them. Use the helper `add_matplotlib_3d_colorbar(fig, ax, mappable)`, which measures the label extent, keeps `shrink=0.72`, and expands the canvas to the right when needed. Add the colorbar only after the content, style, view angle, and box aspect are final.
 - 3D figures are not constrained by the single-panel 2D XY axes-box rule; choose the canvas, view angle, and colorbar placement so the full 3D coordinate box and data remain readable.
+- Equal-unit 3D plots are an exception to the default box: when X, Y, and Z all represent comparable physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, set the 3D box aspect from the displayed data ranges so one data unit has equal visual length on all three axes. In Matplotlib use `ax.set_box_aspect((x_range, y_range, z_range))` or the helper `set_equal_xyz_box_aspect`, after setting the displayed limits.
+- If the equal-unit range ratio is extreme and the box becomes hard to read, ask Tao whether to crop the displayed range or fall back to the default box, and state the deviation.
 - Hidden-axis 3D/4D figures are optional and must be used only when Tao explicitly asks to hide coordinates, remove the 3D coordinate box, or emphasize the data body over coordinate reading. The default 3D style remains the visible Matplotlib 3D coordinate box.
 - For hidden-axis 3D/4D figures, hide the main X/Y/Z axes, tick marks, tick labels, axis titles, pane backgrounds, and grid lines. Keep the data body complete and uncropped.
 - Add a compact in-figure `XYZ` direction marker in a natural empty area, usually the lower-left region. Use the same `elev` and `azim` as the main 3D view. Keep the marker small, about `12.5%` of the figure width/height, with arrow length about `0.78`, line width `0.8 pt`, and `XYZ` label size `6.5 pt` as starting values.
@@ -87,13 +92,14 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 ## Color
 
 - Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors. Deep blue and black are hard to tell apart, so they must never be adjacent in a series order, and black enters only from three series onward.
-- Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`. 6: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#4378BC`, `#808080`. 7: `#2A2F80`, `#8799CF`, `#000000`, `#BDBDBD`, `#3953A5`, `#808080`, `#4378BC`.
-- For cases outside the tables, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder the full sequence so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
+- Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`.
+- More than five ordinary series: switch to a dark-blue or grayscale gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
 - `#6FCCDE` belongs to the τ palette and τ gradient only; as a standalone categorical color use `#8799CF`, taken from the dark-blue gradient, so the light-blue slot stays in the same visual family.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding. When red is needed, prefer muted red `#B04A4A` over saturated red. Red is not part of the default ordinary multi-series sequence.
 - For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients by default.
 - Use the τ palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Treat the τ palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
+- Optional rainbow-muted palette (`categorical_palette("rainbow-muted")`) for exactly five ordered series where the rainbow order itself carries meaning: `#2A2F80`, `#3596B5`, `#5FA04A`, `#C98526`, `#B04A4A`. It is muted to the Tao Style saturation level, keeps the deep-blue and muted-red anchors, and all colors stay at or above ~3:1 contrast on white for thin lines. Always pair it with distinct line styles: luminance is not monotonic in grayscale, and green/amber/red can blur under red-green color-vision deficiency. It does not replace the default per-count sequences.
 - Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the τ palette.
 - Preferred dark-blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
 - Preferred grayscale gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
@@ -179,7 +185,7 @@ set_fixed_axes_box(fig, ax, aspect=aspect)
 save_adaptive_figure(fig, "figure.svg")
 ```
 
-For five or more ordinary series, assign colors explicitly with the per-count helper; the fixed `prop_cycle` matches the per-count orders only up to four series:
+For five ordinary series, assign colors explicitly with the per-count helper; the fixed `prop_cycle` matches the per-count orders only up to four series. With more than five series, switch to a gradient instead:
 
 ```python
 from scripts.apply_tao_style import series_colors
@@ -226,6 +232,14 @@ cbar.set_label("Signal [Unit]")
 save_adaptive_figure(fig, "figure.svg")
 ```
 
+For gradient colormaps, build them with the helper:
+
+```python
+from scripts.apply_tao_style import matplotlib_colormap
+
+cmap = matplotlib_colormap("dark-blue")  # or "gray", "tau"
+```
+
 For histograms, ask for the y-axis mode first, then use the helper when available:
 
 ```python
@@ -244,6 +258,24 @@ from scripts.apply_tao_style import apply_matplotlib_3d_style
 
 ax = fig.add_subplot(111, projection="3d")
 apply_matplotlib_3d_style(ax, xlabel="X", ylabel="Y", zlabel="Z")
+```
+
+For 3D colorbars, add them last, after the content, style, view angle, and box aspect are final, so the label extent is known:
+
+```python
+from scripts.apply_tao_style import add_matplotlib_3d_colorbar
+
+cbar = add_matplotlib_3d_colorbar(fig, ax, surface)
+cbar.set_label("Signal [Unit]")
+```
+
+For equal-unit 3D data such as spatial coordinates, trajectories, or device geometry, set the box aspect from the displayed ranges after applying the style and setting limits:
+
+```python
+from scripts.apply_tao_style import set_equal_xyz_box_aspect
+
+apply_matplotlib_3d_style(ax, xlabel="X [mm]", ylabel="Y [mm]", zlabel="Z [mm]")
+set_equal_xyz_box_aspect(ax, xlim=(0, 40), ylim=(0, 20), zlim=(0, 10))
 ```
 
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
@@ -290,3 +322,4 @@ python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 - TODO: Confirm Tao's default journal and slide figure sizes.
 - TODO: Confirm a diverging colormap for signed data.
 - TODO: Confirm preferred major tick length and minor tick length.
+- TODO: Confirm final 3D `zoom`, `tick_pad`, and `labelpad` values after regenerating the 3D examples and reviewing them visually.

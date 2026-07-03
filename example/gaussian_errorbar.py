@@ -20,7 +20,7 @@ from apply_tao_style import (  # noqa: E402
     FIT_LINE_STYLES,
     LINE_WIDTH,
     MARKER_SIZE,
-    PALETTE,
+    series_colors,
     apply_matplotlib_legend,
     axes_box_size,
     save_adaptive_figure,
@@ -42,9 +42,10 @@ def main() -> None:
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
+    colors = series_colors(len(sigmas))
 
     for index, sigma in enumerate(sigmas):
-        color = PALETTE[index]
+        color = colors[index]
         samples = rng.normal(0.0, sigma, size=360)
         counts, _ = np.histogram(samples, bins=bins)
         density = counts / (counts.sum() * np.diff(bins))

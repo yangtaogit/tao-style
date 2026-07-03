@@ -12,7 +12,7 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 from matplotlib.cm import ScalarMappable
-from matplotlib.colors import LinearSegmentedColormap, Normalize
+from matplotlib.colors import Normalize
 import numpy as np
 
 
@@ -20,9 +20,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
-    GRADIENT_COLORMAPS,
     apply_matplotlib_3d_style,
+    matplotlib_colormap,
     matplotlib_rcparams,
+    set_equal_xyz_box_aspect,
 )
 
 
@@ -51,7 +52,7 @@ def main() -> None:
     voxels = (radius_c - 0.7) ** 2 + (z_c + 0.2 * np.cos(theta_c * 2.0)) ** 2 < 0.2**2
     value = 0.55 * theta_c / (np.pi * 2.0) + 0.30 * radius_c + 0.15 * (z_c + 0.5)
 
-    cmap = LinearSegmentedColormap.from_list("tao_tau", GRADIENT_COLORMAPS["tau"])
+    cmap = matplotlib_colormap("dark-blue")
     norm = Normalize(vmin=float(value[voxels].min()), vmax=float(value[voxels].max()))
     facecolors = cmap(norm(value))
     facecolors[..., 3] = 0.88
@@ -74,9 +75,25 @@ def main() -> None:
     ax.set_xlim(-1.0, 1.0)
     ax.set_ylim(-1.0, 1.0)
     ax.set_zlim(-0.5, 0.5)
-    ax.set_box_aspect((1.0, 1.0, 0.58))
     ax.view_init(elev=22, azim=-55)
-    apply_matplotlib_3d_style(ax, xlabel="X", ylabel="Y", zlabel="Z")
+    apply_matplotlib_3d_style(
+        ax,
+        xlabel="X",
+        ylabel="Y",
+        zlabel="Z",
+        zoom=1.2,
+        max_ticks=5,
+        tick_pad=-1.5,
+        labelpad=-3.0,
+    )
+
+    set_equal_xyz_box_aspect(
+        ax,
+        xlim=(-1.0, 1.0),
+        ylim=(-1.0, 1.0),
+        zlim=(-0.5, 0.5),
+        zoom=1.2,
+    )
 
     mappable = ScalarMappable(norm=norm, cmap=cmap)
     mappable.set_array([])

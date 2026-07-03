@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
     DEFAULT_ASPECT,
-    PALETTE,
+    series_colors,
     apply_matplotlib_legend,
     axes_box_size,
     save_adaptive_figure,
@@ -36,7 +36,7 @@ def main() -> None:
         rng.normal(0.90, 1.55, size=900),
     ]
     labels = ["σ = 0.95", "σ = 1.15", "σ = 1.35", "σ = 1.55"]
-    colors = PALETTE[:4]
+    colors = series_colors(len(samples))
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))
