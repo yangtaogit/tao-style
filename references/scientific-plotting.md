@@ -91,7 +91,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Color
 
-- Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors.
+- Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors, exposed as `categorical_palette("tao-core")`.
 - Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`.
 - More than five ordinary series: switch to a tao blue or tao gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
 - `#6FCCDE` belongs to the tao palette and tao gradient only; as a standalone categorical color use `#8799CF`, taken from the tao blue gradient, so the light-blue slot stays in the same visual family.

@@ -60,7 +60,7 @@ TAO_PALETTE = [
 ]
 CATEGORICAL_PALETTES = {
     "default": PALETTE,
-    "core": CORE_PALETTE,
+    "tao-core": CORE_PALETTE,
     "extended": EXTENDED_PALETTE,
     "emphasis": EMPHASIS_PALETTE,
     "tao": TAO_PALETTE,

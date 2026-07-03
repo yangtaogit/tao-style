@@ -69,7 +69,7 @@ def main() -> None:
         hspace=0.78,
     )
 
-    draw_palette(fig.add_subplot(grid[0, 0]), "Core anchors", CORE_PALETTE)
+    draw_palette(fig.add_subplot(grid[0, 0]), "tao-core anchors", CORE_PALETTE)
     draw_palette(fig.add_subplot(grid[1, 0]), "tao palette", categorical_palette("tao"))
     draw_gradient(fig.add_subplot(grid[2, 0]), "tao blue gradient", "tao-blue")
     draw_gradient(fig.add_subplot(grid[3, 0]), "tao gray gradient", "tao-gray")
