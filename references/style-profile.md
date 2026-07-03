@@ -52,7 +52,8 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Optional tao palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger tao color alternative is desired. `#6FCCDE` stays in the tao palette and tao gradient but is not used as a standalone categorical color; the standalone light blue is `#8799CF` from the tao blue gradient.
 - Sequential colormap: prefer tao blue gradients and tao gray gradients for many curves or ordered series; use the tao gradient as an optional alternative for dedicated colorbars or heatmaps.
 - Preferred tao blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
-- Preferred tao gray gradient: white to black.
+- Preferred tao gray gradient: near-white to black, `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
+- Additional family gradients for data whose semantics call for green or red: tao green `#EEF6EB`, `#C6E3C0`, `#94CB96`, `#5CA86C`, `#35854C`, `#1D6336`, `#124424`; tao red, based on muted red `#B04A4A`: `#F8EEEE`, `#E5BFC0`, `#D08888`, `#B04A4A`, `#7D1415`.
 - Colorbar placement: put colorbars outside the right side of the corresponding axes, vertical, with a black outline matching the axes box. For portrait single-panel figures, keep the axes-box width fixed and allow the canvas to expand rightward for the colorbar instead of squeezing or overlapping the axes.
 - Accessibility: prefer colorblind-aware palettes and avoid encoding critical distinctions by color alone.
 - Contrast: ensure text, markers, and lines remain readable on the final background.

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Starter plotting style helper for tao-style.
+"""Plotting style helper for tao-style.
 
-The values are intentionally conservative until Tao confirms specific
-preferences in references/style-profile.md.
+Implements the confirmed Tao Style plotting profile; the authoritative rules
+live in references/style-profile.md and references/scientific-plotting.md.
+Update this script whenever confirmed reusable Matplotlib defaults change.
 """
 
 from __future__ import annotations
@@ -76,7 +77,6 @@ GRADIENT_COLORMAPS = {
         "#35854C",
         "#1D6336",
         "#124424",
-        "#0C2B17",
     ],
     "tao-red": ["#F8EEEE", "#E5BFC0", "#D08888", "#B04A4A", "#7D1415"],
     "tao": TAO_PALETTE,
