@@ -24,7 +24,6 @@ from apply_tao_style import (  # noqa: E402
     gradient_stops,
     matplotlib_colormap,
     matplotlib_rcparams,
-    series_colors,
 )
 
 
@@ -40,24 +39,6 @@ def draw_palette(ax, title: str, colors: list[str]) -> None:
         ax.add_patch(
             plt.Rectangle((index + 0.08, 0.22), 0.84, 0.5, facecolor=color, edgecolor="black", linewidth=0.35)
         )
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-
-
-def draw_series_orders(ax) -> None:
-    ax.set_xlim(0, 5.4)
-    ax.set_ylim(0.5, 5.5)
-    ax.set_title("Per-count ordinary series orders", loc="left", pad=5)
-    ax.set_xticks([])
-    ax.set_yticks(range(1, 6))
-    ax.set_yticklabels([f"{n} series" for n in range(1, 6)])
-    ax.invert_yaxis()
-    ax.tick_params(axis="y", which="both", length=0, pad=5)
-    for n in range(1, 6):
-        for index, color in enumerate(series_colors(n)):
-            ax.add_patch(
-                plt.Rectangle((index + 0.12, n - 0.32), 0.76, 0.56, facecolor=color, edgecolor="black", linewidth=0.35)
-            )
     for spine in ax.spines.values():
         spine.set_visible(False)
 
@@ -80,20 +61,20 @@ def draw_gradient(ax, title: str, key: str) -> None:
 def main() -> None:
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
 
-    fig = plt.figure(figsize=(7.2, 7.0))
+    fig = plt.figure(figsize=(7.2, 6.2))
     grid = fig.add_gridspec(
         nrows=7,
         ncols=1,
-        height_ratios=[0.72, 1.65, 0.72, 0.72, 0.62, 0.62, 0.62],
+        height_ratios=[0.72, 0.72, 0.62, 0.62, 0.62, 0.62, 0.62],
         hspace=0.78,
     )
 
     draw_palette(fig.add_subplot(grid[0, 0]), "Core anchors", CORE_PALETTE)
-    draw_series_orders(fig.add_subplot(grid[1, 0]))
-    draw_palette(fig.add_subplot(grid[2, 0]), "\u03c4 palette", categorical_palette("tau"))
-    draw_palette(fig.add_subplot(grid[3, 0]), "Optional rainbow-muted palette", categorical_palette("rainbow-muted"))
-    draw_gradient(fig.add_subplot(grid[4, 0]), "Dark-blue gradient", "dark-blue")
-    draw_gradient(fig.add_subplot(grid[5, 0]), "Gray gradient", "gray")
+    draw_palette(fig.add_subplot(grid[1, 0]), "\u03c4 palette", categorical_palette("tau"))
+    draw_gradient(fig.add_subplot(grid[2, 0]), "\u03c4 blue gradient", "tau-blue")
+    draw_gradient(fig.add_subplot(grid[3, 0]), "\u03c4 gray gradient", "tau-gray")
+    draw_gradient(fig.add_subplot(grid[4, 0]), "\u03c4 green gradient", "tau-green")
+    draw_gradient(fig.add_subplot(grid[5, 0]), "\u03c4 red gradient", "tau-red")
     draw_gradient(fig.add_subplot(grid[6, 0]), "\u03c4 gradient", "tau")
 
     output = Path(__file__).with_suffix(".svg")

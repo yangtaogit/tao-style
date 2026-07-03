@@ -83,9 +83,7 @@
 - 核心颜色锚点为 deep blue `#2A2F80`、black `#000000`、gray `#808080`。deep blue 与黑色不易区分：两者在任何系列顺序中不相邻，黑色从三个系列起才引入。muted red `#B04A4A` 仅在需要明确强调时使用，不进入普通序列。
 - 颜色按系列数查表：集合与顺序都由普通系列数决定，直接使用对应系列数的色表，不从其他系列数的色表截断或追加。1 系列：`#2A2F80`；2 系列：`#2A2F80`、`#808080`；3 系列：`#2A2F80`、`#808080`、`#000000`；4 系列：`#2A2F80`、`#808080`、`#000000`、`#BDBDBD`；5 系列：`#2A2F80`、`#BDBDBD`、`#4378BC`、`#000000`、`#808080`。
 - 超过 5 个系列时，优先改用暗蓝梯度或灰度梯度，而非继续扩展分类色；仅当类别无序、梯度会误导时，才从 `#BDBDBD`、`#4378BC`、`#8799CF`、`#3953A5` 补色并整体重排，保证相邻系列在色相和明度上都可分。`#6FCCDE` 仅保留在 τ 色板和 τ 梯度中，单独作分类色时以暗蓝梯度中的 `#8799CF` 代替。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
-- τ 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。
-- 可选 rainbow-muted 色板：`#2A2F80`、`#3596B5`、`#5FA04A`、`#C98526`、`#B04A4A`。用于恰好 5 个有序系列、且彩虹顺序本身携带语义的场景；饱和度与主体系一致，保留深蓝与 muted red 锚点，细线对白底对比度均不低于约 3:1。灰度下亮度非单调，红绿色盲下绿/琥珀/红有混淆风险，必须配合线型区分；不替代默认色表。
-- colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
+- τ 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。- colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
 
 ### 线条、marker 与 error bar
 
@@ -301,10 +299,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - The default palette favors cool tones, dark blue, black, and gray.
 - The core color anchors are deep blue `#2A2F80`, black `#000000`, and gray `#808080`. Deep blue and black are hard to tell apart, so they are never adjacent in a series order, and black enters only from three series onward. Muted red `#B04A4A` is used only for explicit emphasis and never enters the ordinary sequence.
 - Series colors are looked up by count; both the set and the order depend on the number of ordinary series. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`.
-- With more than five ordinary series, switch to a dark-blue or grayscale gradient instead of extending the categorical sequence; only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness. `#6FCCDE` remains only in the τ palette and τ gradient; the standalone light blue is `#8799CF`. For ordered data, prefer dark-blue or grayscale gradients by default; the dark-blue gradient/colorbar is derived from deep blue `#2A2F80`.
-- The τ palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
-- Optional rainbow-muted palette: `#2A2F80`, `#3596B5`, `#5FA04A`, `#C98526`, `#B04A4A`, for exactly five ordered series where the rainbow order itself carries meaning. It is muted to the Tao Style saturation level, keeps the deep-blue and muted-red anchors, and stays at or above ~3:1 contrast on white for thin lines. Always pair it with distinct line styles (non-monotonic grayscale luminance; green/amber/red can blur under red-green color-vision deficiency); it does not replace the default per-count sequences.
-- Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
+- With more than five ordinary series, switch to a ? blue or ? gray gradient instead of extending the categorical sequence; only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness. `#6FCCDE` remains only in the τ palette and τ gradient; the standalone light blue is `#8799CF`. For ordered data, prefer ? blue or ? gray gradients by default; the ? blue gradient/colorbar is derived from deep blue `#2A2F80`.
+- The τ palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.- Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
 
 ### Lines, Markers, and Error Bars
 

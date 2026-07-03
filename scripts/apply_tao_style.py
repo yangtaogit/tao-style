@@ -58,29 +58,18 @@ TAU_PALETTE = [
     "#EE2024",
     "#7D1415",
 ]
-# Optional ordered five-series palette with rainbow hue order, muted to the
-# Tao Style saturation level. Use only when the five series are ordered and
-# the rainbow order itself carries meaning; always pair with distinct line
-# styles (luminance is not monotonic in grayscale, and green/amber/red can
-# blur under red-green color-vision deficiency).
-RAINBOW_MUTED_PALETTE = [
-    "#2A2F80",
-    "#3596B5",
-    "#5FA04A",
-    "#C98526",
-    "#B04A4A",
-]
 CATEGORICAL_PALETTES = {
     "default": PALETTE,
     "core": CORE_PALETTE,
     "extended": EXTENDED_PALETTE,
     "emphasis": EMPHASIS_PALETTE,
     "tau": TAU_PALETTE,
-    "rainbow-muted": RAINBOW_MUTED_PALETTE,
 }
 GRADIENT_COLORMAPS = {
-    "dark-blue": ["#EEF1F8", "#C8D2EA", "#8799CF", "#4E5CA4", "#2A2F80"],
-    "gray": ["#EDEDED", "#C9C9C9", "#9A9A9A", "#5F5F5F", "#000000"],
+    "tau-blue": ["#EEF1F8", "#C8D2EA", "#8799CF", "#4E5CA4", "#2A2F80"],
+    "tau-gray": ["#EDEDED", "#C9C9C9", "#9A9A9A", "#5F5F5F", "#000000"],
+    "tau-green": ["#F2F8EC", "#D8EBC7", "#B8D98E", "#99CB6F", "#4F7F2F"],
+    "tau-red": ["#F8EEEE", "#E5BFC0", "#D08888", "#B04A4A", "#7D1415"],
     "tau": TAU_PALETTE,
 }
 
@@ -1053,7 +1042,7 @@ def series_colors(n: int) -> list[str]:
     truncate or extend another count's sequence. The rcParams prop_cycle
     matches these orders only up to four series, so assign colors explicitly
     from this function when plotting five series. With more than five
-    ordinary series, Tao Style switches to a dark-blue or grayscale gradient
+    ordinary series, Tao Style switches to a tau-blue or tau-gray gradient
     instead of extending the categorical sequence.
     """
 
@@ -1062,7 +1051,7 @@ def series_colors(n: int) -> list[str]:
     if n not in SERIES_COLOR_ORDERS:
         raise ValueError(
             "No categorical order for more than 5 ordinary series; "
-            "use gradient_colormap('dark-blue') or gradient_colormap('gray') instead"
+            "use gradient_colormap('tau-blue') or gradient_colormap('tau-gray') instead"
         )
     return list(SERIES_COLOR_ORDERS[n])
 
@@ -1076,7 +1065,7 @@ def categorical_palette(name: str = "default") -> list[str]:
     return CATEGORICAL_PALETTES[name]
 
 
-def gradient_colormap(name: str = "dark-blue") -> list[str]:
+def gradient_colormap(name: str = "tau-blue") -> list[str]:
     """Return a preferred Tao Style color gradient as a plain color list."""
 
     if name not in GRADIENT_COLORMAPS:
@@ -1085,7 +1074,7 @@ def gradient_colormap(name: str = "dark-blue") -> list[str]:
     return GRADIENT_COLORMAPS[name]
 
 
-def gradient_stops(name: str = "dark-blue") -> list[tuple[float, str]]:
+def gradient_stops(name: str = "tau-blue") -> list[tuple[float, str]]:
     """Return evenly spaced (position, color) stops for a Tao Style gradient."""
 
     colors = gradient_colormap(name)
@@ -1093,7 +1082,7 @@ def gradient_stops(name: str = "dark-blue") -> list[tuple[float, str]]:
     return [(i / last, color) for i, color in enumerate(colors)]
 
 
-def matplotlib_colormap(name: str = "dark-blue", n: int = 256):
+def matplotlib_colormap(name: str = "tau-blue", n: int = 256):
     """Build a Matplotlib LinearSegmentedColormap for a Tao Style gradient."""
 
     from matplotlib.colors import LinearSegmentedColormap

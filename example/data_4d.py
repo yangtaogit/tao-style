@@ -53,7 +53,7 @@ def main() -> None:
     voxels = (radius_c - 0.7) ** 2 + (z_c + 0.2 * np.cos(theta_c * 2.0)) ** 2 < 0.2**2
     value = 0.55 * theta_c / (np.pi * 2.0) + 0.30 * radius_c + 0.15 * (z_c + 0.5)
 
-    cmap = matplotlib_colormap("dark-blue")
+    cmap = matplotlib_colormap("tau")
     norm = Normalize(vmin=float(value[voxels].min()), vmax=float(value[voxels].max()))
     facecolors = cmap(norm(value))
     facecolors[..., 3] = 0.88

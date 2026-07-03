@@ -93,16 +93,15 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 - Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors. Deep blue and black are hard to tell apart, so they must never be adjacent in a series order, and black enters only from three series onward.
 - Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`. 4: `#2A2F80`, `#808080`, `#000000`, `#BDBDBD`. 5: `#2A2F80`, `#BDBDBD`, `#4378BC`, `#000000`, `#808080`.
-- More than five ordinary series: switch to a dark-blue or grayscale gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
-- `#6FCCDE` belongs to the τ palette and τ gradient only; as a standalone categorical color use `#8799CF`, taken from the dark-blue gradient, so the light-blue slot stays in the same visual family.
+- More than five ordinary series: switch to a ? blue or ? gray gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
+- `#6FCCDE` belongs to the τ palette and τ gradient only; as a standalone categorical color use `#8799CF`, taken from the ? blue gradient, so the light-blue slot stays in the same visual family.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding. When red is needed, prefer muted red `#B04A4A` over saturated red. Red is not part of the default ordinary multi-series sequence.
-- For many curves or ordered series that need a color gradient, prefer dark-blue gradients or grayscale gradients by default.
+- For many curves or ordered series that need a color gradient, prefer ? blue gradients or ? gray gradients by default.
 - Use the τ palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Treat the τ palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
-- Optional rainbow-muted palette (`categorical_palette("rainbow-muted")`) for exactly five ordered series where the rainbow order itself carries meaning: `#2A2F80`, `#3596B5`, `#5FA04A`, `#C98526`, `#B04A4A`. It is muted to the Tao Style saturation level, keeps the deep-blue and muted-red anchors, and all colors stay at or above ~3:1 contrast on white for thin lines. Always pair it with distinct line styles: luminance is not monotonic in grayscale, and green/amber/red can blur under red-green color-vision deficiency. It does not replace the default per-count sequences.
 - Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the τ palette.
-- Preferred dark-blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
-- Preferred grayscale gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
+- Preferred ? blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
+- Preferred ? gray gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
 - Optional τ gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Colorbars should sit outside the right side of the corresponding axes, use a vertical layout, and keep a black outline with the same line width as the axes box. For portrait single-panel figures, keep the axes-box width fixed and allow the canvas to expand rightward for the colorbar; do not squeeze the axes box or let the colorbar overlap tick labels.
 - Use these lists consistently across supported backends unless the user provides a data-specific color mapping.
@@ -237,7 +236,7 @@ For gradient colormaps, build them with the helper:
 ```python
 from scripts.apply_tao_style import matplotlib_colormap
 
-cmap = matplotlib_colormap("dark-blue")  # or "gray", "tau"
+cmap = matplotlib_colormap("tau-blue")  # or "tau-gray", "tau-green", "tau-red", "tau"
 ```
 
 For histograms, ask for the y-axis mode first, then use the helper when available:

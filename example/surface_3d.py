@@ -36,7 +36,7 @@ def main() -> None:
     zz = 0.42 * np.cos(1.7 * radius) * np.exp(-0.12 * radius**2)
     zz += 0.18 * np.exp(-0.55 * ((xx - 1.05) ** 2 + 1.5 * (yy + 0.45) ** 2))
 
-    cmap = matplotlib_colormap("dark-blue")
+    cmap = matplotlib_colormap("tau-blue")
     fig = plt.figure(figsize=(4.8, 3.15))
     ax = fig.add_subplot(111, projection="3d")
     surface = ax.plot_surface(

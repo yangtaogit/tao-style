@@ -89,12 +89,12 @@ def draw_contour_panel(fig, ax, cax, cmap) -> None:
 def main() -> None:
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
 
-    gradient_names = ["τ", "dark-blue", "gray"]
-    gradient_keys = ["tau", "dark-blue", "gray"]
+    gradient_names = ["\u03c4 gradient", "\u03c4 blue gradient", "\u03c4 gray gradient", "\u03c4 green gradient", "\u03c4 red gradient"]
+    gradient_keys = ["tau", "tau-blue", "tau-gray", "tau-green", "tau-red"]
 
-    fig = plt.figure(figsize=(11.2, 8.2))
+    fig = plt.figure(figsize=(11.2, 12.8))
     grid = fig.add_gridspec(
-        nrows=3,
+        nrows=5,
         ncols=4,
         width_ratios=[0.06, 1.0, 1.08, 1.08],
         hspace=0.62,
