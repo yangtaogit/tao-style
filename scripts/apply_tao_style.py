@@ -364,7 +364,7 @@ def add_matplotlib_3d_colorbar(
     *,
     width: float = COLORBAR_WIDTH_IN,
     pad: float = COLORBAR_3D_PAD_IN,
-    shrink: float = 0.72,
+    shrink: float = 0.50,
     expand_canvas: bool = True,
     **kwargs,
 ):
