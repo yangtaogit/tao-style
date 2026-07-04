@@ -37,6 +37,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Dense 2D XY data: prefer line-only plots to avoid overcrowded markers.
 - Multi-curve categorical line styles: solid, dashed, dotted, then dash-dot.
 - Multi-curve gradient color schemes: use solid lines for all curves.
+- Major tick length: `2.5 pt`. Minor tick length: `1.5 pt`.
 - Marker size: `3.2 pt`.
 - Marker edge width: `0.7 pt`.
 - Error bar line width: `0.6 pt`.

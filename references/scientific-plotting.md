@@ -54,8 +54,8 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Show ticks on all four sides of the plotting box when the backend supports it.
 - Mirror all ticks in Plotly using `mirror="allticks"`.
 - Enable minor ticks for continuous numeric axes unless they make the axis visually crowded.
-- Use major tick width `0.6`.
-- Use minor tick width `0.3`.
+- Use major tick width `0.6` and major tick length `2.5 pt`.
+- Use minor tick width `0.3` and minor tick length `1.5 pt`.
 - Do not use grid lines by default.
 
 ## Three-Dimensional Axes
@@ -323,5 +323,5 @@ python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 
 - TODO: Confirm Tao's default journal and slide figure sizes.
 - TODO: Confirm a diverging colormap for signed data.
-- TODO: Confirm preferred major tick length and minor tick length.
+- Confirmed: major tick length `2.5 pt`, minor tick length `1.5 pt`.
 - TODO: Confirm final 3D `zoom`, `tick_pad`, and `labelpad` values after regenerating the 3D examples and reviewing them visually.

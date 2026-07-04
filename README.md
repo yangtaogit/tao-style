@@ -277,7 +277,7 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 - Use a closed black axis box by default; all four spines are visible.
 - Ticks point inward; top and right ticks are shown.
-- Axis line width is `0.6 pt`; major tick width is `0.6`; minor tick width is `0.3`.
+- Axis line width is `0.6 pt`; major tick width `0.6`, length `2.5 pt`; minor tick width `0.3`, length `1.5 pt`.
 - Grid lines are off by default.
 - Units use square brackets, such as `Bias Voltage [V]` and `Current [A]`.
 - Base-10 log major ticks should be displayed as plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.
