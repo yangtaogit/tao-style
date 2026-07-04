@@ -808,11 +808,18 @@ def apply_matplotlib_3d_style(
     focal_length via ax.set_proj_type) only for presentation-style depth.
 
     Space is reclaimed in layers rather than with aggressive negative padding:
-    ``zoom`` enlarges the data box within the axes area (outer whitespace is
-    removed by content-adaptive cropping at save time), ``max_ticks`` limits
-    major-tick density so tick text stays short, and the mild negative pads
-    close the remaining gap. The zoom and pad defaults are starting values;
-    verify them at the final view angle and label length.
+    ``zoom`` enlarges the axes rectangle (via _enlarge_3d_axes; outer
+    whitespace is removed by content-adaptive cropping at save time),
+    ``max_ticks`` limits major-tick density so tick text stays short, and the
+    mild negative pads close the remaining gap. The zoom and pad defaults are
+    starting values; verify them at the final view angle and label length.
+    ``zoom`` uses axes enlargement rather than set_box_aspect(zoom=) on
+    purpose: the latter decouples data coordinates from pane rendering and
+    breaks add_matplotlib_3d_box_edge alignment.
+
+    The three inner panes are transparent with black edges, so the box reads
+    as a wireframe. Call add_matplotlib_3d_box_edge() afterwards to draw the
+    rear vertical edge Matplotlib leaves unstroked.
 
     For equal-unit spatial data where X, Y, and Z require true scale, call
     set_equal_xyz_box_aspect() after this function and after setting limits.
@@ -821,11 +828,14 @@ def apply_matplotlib_3d_style(
     if projection:
         ax.set_proj_type(projection)
 
-    if zoom is not None:
-        try:
-            ax.set_box_aspect(None, zoom=zoom)
-        except (AttributeError, TypeError):
-            pass
+    if zoom is not None and zoom != 1.0:
+        # Reclaim whitespace by enlarging the axes rectangle, not with
+        # set_box_aspect(zoom=). The box-aspect zoom decouples the data
+        # coordinate system from the pane render coordinates, which makes the
+        # manually drawn rear box edge (add_matplotlib_3d_box_edge) miss the
+        # grid box. Enlarging the axes rectangle keeps the data coordinates
+        # intact, so the edge aligns exactly. See references/scientific-plotting.md.
+        _enlarge_3d_axes(ax, zoom)
 
     if max_ticks is not None:
         from matplotlib.ticker import MaxNLocator
@@ -841,8 +851,19 @@ def apply_matplotlib_3d_style(
 
     for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
         try:
-            axis.pane.set_facecolor((0.95, 0.95, 0.95, 1.0))
-            axis.pane.set_edgecolor((0.95, 0.95, 0.95, 1.0))
+            # Transparent inner panes with a black edge: the three faces read
+            # as a wireframe box rather than shaded panels. The rear vertical
+            # edge that Matplotlib never strokes is filled in separately by
+            # add_matplotlib_3d_box_edge so the box closes.
+            axis.pane.set_facecolor((1.0, 1.0, 1.0, 0.0))
+            axis.pane.set_edgecolor(AXIS_COLOR)
+            axis.pane.set_alpha(1.0)
+            axis.pane.set_linewidth(AXIS_LINE_WIDTH)
+        except AttributeError:
+            pass
+        try:
+            axis.line.set_color(AXIS_COLOR)
+            axis.line.set_linewidth(AXIS_LINE_WIDTH)
         except AttributeError:
             pass
         try:
@@ -861,13 +882,83 @@ def apply_matplotlib_3d_style(
     return ax
 
 
+def _enlarge_3d_axes(ax, scale: float):
+    """Enlarge the 3D axes rectangle about its center to reclaim whitespace.
+
+    Used instead of set_box_aspect(zoom=) so the data coordinate system stays
+    unchanged and add_matplotlib_3d_box_edge can align the rear box edge with
+    the rendered grid box. The enlarged rectangle may extend past the figure
+    edges; content-adaptive cropping at save time trims the surrounding
+    whitespace back.
+    """
+
+    pos = ax.get_position()
+    cx = pos.x0 + pos.width / 2.0
+    cy = pos.y0 + pos.height / 2.0
+    new_w = pos.width * scale
+    new_h = pos.height * scale
+    ax.set_position([cx - new_w / 2.0, cy - new_h / 2.0, new_w, new_h])
+    return ax
+
+
+def add_matplotlib_3d_box_edge(
+    ax,
+    fig,
+    *,
+    color: str = AXIS_COLOR,
+    linewidth: float = AXIS_LINE_WIDTH,
+):
+    """Draw the rear vertical box edge that Matplotlib leaves unstroked.
+
+    Matplotlib strokes only the three panes facing the viewer, so the vertical
+    edge where the two rear panes meet is missing and the wireframe box looks
+    open. This adds that edge as a Line3DCollection at the true rendered box
+    bounds (ax.xaxis._get_coord_info, which includes Matplotlib's automatic
+    axis margin), picking the box corner that projects leftmost on screen.
+
+    Call after the view angle, box aspect, and any axes enlargement are final,
+    and before add_matplotlib_3d_colorbar, because the corner selection and the
+    colorbar layout both depend on the final projection. Relies on a private
+    Matplotlib API; if it is unavailable the edge is skipped rather than raising.
+    """
+
+    from mpl_toolkits.mplot3d import proj3d
+    from mpl_toolkits.mplot3d.art3d import Line3DCollection
+
+    fig.canvas.draw()
+    try:
+        renderer = fig.canvas.get_renderer()
+        info = ax.xaxis._get_coord_info(renderer)
+        mins, maxs = info[0], info[1]
+    except (AttributeError, TypeError, IndexError):
+        return None
+
+    proj = ax.get_proj()
+    corners = [
+        (mins[0], mins[1]),
+        (mins[0], maxs[1]),
+        (maxs[0], mins[1]),
+        (maxs[0], maxs[1]),
+    ]
+    best = None
+    for cx, cy in corners:
+        screen_x, _, _ = proj3d.proj_transform(cx, cy, mins[2], proj)
+        if best is None or screen_x < best[0]:
+            best = (screen_x, cx, cy)
+    _, cx, cy = best
+    segment = [[(cx, cy, mins[2]), (cx, cy, maxs[2])]]
+    edge = Line3DCollection(segment, colors=color, linewidths=linewidth, zorder=0)
+    ax.add_collection3d(edge)
+    return edge
+
+
 def set_equal_xyz_box_aspect(
     ax,
     *,
     xlim: tuple[float, float] | None = None,
     ylim: tuple[float, float] | None = None,
     zlim: tuple[float, float] | None = None,
-    zoom: float = 1.2,
+    zoom: float = 1.0,
 ):
     """Set the 3D box aspect so one data unit has equal visual length on X, Y, and Z.
 
@@ -877,6 +968,11 @@ def set_equal_xyz_box_aspect(
     independently and distorts such data. Call this after setting the
     displayed limits and after apply_matplotlib_3d_style(), because both set
     the box aspect.
+
+    ``zoom`` defaults to 1.0 (ratio only, no scaling): reclaim whitespace by
+    enlarging the axes rectangle via apply_matplotlib_3d_style's ``zoom`` (or
+    _enlarge_3d_axes) instead, so the data coordinates stay intact and the
+    rear box edge from add_matplotlib_3d_box_edge aligns with the grid box.
     """
 
     if xlim is None:

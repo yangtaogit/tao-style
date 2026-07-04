@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_tao_style import (  # noqa: E402
+    add_matplotlib_3d_box_edge,
     add_matplotlib_3d_colorbar,
     apply_matplotlib_3d_style,
     matplotlib_colormap,
@@ -93,8 +94,10 @@ def main() -> None:
         xlim=(-1.0, 1.0),
         ylim=(-1.0, 1.0),
         zlim=(-0.5, 0.5),
-        zoom=1.2,
+        zoom=1.0,
     )
+
+    add_matplotlib_3d_box_edge(ax, fig)
 
     mappable = ScalarMappable(norm=norm, cmap=cmap)
     mappable.set_array([])
@@ -102,7 +105,7 @@ def main() -> None:
     cbar.set_label("Value", labelpad=4)
 
     output = Path(__file__).with_suffix(".svg")
-    fig.savefig(output, bbox_inches="tight", pad_inches=0.03)
+    fig.savefig(output, bbox_inches="tight", pad_inches=0.22)
     plt.close(fig)
     print(output)
 

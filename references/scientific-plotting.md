@@ -60,13 +60,14 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Three-Dimensional Axes
 
-- For 3D scientific plots, use Matplotlib's default 3D coordinate box, panes, and grid by default, including the visible X/Y/Z axes.
+- For 3D scientific plots, show the visible X/Y/Z coordinate box and grid by default, but render the three inner panes transparent so the box reads as a black wireframe rather than shaded panels.
 - Use orthographic projection by default, `projection="ortho"`: vertical lines stay vertical on screen and equal heights remain comparable along the depth direction. Perspective tilts the Z axis toward a vanishing point and distorts height comparison.
 - Use perspective (`projection="persp"`, optionally with a larger `focal_length` such as 4 to reduce distortion) only when Tao asks for a presentation-style depth effect.
-- Keep the three light-gray 3D pane backgrounds with pane color `#F2F2F2` (`0.95, 0.95, 0.95, 1.0` in Matplotlib RGBA).
-- Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E` (`0.62, 0.62, 0.62, 1.0`), linestyle `":"`, and linewidth `0.2 pt`. Do not add extra pane boundary lines or manual frames.
+- Make the three 3D panes transparent (`1, 1, 1, 0` in Matplotlib RGBA) and give each pane edge and axis line a black `0.6 pt` stroke, so only the black wireframe box and the grid show, with no shaded backgrounds.
+- Matplotlib strokes only the three panes facing the viewer, so the rear vertical edge where the two back panes meet is left unstroked and the wireframe box looks open. Close it with the helper `add_matplotlib_3d_box_edge(fig, ax)`, which draws that edge at the true rendered box bounds so it aligns exactly with the grid box. Do not add other manual frames.
+- Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E` (`0.62, 0.62, 0.62, 1.0`), linestyle `":"`, and linewidth `0.2 pt`.
 - Use inward ticks. In Matplotlib 3D, set `inward_factor=0.0` and `outward_factor=0.2` for the current Tao Style visual direction.
-- Reclaim 3D space in layers rather than with aggressive negative padding: first enlarge the data box within the axes area using `ax.set_box_aspect(None, zoom=1.2)` and rely on content-adaptive cropping to remove outer whitespace; then limit each axis to about five major ticks and shorten tick text with unit scaling, putting the scale in the axis label, such as `Time [μs]`; finally close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0`.
+- Reclaim 3D space in layers rather than with aggressive negative padding: first enlarge the axes rectangle with `apply_matplotlib_3d_style(..., zoom=1.2)` (it enlarges the axes rectangle about its center, not `set_box_aspect(zoom=)`) and rely on content-adaptive cropping to remove outer whitespace; then limit each axis to about five major ticks and shorten tick text with unit scaling, putting the scale in the axis label, such as `Time [μs]`; finally close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0`. Do not use `set_box_aspect(zoom=)` for compactness: it decouples the data coordinate system from the pane rendering, which makes the manually drawn rear box edge miss the grid box.
 - Give the Z axis title a tighter pad than X/Y: Matplotlib offsets each axis title from the outer edge of its tick labels, and Z tick numbers are horizontal text whose width sets that edge, so a uniform labelpad leaves the Z title visually far from its numbers. Use `zlabelpad=-6.0` as the starting value, and keep Z tick text short via unit scaling.
 - Treat `zoom` and the pad values as starting values and verify them at the final view angle, because negative pads depend on the view angle and tick-label length.
 - Apply Tao Style typography to 3D axes: ordinary text font, axis labels at `9 pt`, tick labels at `8 pt`, and Computer Modern only for real mathematical expressions.
@@ -74,7 +75,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - For 3D scalar fields, surfaces, or 4D data shown as spatial coordinates plus a value, encode the value with the preferred gradients and place the colorbar outside the right side of the axes.
 - Position 3D colorbars from the axes' tight bounding box, not the axes rectangle: Matplotlib draws 3D tick and axis labels outside the axes rectangle, so `fig.colorbar(pad=...)` can overlap them. Use the helper `add_matplotlib_3d_colorbar(fig, ax, mappable)`, which measures the label extent, uses a larger default gap (`pad=0.28 in`) than 2D colorbars, keeps `shrink=0.72`, and expands the canvas to the right when needed. Add the colorbar only after the content, style, view angle, and box aspect are final.
 - 3D figures are not constrained by the single-panel 2D XY axes-box rule; choose the canvas, view angle, and colorbar placement so the full 3D coordinate box and data remain readable.
-- Equal-unit 3D plots are an exception to the default box: when X, Y, and Z all represent comparable physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, set the 3D box aspect from the displayed data ranges so one data unit has equal visual length on all three axes. In Matplotlib use `ax.set_box_aspect((x_range, y_range, z_range))` or the helper `set_equal_xyz_box_aspect`, after setting the displayed limits.
+- Equal-unit 3D plots are an exception to the default box: when X, Y, and Z all represent comparable physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, set the 3D box aspect from the displayed data ranges so one data unit has equal visual length on all three axes. In Matplotlib use `ax.set_box_aspect((x_range, y_range, z_range))` or the helper `set_equal_xyz_box_aspect`, after setting the displayed limits. Keep `set_equal_xyz_box_aspect(..., zoom=1.0)` so it only fixes the ratio; reclaim whitespace through the axes-rectangle enlargement in `apply_matplotlib_3d_style` so the rear box edge stays aligned.
 - If the equal-unit range ratio is extreme and the box becomes hard to read, ask Tao whether to crop the displayed range or fall back to the default box, and state the deviation.
 - Hidden-axis 3D/4D figures are optional and must be used only when Tao explicitly asks to hide coordinates, remove the 3D coordinate box, or emphasize the data body over coordinate reading. The default 3D style remains the visible Matplotlib 3D coordinate box.
 - For hidden-axis 3D/4D figures, hide the main X/Y/Z axes, tick marks, tick labels, axis titles, pane backgrounds, and grid lines. Keep the data body complete and uncropped.
@@ -253,16 +254,17 @@ plot_matplotlib_histogram(ax, data, bins, mode, unit="mm", color="#2A2F80", labe
 
 This helper draws the histogram as bin-edge steps with light fill; it does not connect bin centers.
 
-For Matplotlib 3D axes, keep the default 3D box and apply Tao typography with the helper when available:
+For Matplotlib 3D axes, apply Tao typography with the helper (transparent panes plus a black wireframe box), then close the rear box edge that Matplotlib leaves unstroked:
 
 ```python
-from scripts.apply_tao_style import apply_matplotlib_3d_style
+from scripts.apply_tao_style import apply_matplotlib_3d_style, add_matplotlib_3d_box_edge
 
 ax = fig.add_subplot(111, projection="3d")
-apply_matplotlib_3d_style(ax, xlabel="X", ylabel="Y", zlabel="Z")
+apply_matplotlib_3d_style(ax, xlabel="X", ylabel="Y", zlabel="Z")  # zoom=1.2 enlarges the axes rectangle
+add_matplotlib_3d_box_edge(ax, fig)  # after view angle and box aspect are final
 ```
 
-For 3D colorbars, add them last, after the content, style, view angle, and box aspect are final, so the label extent is known:
+For 3D colorbars, add them last, after the content, style, view angle, box aspect, and box edge are final, so the label extent is known:
 
 ```python
 from scripts.apply_tao_style import add_matplotlib_3d_colorbar
@@ -271,13 +273,14 @@ cbar = add_matplotlib_3d_colorbar(fig, ax, surface)  # default pad=0.28 in
 cbar.set_label("Signal [Unit]")
 ```
 
-For equal-unit 3D data such as spatial coordinates, trajectories, or device geometry, set the box aspect from the displayed ranges after applying the style and setting limits:
+For equal-unit 3D data such as spatial coordinates, trajectories, or device geometry, set the box aspect from the displayed ranges after applying the style and setting limits, keeping `zoom=1.0` so only the ratio is fixed:
 
 ```python
 from scripts.apply_tao_style import set_equal_xyz_box_aspect
 
 apply_matplotlib_3d_style(ax, xlabel="X [mm]", ylabel="Y [mm]", zlabel="Z [mm]")
-set_equal_xyz_box_aspect(ax, xlim=(0, 40), ylim=(0, 20), zlim=(0, 10))
+set_equal_xyz_box_aspect(ax, xlim=(0, 40), ylim=(0, 20), zlim=(0, 10), zoom=1.0)
+add_matplotlib_3d_box_edge(ax, fig)
 ```
 
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
@@ -324,4 +327,4 @@ python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 - TODO: Confirm Tao's default journal and slide figure sizes.
 - TODO: Confirm a diverging colormap for signed data.
 - Confirmed: major tick length `2.5 pt`, minor tick length `1.5 pt`.
-- TODO: Confirm final 3D `zoom`, `tick_pad`, and `labelpad` values after regenerating the 3D examples and reviewing them visually.
+- Confirmed: 3D boxed style uses transparent panes with a black wireframe box, `add_matplotlib_3d_box_edge` for the rear edge, and axes-rectangle enlargement (`zoom=1.2`) rather than `set_box_aspect(zoom=)`.
