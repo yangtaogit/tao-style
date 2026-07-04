@@ -105,7 +105,7 @@ def main() -> None:
     cbar.set_label("Value", labelpad=4)
 
     output = Path(__file__).with_suffix(".svg")
-    fig.savefig(output, bbox_inches="tight", pad_inches=0.22)
+    fig.savefig(output, bbox_inches="tight", pad_inches=0.03)
     plt.close(fig)
     print(output)
 
