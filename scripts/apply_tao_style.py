@@ -70,15 +70,15 @@ GRADIENT_COLORMAPS = {
     "tao-blue": ["#EEF1F8", "#C8D2EA", "#8799CF", "#4E5CA4", "#2A2F80"],
     "tao-gray": ["#EDEDED", "#C9C9C9", "#9A9A9A", "#5F5F5F", "#000000"],
     "tao-green": [
-        "#EEF6EB",
-        "#C6E3C0",
-        "#94CB96",
-        "#5CA86C",
-        "#35854C",
-        "#1D6336",
-        "#124424",
+        "#EFF9EA",
+        "#C7EBB4",
+        "#92D982",
+        "#55BE55",
+        "#2BA13C",
+        "#158029",
+        "#0E5A20",
     ],
-    "tao-red": ["#F8EEEE", "#E5BFC0", "#D08888", "#B04A4A", "#7D1415"],
+    "tao-red": ["#FCEFEC", "#F8C4BA", "#F09083", "#DD4B3E", "#9E1A15"],
     "tao": TAO_PALETTE,
 }
 

@@ -104,7 +104,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the tao palette.
 - Preferred tao blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
 - Preferred tao gray gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
-- Additional family gradients when the data semantics call for green or red: tao green gradient `#EEF6EB`, `#C6E3C0`, `#94CB96`, `#5CA86C`, `#35854C`, `#1D6336`, `#124424`; tao red gradient, based on muted red `#B04A4A`: `#F8EEEE`, `#E5BFC0`, `#D08888`, `#B04A4A`, `#7D1415`.
+- Additional family gradients when the data semantics call for green or red: tao green gradient `#EFF9EA`, `#C7EBB4`, `#92D982`, `#55BE55`, `#2BA13C`, `#158029`, `#0E5A20`; tao red gradient `#FCEFEC`, `#F8C4BA`, `#F09083`, `#DD4B3E`, `#9E1A15`. These two are deliberately brighter than the categorical colors; the emphasis red `#B04A4A` is a categorical color and not part of the tao red gradient.
 - Optional tao gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Colorbars should sit outside the right side of the corresponding axes, use a vertical layout, and keep a black outline with the same line width as the axes box. For portrait single-panel figures, keep the axes-box width fixed and allow the canvas to expand rightward for the colorbar; do not squeeze the axes box or let the colorbar overlap tick labels.
 - Use these lists consistently across supported backends unless the user provides a data-specific color mapping.
