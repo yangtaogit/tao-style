@@ -45,8 +45,6 @@ SERIES_COLOR_ORDERS = {
     1: ["#2A2F80"],
     2: ["#2A2F80", "#808080"],
     3: ["#2A2F80", "#808080", "#000000"],
-    4: ["#2A2F80", "#808080", "#000000", "#BDBDBD"],
-    5: ["#2A2F80", "#BDBDBD", "#4378BC", "#000000", "#808080"],
 }
 TAO_PALETTE = [
     "#2A2F80",
@@ -560,9 +558,9 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") 
     depend on the fonts installed where the SVG is opened. PDF export keeps
     embedded TrueType text by default via ``pdf.fonttype = 42``.
 
-    The color prop_cycle matches the Tao Style per-count series orders only up
-    to four series; for five or more series, assign colors explicitly with
-    ``series_colors(n)``.
+    The color prop_cycle matches the Tao Style per-count series orders for
+    one to three ordinary series; with more than three ordinary series,
+    switch to a tao-blue or tao gradient instead.
     """
 
     if svg_fonttype not in {"none", "path"}:
@@ -1153,9 +1151,8 @@ def series_colors(n: int) -> list[str]:
 
     The color set and its order both depend on the series count; do not
     truncate or extend another count's sequence. The rcParams prop_cycle
-    matches these orders only up to four series, so assign colors explicitly
-    from this function when plotting five series. With more than five
-    ordinary series, Tao Style switches to a tao-blue or tao gradient
+    already matches these orders for one to three series. With more than
+    three ordinary series, Tao Style switches to a tao-blue or tao gradient
     instead of extending the categorical sequence.
     """
 
@@ -1163,7 +1160,7 @@ def series_colors(n: int) -> list[str]:
         raise ValueError("n must be at least 1")
     if n not in SERIES_COLOR_ORDERS:
         raise ValueError(
-            "No categorical order for more than 5 ordinary series; "
+            "No categorical order for more than 3 ordinary series; "
             "use gradient_colormap('tao-blue') or gradient_colormap('tao') instead"
         )
     return list(SERIES_COLOR_ORDERS[n])

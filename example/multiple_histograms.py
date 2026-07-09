@@ -33,9 +33,8 @@ def main() -> None:
         rng.normal(-0.45, 0.95, size=900),
         rng.normal(0.05, 1.15, size=900),
         rng.normal(0.48, 1.35, size=900),
-        rng.normal(0.90, 1.55, size=900),
     ]
-    labels = ["σ = 0.95", "σ = 1.15", "σ = 1.35", "σ = 1.55"]
+    labels = ["σ = 0.95", "σ = 1.15", "σ = 1.35"]
     colors = series_colors(len(samples))
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
