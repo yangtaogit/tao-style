@@ -138,6 +138,14 @@
     <td colspan="2"><img src="example/tao_palette.svg" alt="tao palette example" width="100%"></td>
   </tr>
   <tr>
+    <td width="50%">带状填充曲线</td>
+    <td>tao 色板带状填充</td>
+  </tr>
+  <tr>
+    <td><img src="example/band_curves.svg" alt="Band curves example" height="220"></td>
+    <td><img src="example/band_tao_palette.svg" alt="tao palette band example" height="220"></td>
+  </tr>
+  <tr>
     <td width="50%">2:3 竖向曲线图</td>
     <td>2:3 竖向等高线图</td>
   </tr>
@@ -357,6 +365,14 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
   </tr>
   <tr>
     <td colspan="2"><img src="example/tao_palette.svg" alt="tao palette example" width="100%"></td>
+  </tr>
+  <tr>
+    <td width="50%">Band Curves</td>
+    <td>tao Palette Bands</td>
+  </tr>
+  <tr>
+    <td><img src="example/band_curves.svg" alt="Band curves example" height="220"></td>
+    <td><img src="example/band_tao_palette.svg" alt="tao palette band example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">2:3 Portrait Curves</td>
