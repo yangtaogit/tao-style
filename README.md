@@ -58,7 +58,7 @@
 - 默认封闭黑色坐标框；上下左右 spine 可见。
 - tick 向内；顶部和右侧也显示 tick。
 - 坐标轴线宽为 `0.6 pt`；主 tick 线宽为 `0.6`；副 tick 线宽为 `0.3`。
-- 默认不使用 grid。
+- 默认不使用 grid；需要网格线时，只显示主 tick 对应的灰色 dotted 网格线，颜色 `#9E9E9E`，线型 `":"`，线宽 `0.2 pt`，不显示副 tick 网格线。
 - 单位格式：`Quantity [Unit]`，例如 `Bias Voltage [V]`、`Current [A]`。
 - base-10 log 主刻度使用普通文本上标，如 `10⁻⁶`；不用 Matplotlib mathtext；副 tick 默认保留。
 
@@ -186,6 +186,14 @@
     <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="220"></td>
   </tr>
   <tr>
+    <td width="50%">主 tick 网格线曲线</td>
+    <td>对数坐标主 tick 网格线</td>
+  </tr>
+  <tr>
+    <td><img src="example/grid_linear.svg" alt="Major tick grid linear example" height="220"></td>
+    <td><img src="example/grid_log_axis.svg" alt="Major tick grid log-axis example" height="220"></td>
+  </tr>
+  <tr>
     <td width="50%">多个直方图填充</td>
     <td>曲线局部放大</td>
   </tr>
@@ -287,7 +295,7 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - Use a closed black axis box by default; all four spines are visible.
 - Ticks point inward; top and right ticks are shown.
 - Axis line width is `0.6 pt`; major tick width `0.6`, length `2.5 pt`; minor tick width `0.3`, length `1.5 pt`.
-- Grid lines are off by default.
+- Grid lines are off by default; when needed, show only major-tick grid lines with color `#9E9E9E`, dotted linestyle `":"`, and linewidth `0.2 pt`. Do not show minor-tick grid lines.
 - Units use square brackets, such as `Bias Voltage [V]` and `Current [A]`.
 - Base-10 log major ticks should be displayed as plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.
 
@@ -413,6 +421,14 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
   <tr>
     <td><img src="example/log_axis.svg" alt="Log axis example" height="220"></td>
     <td><img src="example/many_curves_gradient.svg" alt="Many curves gradient example" height="220"></td>
+  </tr>
+  <tr>
+    <td width="50%">Major-Tick Grid</td>
+    <td>Log Axis Major-Tick Grid</td>
+  </tr>
+  <tr>
+    <td><img src="example/grid_linear.svg" alt="Major tick grid linear example" height="220"></td>
+    <td><img src="example/grid_log_axis.svg" alt="Major tick grid log-axis example" height="220"></td>
   </tr>
   <tr>
     <td width="50%">Multiple Filled Histograms</td>

@@ -88,6 +88,9 @@ AXIS_COLOR = "#000000"
 AXIS_LINE_WIDTH = 0.6
 MAJOR_TICK_WIDTH = 0.6
 MINOR_TICK_WIDTH = 0.3
+GRID_COLOR = "#9E9E9E"
+GRID_LINE_WIDTH = 0.2
+GRID_LINE_STYLE = ":"
 AXIS_LABEL_SIZE = 9
 TICK_LABEL_SIZE = 8
 LEGEND_FONT_SIZE = 8
@@ -574,6 +577,9 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") 
         "axes.labelcolor": "#111111",
         "axes.linewidth": AXIS_LINE_WIDTH,
         "axes.grid": False,
+        "grid.color": GRID_COLOR,
+        "grid.linewidth": GRID_LINE_WIDTH,
+        "grid.linestyle": GRID_LINE_STYLE,
         "axes.spines.left": True,
         "axes.spines.right": True,
         "axes.spines.top": True,
@@ -632,6 +638,24 @@ def matplotlib_legend_kwargs(outside: bool = False, n_items: int | None = None) 
             "borderaxespad": 0.0,
         }
     return {"frameon": False}
+
+
+def apply_matplotlib_grid(ax, enabled: bool = True):
+    """Apply Tao Style's optional 2D major-tick grid to a Matplotlib axes.
+
+    Grid lines are disabled by default in the style profile. When enabled,
+    show only major-tick grid lines with a thin gray dotted stroke.
+    """
+
+    ax.grid(False, which="minor")
+    ax.grid(
+        enabled,
+        which="major",
+        color=GRID_COLOR,
+        linestyle=GRID_LINE_STYLE,
+        linewidth=GRID_LINE_WIDTH,
+    )
+    return ax
 
 
 def apply_matplotlib_legend(ax, outside=None, **kwargs):
@@ -1070,7 +1094,7 @@ def apply_matplotlib_hidden_3d_style(
     return ax
 
 
-def plotly_axis_style() -> dict[str, object]:
+def plotly_axis_style(grid: bool = False) -> dict[str, object]:
     """Return Tao Style axis settings for Plotly xaxes/yaxes."""
 
     return {
@@ -1085,7 +1109,10 @@ def plotly_axis_style() -> dict[str, object]:
         "mirror": "allticks",
         "minor_ticks": "inside",
         "minor_tickwidth": MINOR_TICK_WIDTH,
-        "gridcolor": "rgba(0,0,0,0)",
+        "showgrid": grid,
+        "gridcolor": GRID_COLOR if grid else "rgba(0,0,0,0)",
+        "gridwidth": GRID_LINE_WIDTH,
+        "griddash": "dot",
         "zeroline": False,
     }
 
@@ -1128,12 +1155,13 @@ def apply_plotly_style(
     aspect: str = DEFAULT_ASPECT,
     width: int | None = None,
     legend_outside: bool = False,
+    grid: bool = False,
 ):
     """Apply Tao Style axis and layout settings to a Plotly figure."""
 
     fig.update_layout(**plotly_layout_style(aspect, width))
     fig.update_layout(legend=plotly_legend_style(legend_outside))
-    axis_style = plotly_axis_style()
+    axis_style = plotly_axis_style(grid=grid)
     fig.update_xaxes(**axis_style)
     fig.update_yaxes(**axis_style)
     return fig

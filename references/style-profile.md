@@ -38,6 +38,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Multi-curve categorical line styles: solid, dashed, dotted, then dash-dot.
 - Multi-curve gradient color schemes: use solid lines for all curves.
 - Major tick length: `2.5 pt`. Minor tick length: `1.5 pt`.
+- Grid lines are off by default; when needed, use only major-tick grid lines with color `#9E9E9E`, dotted linestyle `":"`, and linewidth `0.2 pt`. Do not show minor-tick grid lines.
 - Marker size: `3.2 pt`.
 - Marker edge width: `0.7 pt`.
 - Error bar line width: `0.6 pt`.

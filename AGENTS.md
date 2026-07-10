@@ -44,6 +44,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Log tick labels use plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext.
 - Histogram y-axis mode: default to raw `Count` and state the assumption when unspecified; ask only when normalization materially affects the result. The normalized mode is `Probability Density [1/Unit]`.
 - Default histograms use stepped bin outlines with light fill, not connected bin-center lines.
+- 2D grid lines are off by default; when needed, use major-tick grid lines only: gray `#9E9E9E`, dotted `":"`, linewidth `0.2 pt`, no minor-tick grid.
 - Dense 2D data should usually use line-only rendering to avoid marker crowding.
 - Multiple ordinary or fitted curves with categorical colors use both color and line style; line styles are solid, dashed, dotted, then dash-dot. If a gradient color scheme is used, all curves stay solid.
 - Series colors are looked up by count; the set and the order both depend on the number of ordinary series. 1: `#2A2F80`; 2: `#2A2F80`, `#808080`; 3: `#2A2F80`, `#808080`, `#000000`. With more than three ordinary series, prefer the tao palette in order; for ordered series, use a tao blue or tao gradient instead (`series_colors(n)` in the helper script returns the per-count orders, n ≤ 3). Muted red `#B04A4A` is only for explicit emphasis.

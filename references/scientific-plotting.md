@@ -56,7 +56,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Enable minor ticks for continuous numeric axes unless they make the axis visually crowded.
 - Use major tick width `0.6` and major tick length `2.5 pt`.
 - Use minor tick width `0.3` and minor tick length `1.5 pt`.
-- Do not use grid lines by default.
+- Do not use grid lines by default. When grid lines are needed, show only major-tick grid lines, using gray dotted lines with color `#9E9E9E`, linestyle `":"`, and linewidth `0.2 pt`; do not show minor-tick grid lines.
 
 ## Three-Dimensional Axes
 
