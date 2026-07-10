@@ -95,8 +95,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 - Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors, exposed as `categorical_palette("tao-core")`.
 - Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`.
-- More than three ordinary series: switch to a tao blue or tao gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
-- `#6FCCDE` belongs to the tao palette and tao gradient only; as a standalone categorical color use `#8799CF`, taken from the tao blue gradient, so the light-blue slot stays in the same visual family.
+- More than three ordinary series: prefer the tao palette, taking its colors in order; for ordered series, switch to a tao blue or tao gradient instead.
 - Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding. When red is needed, prefer muted red `#B04A4A` over saturated red. Red is not part of the default ordinary multi-series sequence.
 - For many curves or ordered series that need a color gradient, prefer tao blue gradients or tao gray gradients by default.
 - Use the tao palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
@@ -188,7 +187,7 @@ set_fixed_axes_box(fig, ax, aspect=aspect)
 save_adaptive_figure(fig, "figure.svg")
 ```
 
-The per-count series orders (up to three) are also available programmatically; the fixed `prop_cycle` already matches them. With more than three ordinary series, switch to a gradient instead:
+The per-count series orders (up to three) are also available programmatically; the fixed `prop_cycle` already matches them. With more than three ordinary series, use `categorical_palette("tao")` in order, or a gradient for ordered series:
 
 ```python
 from scripts.apply_tao_style import series_colors

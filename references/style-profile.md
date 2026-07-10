@@ -49,8 +49,8 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 
 - Core color anchors (`tao-core`): deep blue `#2A2F80`, black `#000000`, gray `#808080`. Use muted red `#B04A4A` only for explicit emphasis; it is never part of the ordinary sequence.
 - Per-count series colors: the color set and its order both depend on the number of ordinary series. Use the sequence for the actual series count; do not truncate or extend another count's sequence. 1 series: `#2A2F80`. 2 series: `#2A2F80`, `#808080`. 3 series: `#2A2F80`, `#808080`, `#000000`.
-- More than three ordinary series: switch to a tao blue or tao gradient instead of extending the categorical sequence. Only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5`, keep `#2A2F80` first, and reorder so adjacent series differ in both hue family and lightness; never place two grays or two similar blues next to each other.
-- Optional tao palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger tao color alternative is desired. `#6FCCDE` stays in the tao palette and tao gradient but is not used as a standalone categorical color; the standalone light blue is `#8799CF` from the tao blue gradient.
+- More than three ordinary series: prefer the tao palette, taking its colors in order; for ordered series, switch to a tao blue or tao gradient instead.
+- Optional tao palette: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`. Use it only when a stronger tao color alternative is desired.
 - Sequential colormap: prefer tao blue gradients and tao gray gradients for many curves or ordered series; use the tao gradient as an optional alternative for dedicated colorbars or heatmaps.
 - Preferred tao blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
 - Preferred tao gray gradient: near-white to black, `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.

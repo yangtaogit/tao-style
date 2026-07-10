@@ -26,20 +26,13 @@ CORE_PALETTE = [
 EMPHASIS_PALETTE = [
     "#B04A4A",
 ]
+# Default prop_cycle: identical to the per-count core orders (1-3 ordinary
+# series). More than three series requires explicit assignment per the color
+# rules (tao palette in order, or a gradient for ordered series).
 PALETTE = [
     "#2A2F80",
     "#808080",
     "#000000",
-    "#BDBDBD",
-    "#4378BC",
-    "#8799CF",
-    "#3953A5",
-]
-EXTENDED_PALETTE = [
-    "#BDBDBD",
-    "#4378BC",
-    "#8799CF",
-    "#3953A5",
 ]
 SERIES_COLOR_ORDERS = {
     1: ["#2A2F80"],
@@ -60,7 +53,6 @@ TAO_PALETTE = [
 CATEGORICAL_PALETTES = {
     "default": PALETTE,
     "tao-core": CORE_PALETTE,
-    "extended": EXTENDED_PALETTE,
     "emphasis": EMPHASIS_PALETTE,
     "tao": TAO_PALETTE,
 }
@@ -559,8 +551,9 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") 
     embedded TrueType text by default via ``pdf.fonttype = 42``.
 
     The color prop_cycle matches the Tao Style per-count series orders for
-    one to three ordinary series; with more than three ordinary series,
-    switch to a tao-blue or tao gradient instead.
+    one to three ordinary series and repeats beyond that. With more than
+    three ordinary series, assign colors explicitly: the tao palette in
+    order, or a tao-blue/tao gradient for ordered series.
     """
 
     if svg_fonttype not in {"none", "path"}:
@@ -1152,16 +1145,18 @@ def series_colors(n: int) -> list[str]:
     The color set and its order both depend on the series count; do not
     truncate or extend another count's sequence. The rcParams prop_cycle
     already matches these orders for one to three series. With more than
-    three ordinary series, Tao Style switches to a tao-blue or tao gradient
-    instead of extending the categorical sequence.
+    three ordinary series, Tao Style prefers the tao palette taken in order
+    (categorical_palette("tao")); for ordered series, use a tao-blue or tao
+    gradient instead.
     """
 
     if n < 1:
         raise ValueError("n must be at least 1")
     if n not in SERIES_COLOR_ORDERS:
         raise ValueError(
-            "No categorical order for more than 3 ordinary series; "
-            "use gradient_colormap('tao-blue') or gradient_colormap('tao') instead"
+            "No per-count order for more than 3 ordinary series; "
+            "use categorical_palette('tao') in order, or gradient_colormap('tao-blue') "
+            "/ gradient_colormap('tao') for ordered series"
         )
     return list(SERIES_COLOR_ORDERS[n])
 

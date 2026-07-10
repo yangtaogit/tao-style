@@ -83,7 +83,7 @@
 - 默认偏好冷色调、暗蓝、黑色和灰色。
 - 核心颜色锚点（`tao-core`）为 deep blue `#2A2F80`、black `#000000`、gray `#808080`。muted red `#B04A4A` 仅在需要明确强调时使用，不进入普通序列。
 - 颜色按系列数查表：集合与顺序都由普通系列数决定，直接使用对应系列数的色表，不从其他系列数的色表截断或追加。1 系列：`#2A2F80`；2 系列：`#2A2F80`、`#808080`；3 系列：`#2A2F80`、`#808080`、`#000000`。
-- 超过 3 个系列时，优先改用暗蓝梯度或 tao 梯度，而非继续扩展分类色；仅当类别无序、梯度会误导时，才从 `#BDBDBD`、`#4378BC`、`#8799CF`、`#3953A5` 补色并整体重排，保证相邻系列在色相和明度上都可分。`#6FCCDE` 仅保留在 tao 色板和 tao 梯度中，单独作分类色时以暗蓝梯度中的 `#8799CF` 代替。有序数据默认优先使用暗蓝梯度或灰度梯度；暗蓝梯度/colorbar 以 deep blue `#2A2F80` 为基础演变。
+- 超过 3 个系列时，优先使用 tao 色板并按其顺序取色；有序系列则优先改用暗蓝（tao blue）梯度或 tao 梯度。
 - tao 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。
 - 需要绿色或红色语义的顺序数据可用附加梯度：tao green `#EFF9EA`、`#C7EBB4`、`#92D982`、`#55BE55`、`#2BA13C`、`#158029`、`#0E5A20`；tao red `#FCEFEC`、`#F8C4BA`、`#F09083`、`#DD4B3E`、`#9E1A15`。这两条梯度有意比分类色更明亮；强调红 `#B04A4A` 属于分类色，不在 tao red 梯度中。
 - colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
@@ -312,7 +312,7 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - The default palette favors cool tones, dark blue, black, and gray.
 - The core color anchors (`tao-core`) are deep blue `#2A2F80`, black `#000000`, and gray `#808080`. Muted red `#B04A4A` is used only for explicit emphasis and never enters the ordinary sequence.
 - Series colors are looked up by count; both the set and the order depend on the number of ordinary series. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`.
-- With more than three ordinary series, switch to a tao blue or tao gradient instead of extending the categorical sequence; only when the categories are unordered and a gradient would mislead, extend from the pool `#BDBDBD`, `#4378BC`, `#8799CF`, `#3953A5` and reorder so adjacent series differ in both hue family and lightness. `#6FCCDE` remains only in the tao palette and tao gradient; the standalone light blue is `#8799CF`. For ordered data, prefer tao blue or tao gray gradients by default; the tao blue gradient/colorbar is derived from deep blue `#2A2F80`.
+- With more than three ordinary series, prefer the tao palette, taking its colors in order; for ordered series, switch to a tao blue or tao gradient instead.
 - The tao palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Additional family gradients when the data semantics call for green or red: tao green `#EFF9EA`, `#C7EBB4`, `#92D982`, `#55BE55`, `#2BA13C`, `#158029`, `#0E5A20`; tao red `#FCEFEC`, `#F8C4BA`, `#F09083`, `#DD4B3E`, `#9E1A15`. These two are deliberately brighter than the categorical colors; the emphasis red `#B04A4A` is a categorical color and not part of the tao red gradient.
 - Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.
