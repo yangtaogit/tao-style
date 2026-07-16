@@ -22,6 +22,7 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 ## Typography
 
 - Primary Latin font: Helvetica.
+- The Skill bundles Helvetica under `assets/fonts/helvetica/`. Before rendering, check whether the preferred font is available with `python scripts/manage_fonts.py --check`. If Helvetica is missing, tell the user and ask whether to install the bundled font; never install it silently. Only after installation is declined or unavailable should a compatible fallback be selected and disclosed.
 - Primary CJK font: 宋体, using `SimSun` on Windows, `Songti SC` on macOS, and `Noto Serif CJK SC` as a Linux fallback when 宋体 is unavailable.
 - Math font: Computer Modern.
 - Coordinate-axis labels and tick labels: prefer ordinary text fonts over math fonts; for log axes, use plain-text superscripts such as `10⁻⁶` with a sans fallback that supports the required glyphs.

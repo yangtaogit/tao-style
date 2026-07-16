@@ -42,6 +42,8 @@
 ### 字体与字号
 
 - 英文字体首选 Helvetica；中文字体首选宋体；数学公式字体使用 Computer Modern。
+- 仓库随附 Helvetica 字体文件，位于 `assets/fonts/helvetica/`。生成图片前应先检测当前环境；若缺少 Helvetica，AI 会先询问是否安装，不会自动修改系统字体。
+- 仅在拒绝安装或当前环境无法安装时，才改用 Arimo、Noto Sans 或 Nimbus Sans 等兼容字体，并明确说明替代关系。
 - 普通坐标轴标题、tick、legend、annotation 尽量不用 Matplotlib mathtext。
 - 坐标轴标题使用 `9 pt`；tick 数字使用 `8 pt`；legend 使用 `8 pt`。
 
@@ -234,6 +236,18 @@ python3 scripts/install_skill.py --target all --mode copy --force
 
 自定义 Skill 目录：添加 `--skills-dir /path/to/skills`。预览操作：添加 `--dry-run`。
 
+Skill 安装会复制随附字体文件，但不会自动将字体安装到操作系统。可手动检查：
+
+```bash
+python3 scripts/manage_fonts.py --check
+```
+
+确认安装后，执行当前用户级安装：
+
+```bash
+python3 scripts/manage_fonts.py --install
+```
+
 ## 更新
 
 copy 安装：
@@ -279,6 +293,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### Fonts and Sizes
 
 - English text should prefer Helvetica; Chinese text should prefer Songti; mathematical expressions use Computer Modern.
+- Helvetica files are bundled under `assets/fonts/helvetica/`. Before rendering, the AI should check the current environment and ask before installing when Helvetica is missing; it must not modify system fonts automatically.
+- Use a compatible font such as Arimo, Noto Sans, or Nimbus Sans only when installation is declined or unavailable, and disclose the substitution.
 - Regular axis labels, tick labels, legends, and annotations should avoid Matplotlib mathtext when possible.
 - Axis labels use `9 pt`; tick labels use `8 pt`; legends use `8 pt`.
 
@@ -470,6 +486,18 @@ python3 scripts/install_skill.py --target all --mode copy --force
 ```
 
 Custom Skill directory: add `--skills-dir /path/to/skills`. Dry run: add `--dry-run`.
+
+Installing the Skill copies the bundled font files but does not install them into the operating system. Check manually with:
+
+```bash
+python3 scripts/manage_fonts.py --check
+```
+
+After approving installation, install them for the current user with:
+
+```bash
+python3 scripts/manage_fonts.py --install
+```
 
 ## Update
 

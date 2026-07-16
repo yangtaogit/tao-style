@@ -38,6 +38,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Common landscape/square ratios use the same default axes-box height: `1:1 = 2.0 in x 2.0 in`, `3:2 = 3.0 in x 2.0 in`, `5:3 = 3.33 in x 2.0 in`. Common portrait ratios use the same default axes-box width: `2:3 = 2.0 in x 3.0 in`, `3:5 = 2.0 in x 3.33 in`.
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
+- Check Helvetica before plotting with `python3 scripts/manage_fonts.py --check`. If it is absent, tell the user that `assets/fonts/helvetica/` is bundled and ask whether to run `python3 scripts/manage_fonts.py --install`. Never install fonts silently. If the user declines or installation is unavailable, explicitly select and disclose a compatible fallback such as Arimo, Noto Sans, or Nimbus Sans.
 - Font-stable vector export: default SVG text should be converted to paths; default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and target fonts are available.
 - Axis box: black boxed axes, inward ticks on all sides, axis linewidth `0.6 pt`, major tick width `0.6`, major tick length `2.5 pt`, minor tick width `0.3`, minor tick length `1.5 pt`, no grid by default.
 - Units use square brackets: `Quantity [Unit]`.
@@ -87,9 +88,10 @@ tao-style/
 |-- references/scientific-slides.md   # Scientific report / slides and Beamer rules
 |-- references/academic-documents.md  # Academic document and tao-document rules
 |-- scripts/apply_tao_style.py        # Python plotting style helper
+|-- scripts/manage_fonts.py           # Preferred-font check and approved user-level install
 |-- scripts/install_skill.py          # Install/update script
 |-- example/                          # Committed plotting examples and SVG outputs
-|-- assets/                           # Assets such as logo files
+|-- assets/                           # Logos and bundled fonts
 `-- test/                             # Local debugging scripts and outputs; ignored by git
 ```
 

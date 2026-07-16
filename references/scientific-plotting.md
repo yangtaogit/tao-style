@@ -30,7 +30,8 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 ## Typography
 
 - Use Helvetica as the first-choice English font.
-- Use `Arimo`, `Noto Sans`, or `Nimbus Sans` only as Helvetica-compatible local preview fallbacks when the system does not provide Helvetica. Prefer a fallback with complete superscript glyphs for log-axis labels.
+- Check Helvetica availability before rendering with `python scripts/manage_fonts.py --check`. The Skill includes font files under `assets/fonts/helvetica/`; when Helvetica is missing, tell the user and ask whether to install them with `python scripts/manage_fonts.py --install`. Do not install fonts automatically.
+- Use `Arimo`, `Noto Sans`, or `Nimbus Sans` as Helvetica-compatible local preview fallbacks only after the user declines installation or installation is unavailable. State the chosen substitution, and prefer a fallback with complete superscript glyphs for log-axis labels.
 - Use 宋体 for Chinese text. In code, prefer cross-platform font names in this order: `SimSun`, `Songti SC`, `Noto Serif CJK SC`.
 - Keep font selection explicit in plotting code when the environment may not have the preferred fonts installed.
 - Make axis labels/titles slightly larger than tick labels. Use axis labels at `9 pt` and tick labels at `8 pt` by default.
