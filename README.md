@@ -66,19 +66,14 @@
 
 ### 三维坐标
 
-- 三维科研图默认显示 `X`、`Y`、`Z` 坐标框和网格，但三个内面透明，使坐标框呈现为黑色线框而非灰色填充面。
-- 默认正交投影：`projection="ortho"`，Z 轴在屏幕上保持垂直、等高沿深度方向可比；仅在演示需要景深效果时使用透视投影（可配合较大 `focal_length` 减小畸变）。三个 pane 设为透明（`1,1,1,0`），pane 边和轴线为黑色 `0.6 pt`。
-- Matplotlib 只描边朝向观察者的三个 pane，朝后两面相交的那条竖棱默认不画、线框不闭合；用 helper `add_matplotlib_3d_box_edge(fig, ax)` 在真实盒界处补齐这条棱，使其与网格框精确对齐。
-- 3D 网格只显示主 tick 对应的灰色点线，颜色为 `#9E9E9E`，线型为 dotted `":"`，线宽为 `0.2 pt`；不额外添加手动画框。
-- 3D tick 方向与 2D 坐标统一为向内；Matplotlib 3D 中使用 `inward_factor=0.0`、`outward_factor=0.2`。
-- 3D 空间分层回收：先用 `apply_matplotlib_3d_style(..., zoom=1.2)` 放大 axes 矩形（放大 axes 矩形而非 `set_box_aspect(zoom=)`，后者会使补的竖棱错位）并依靠内容自适应裁切收掉外圈空白；再限制每轴约 5 个主 tick，并用单位换算缩短 tick 数字；最后用温和的 `tick_pad=-1.5`、`labelpad=-3.0` 收紧剩余间距（起始值，按最终视角确认）。Z 轴标题因 tick 数字为水平文字、外沿由文字宽度决定，需要单独更紧的 `zlabelpad=-6.0`（起始值），并配合单位换算缩短 Z 的 tick 数字。字体、字号和普通文本规则使用 tao Style。
-- 已知单位时继续使用方括号格式，例如 `X Position [mm]`。
-- 三维空间坐标之外的数值可用颜色梯度表示；colorbar 置于图框外右侧。3D 的 tick 数字和轴标题画在轴矩形之外，直接用 `fig.colorbar(pad=...)` 可能与其重叠；应按含标签的 tight bounding box 定位 colorbar（helper：`add_matplotlib_3d_colorbar`，用较短的 `shrink=0.50` 使 colorbar 不至于过高突兀，必要时向右扩展 canvas），并在内容、视角和 box aspect 定稿后再添加。
-- 三维图不受二维单图 XY 坐标框尺寸规则约束。
-- 等比例 3D 图是默认坐标框的例外：若 X/Y/Z 都是长度、位置、空间坐标、几何尺寸等需要真实比例关系的量，按显示范围设置 `set_box_aspect((X range, Y range, Z range))`（或 `set_equal_xyz_box_aspect(..., zoom=1.0)`），使三个方向上一个数据单位的视觉长度相等，紧凑感交给 axes 矩形放大以保持竖棱对齐；范围比例极端时先询问是否裁剪显示范围。
-- 默认三维绘图仍显示坐标轴；只有明确要求隐藏坐标、弱化坐标框或突出数据主体时，才使用隐藏三维坐标轴风格。
-- 隐藏三维坐标轴风格会隐藏主 `X/Y/Z` 坐标轴、tick、tick label、轴标题、pane 背景和网格；在图内空白区域放置小型 `XYZ` 方向箭头，并在颜色表示数值时保留图内 colorbar。
-- 隐藏坐标轴图默认按内容自适应裁切，裁切范围包含数据主体、图内 `XYZ` 方向箭头和图内 colorbar，并保留少量安全边距；`XYZ` 方向箭头和 colorbar 不应遮挡数据主体。
+- 默认显示 `X/Y/Z` 坐标框并使用正交投影 `projection="ortho"`；仅在强调景深时使用透视投影。pane 透明，pane 边和轴线为黑色 `0.6 pt`，并用 `add_matplotlib_3d_box_edge` 补齐后侧竖棱。
+- tick 向内；仅显示主 tick 对应的灰色点状网格（`#9E9E9E`、`":"`、`0.2 pt`）。每轴约 5 个主 tick，轴标题 `9 pt`、tick label `8 pt`，单位继续使用 `Quantity [Unit]`。
+- 紧凑布局以 `zoom=1.2`、`tick_pad=-1.5`、`labelpad=-3.0`、`zlabelpad=-6.0` 为起始值，并按最终视角检查。
+- 额外数值使用 tao 梯度；colorbar 置于右侧、黑色 `0.6 pt` 外框，并通过 `add_matplotlib_3d_colorbar` 避免与标签重叠。三维 canvas 按视角、数据和 colorbar 自适应，不受二维单图坐标框尺寸限制。
+- X/Y/Z 需要真实等比例时，按显示范围设置 box aspect；范围比例极端时先询问是否裁剪。
+- 仅在明确要求隐藏坐标或突出数据主体时，隐藏坐标框、tick、pane 和网格，改用图内小型 `XYZ` 方向标与 colorbar；自适应裁切且不得遮挡数据。
+
+完整 Matplotlib 参数与 helper 用法见 `references/scientific-plotting.md`。
 
 ### 颜色
 
@@ -317,19 +312,14 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 
 ### 3D Axes
 
-- 3D scientific plots should show the `X`, `Y`, and `Z` coordinate box and grid by default, but render the three inner panes transparent so the box reads as a black wireframe rather than shaded panels.
-- Use orthographic projection by default, `projection="ortho"`, so the Z axis stays vertical on screen and heights remain comparable along depth; use perspective (optionally with a larger `focal_length`) only for presentation-style depth effects. Make the three panes transparent (`1,1,1,0`) with black `0.6 pt` pane edges and axis lines.
-- Matplotlib strokes only the three panes facing the viewer, leaving the rear vertical edge unstroked so the wireframe looks open. Close it with `add_matplotlib_3d_box_edge(fig, ax)`, which draws that edge at the true rendered box bounds so it aligns with the grid box.
-- Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E`, linestyle `":"`, and linewidth `0.2 pt`. Do not add other manual frames.
-- Match 2D axes by using inward ticks. In Matplotlib 3D, use `inward_factor=0.0` and `outward_factor=0.2`.
-- Reclaim 3D space in layers: enlarge the axes rectangle with `apply_matplotlib_3d_style(..., zoom=1.2)` (axes-rectangle enlargement, not `set_box_aspect(zoom=)`, which misaligns the rear box edge) and rely on content-adaptive cropping; limit each axis to about five major ticks and shorten tick text with unit scaling; then close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0` (starting values; verify at the final view angle). The Z axis title needs a tighter `zlabelpad=-6.0` (starting value), because Z tick numbers are horizontal text whose width sets the title offset. Apply tao Style typography: `9 pt` axis labels, `8 pt` tick labels, and ordinary text for regular coordinate labels instead of mathtext.
-- When units are known, keep the square-bracket format, such as `X Position [mm]`.
-- Use color gradients for scalar values in addition to 3D spatial coordinates; place the colorbar outside the right side of the axes. Matplotlib draws 3D tick and axis labels outside the axes rectangle, so a plain `fig.colorbar(pad=...)` can overlap them; position the colorbar from the axes' tight bounding box instead (helper: `add_matplotlib_3d_colorbar`, default `pad=0.28 in`, using a compact `shrink=0.50` so the bar does not tower over the box, expanding the canvas to the right when needed), and add it only after the content, view angle, and box aspect are final.
-- 3D figures are not constrained by the single-panel 2D XY axes-box size rule. Choose the canvas according to the view angle, data body, and right-side colorbar.
-- Equal-unit 3D plots are an exception to the default box: when X, Y, and Z all represent comparable physical lengths, positions, spatial coordinates, or geometry dimensions that require true scale, set the box aspect from the displayed data ranges (`set_box_aspect((x_range, y_range, z_range))`, or `set_equal_xyz_box_aspect(..., zoom=1.0)`) so one data unit has equal visual length on all three axes, reclaiming whitespace through the axes-rectangle enlargement so the rear box edge stays aligned; ask before cropping the displayed range if the ratio is extreme.
-- By default, 3D plots still show coordinates. Use the hidden-axis 3D/4D style only when the request explicitly asks to hide coordinates, de-emphasize the coordinate box, or emphasize the data body.
-- Hidden-axis 3D/4D style hides the main `X/Y/Z` axes, ticks, tick labels, axis titles, pane backgrounds, and grid. It adds a compact in-figure `XYZ` direction marker and keeps an in-figure colorbar when color encodes scalar values.
-- Hidden-axis figures use content-adaptive cropping by default. The crop includes the data body, in-figure `XYZ` marker, and in-figure colorbar with a small safety margin; the marker and colorbar should not cover the data body.
+- Show the `X/Y/Z` coordinate box by default with orthographic projection, `projection="ortho"`; use perspective only when depth is intentional. Keep panes transparent with black `0.6 pt` pane edges and axis lines, and close the rear vertical edge with `add_matplotlib_3d_box_edge`.
+- Point ticks inward and show only major-tick grids using `#9E9E9E`, `":"`, and `0.2 pt`. Keep about five major ticks per axis, with `9 pt` axis labels, `8 pt` tick labels, and `Quantity [Unit]` units.
+- Start compact layout at `zoom=1.2`, `tick_pad=-1.5`, `labelpad=-3.0`, and `zlabelpad=-6.0`, then verify at the final view angle.
+- Encode additional values with tao gradients. Put a black `0.6 pt` colorbar on the right using `add_matplotlib_3d_colorbar` to avoid label overlap. Size the 3D canvas for the view, data, and colorbar rather than the 2D single-panel axes-box rule.
+- For true equal-unit X/Y/Z data, set the box aspect from displayed ranges; ask before cropping when the ratio is extreme.
+- Use hidden-axis 3D/4D style only when coordinates should be hidden or the data body emphasized. Hide the coordinate box, ticks, panes, and grid; add a compact in-figure `XYZ` marker and colorbar, crop adaptively, and keep both clear of the data.
+
+See `references/scientific-plotting.md` for complete Matplotlib parameters and helper usage.
 
 ### Colors
 
