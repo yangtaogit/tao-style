@@ -8,6 +8,16 @@ Use this reference for research data plots, figure panels, publication graphics,
 
 The skill is language-agnostic. Default to Python/Matplotlib when the user has not chosen a stack, because Python is Tao's default environment for plotting and validation and Matplotlib is Tao's default plotting backend. If the user's data, code, or workflow is already in another language or plotting library, apply the same style principles in that stack instead of translating the whole workflow without a reason.
 
+## Contents
+
+- [Backend selection](#backend-selection)
+- [Figure principles](#default-scientific-figure-principles)
+- [Typography, axes, and 3D](#typography)
+- [Colors, markers, histograms, and lines](#color)
+- [Legend and layout](#legend)
+- [Python starter](#python-starter)
+- [Output and QA](#output-defaults)
+
 ## Backend Selection
 
 - Python: use Matplotlib by default for static scientific figures; use Seaborn only for statistical plot convenience when it does not obscure control; use Plotly only when interactive output is requested.
@@ -65,7 +75,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Use orthographic projection by default, `projection="ortho"`: vertical lines stay vertical on screen and equal heights remain comparable along the depth direction. Perspective tilts the Z axis toward a vanishing point and distorts height comparison.
 - Use perspective (`projection="persp"`, optionally with a larger `focal_length` such as 4 to reduce distortion) only when Tao asks for a presentation-style depth effect.
 - Make the three 3D panes transparent (`1, 1, 1, 0` in Matplotlib RGBA) and give each pane edge and axis line a black `0.6 pt` stroke, so only the black wireframe box and the grid show, with no shaded backgrounds.
-- Matplotlib strokes only the three panes facing the viewer, so the rear vertical edge where the two back panes meet is left unstroked and the wireframe box looks open. Close it with the helper `add_matplotlib_3d_box_edge(fig, ax)`, which draws that edge at the true rendered box bounds so it aligns exactly with the grid box. Do not add other manual frames.
+- Matplotlib strokes only the three panes facing the viewer, so the rear vertical edge where the two back panes meet is left unstroked and the wireframe box looks open. Close it with the helper `add_matplotlib_3d_box_edge(ax, fig)`, which draws that edge at the true rendered box bounds so it aligns exactly with the grid box. Do not add other manual frames.
 - Show only major-tick grid lines on 3D panes, using gray dotted lines with color `#9E9E9E` (`0.62, 0.62, 0.62, 1.0`), linestyle `":"`, and linewidth `0.2 pt`.
 - Use inward ticks. In Matplotlib 3D, set `inward_factor=0.0` and `outward_factor=0.2` for the current Tao Style visual direction.
 - Reclaim 3D space in layers rather than with aggressive negative padding: first enlarge the axes rectangle with `apply_matplotlib_3d_style(..., zoom=1.2)` (it enlarges the axes rectangle about its center, not `set_box_aspect(zoom=)`) and rely on content-adaptive cropping to remove outer whitespace; then limit each axis to about five major ticks and shorten tick text with unit scaling, putting the scale in the axis label, such as `Time [μs]`; finally close the remaining gap with mild `tick_pad=-1.5` and `labelpad=-3.0`. Do not use `set_box_aspect(zoom=)` for compactness: it decouples the data coordinate system from the pane rendering, which makes the manually drawn rear box edge miss the grid box.
@@ -169,7 +179,7 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 ## Python Starter
 
-When using Matplotlib, import `scripts/apply_tao_style.py` if the skill files are available locally. The import requires the skill root as the working directory or on `sys.path`; otherwise use the CLI fallback below to generate the values path-independently.
+When using Matplotlib, resolve the skill root from the loaded `SKILL.md`. Import `scripts/apply_tao_style.py` only after adding that root to the module search path or loading the module from its resolved file path. Do not assume the user's project has the skill root as its working directory. If direct import is unsuitable, run the CLI with the resolved absolute script path.
 
 ```python
 from scripts.apply_tao_style import (
@@ -286,7 +296,7 @@ add_matplotlib_3d_box_edge(ax, fig)
 If the skill is installed but the script path is not directly importable, copy the relevant rcParams values or generate them from:
 
 ```bash
-python scripts/apply_tao_style.py --aspect 3:2 --format json
+python <skill-root>/scripts/apply_tao_style.py --aspect 3:2 --format json
 ```
 
 For Plotly, use the helper functions when available:
@@ -300,7 +310,7 @@ fig = apply_plotly_style(fig)
 Or inspect the Plotly axis/layout dictionary:
 
 ```bash
-python scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
+python <skill-root>/scripts/apply_tao_style.py --target plotly --aspect 3:2 --format json
 ```
 
 ## Output Defaults

@@ -1,4 +1,7 @@
 interface:
   display_name: "Tao Style"
-  short_description: "Tao's reusable scientific plotting and slide style"
-  default_prompt: "Use $tao-style to create a scientific plot or slide report in Tao's saved visual style."
+  short_description: "Tao's reusable style for scientific artifacts"
+  default_prompt: "Use $tao-style to create a scientific figure, document, or presentation in Tao's saved visual style."
+
+policy:
+  allow_implicit_invocation: true

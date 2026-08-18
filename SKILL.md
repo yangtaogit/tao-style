@@ -1,6 +1,6 @@
 ---
 name: tao-style
-description: Portable personal visual-style guidance for Tao's preferred output style. Use when the assistant is asked to create, edit, format, or export scientific plots, charts, data visualizations, figure panels, publication graphics, scientific slide reports, Beamer presentations, academic documents, manuscripts, reports, notes, handouts, diagrams, generated images, LaTeX/Beamer visual themes, or other artifacts where fonts, colors, labels, line widths, layout, or export settings matter. When triggered, ask whether to apply Tao Style unless the user already explicitly requested or rejected it.
+description: Portable personal visual-style guidance for Tao's preferred output style. Use when the assistant is asked to create, edit, format, or export scientific plots, charts, data visualizations, figure panels, publication graphics, scientific slide reports, Beamer presentations, academic documents, manuscripts, reports, notes, handouts, diagrams, generated images, LaTeX/Beamer visual themes, or other artifacts where fonts, colors, labels, line widths, layout, or export settings matter. Apply directly when the user explicitly invokes $tao-style or asks to use Tao Style. When selected implicitly because the task may benefit from Tao Style, ask for confirmation and do not apply Tao Style until the user agrees.
 ---
 
 # Tao Style
@@ -9,24 +9,31 @@ description: Portable personal visual-style guidance for Tao's preferred output 
 
 Use this skill to apply Tao's personal visual style across portable AI tools and local development environments. Treat the current profile as the authoritative style specification: follow confirmed rules exactly, keep genuinely unspecified areas conservative, and avoid inventing strict requirements when the style has not been specified yet.
 
-The current repository location is only a development and validation workspace. Do not assume WSL, Python, or any local path is available when the installed skill is used elsewhere.
+The current repository location is only a development and validation workspace. Resolve bundled resources relative to this `SKILL.md`; do not assume the current working directory, WSL, Python command name, or any fixed local path is available when the installed skill is used elsewhere.
 
 ## First Response Protocol
 
-- If the user asks to generate or edit a plot, chart, scientific figure, diagram, or image and has not explicitly asked for Tao Style, ask once whether to use Tao Style.
+- Treat an explicit invocation such as `$tao-style`, "use Tao Style", or "use my saved style" as consent and apply it without an additional style-confirmation question.
+- When this skill is selected implicitly because a plot, chart, scientific figure, diagram, image, presentation, or document may benefit from Tao Style, ask once whether to use it. Do not apply any Tao Style profile rules until the user agrees.
 - If the user asks to generate a scientific slide report or presentation, ask whether to use Beamer unless the user already specified the output format.
 - If the user asks to generate an academic document, manuscript, report, note, or handout and has not specified a template, ask whether to use the `yangtaogit/tao-document` template.
 - If the user says yes, apply the current profile in `references/style-profile.md`.
 - If the user says no, proceed with the requested output without Tao Style.
-- If the user already mentions `$tao-style`, "Tao Style", "my style", or a saved style preference, apply it without asking again.
 - If a required style detail is explicitly unspecified and materially affects the result, ask one concise question or use a neutral publication-style default and state the assumption.
 - Combine any needed questions—style opt-in, output format or template, and required details—into one concise message instead of asking sequentially.
+- Treat preferences stated for the current artifact as task-local unless Tao explicitly asks to save, remember, or update them as persistent Tao Style preferences.
+
+## Composition with Artifact Skills
+
+- Treat Tao Style as the visual-specification layer, not as a replacement for an available artifact-specific workflow.
+- When another available skill handles the requested format—such as presentations, documents, PDFs, generated images, or interactive visualizations—follow that skill's creation, editing, rendering, and QA requirements while applying Tao Style to visual choices.
+- If requirements conflict, follow the user's explicit request first, then the artifact-specific workflow, then Tao Style defaults.
 
 ## Plotting Workflow
 
 1. Read `references/style-profile.md` before choosing visual parameters.
 2. For scientific plots, read `references/scientific-plotting.md` and match the user's existing plotting stack. Default to Python/Matplotlib when the user leaves the stack open, but do not force Matplotlib when the task is already in R, MATLAB, Julia, C++, Gnuplot, LaTeX, Plotly, or another tool.
-3. Load preferred fonts from bundled assets within the current rendering process when the backend supports local font registration. For Matplotlib, `matplotlib_rcparams()` performs this automatically; `python scripts/manage_fonts.py --check` verifies it. Never copy bundled fonts into system or user font directories. If local loading is unsupported or fails, use a compatible fallback and disclose the substitution.
+3. Load preferred fonts from bundled assets within the current rendering process when the backend supports local font registration. For Matplotlib, `matplotlib_rcparams()` performs this automatically; run `<skill-root>/scripts/manage_fonts.py --check` with an available Python runtime to verify it. Never copy bundled fonts into system or user font directories. If local loading is unsupported or fails, use a compatible fallback and disclose the substitution.
 4. Prefer styling at the source plotting layer, such as Matplotlib rcParams, Seaborn themes, Plotly templates, ggplot themes, MATLAB defaults, Makie themes, ROOT styles, or pgfplots settings, instead of post-processing rendered images.
 5. Apply typography, palette, line widths, marker sizes, tick style, legend placement, panel labels, and export settings consistently.
 6. Check that labels, units, legends, annotations, color scales, and tick text remain readable at the target output size.
@@ -68,6 +75,6 @@ The current repository location is only a development and validation workspace. 
 
 ## Update Rules
 
-- When Tao confirms a concrete visual preference, update `references/style-profile.md` instead of relying only on conversation memory.
+- Update `references/style-profile.md` only when Tao explicitly asks to save, remember, or update a persistent visual preference. Do not persist a one-off artifact instruction automatically.
 - Keep this `SKILL.md` concise; detailed examples, palettes, export presets, and font notes belong in `references/` or `assets/`.
 - Do not add unrelated documentation files. Skills should contain only files that directly support the workflow.
