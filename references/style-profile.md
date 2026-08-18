@@ -15,8 +15,8 @@ Status: active style profile. Follow the confirmed rules in this file and the re
 See `references/scientific-plotting.md` for the active plotting workflow and backend guidance. Keep confirmed reusable preferences here so future modules, such as LaTeX Beamer or document templates, can share the same visual identity.
 
 - Default backend: Python/Matplotlib when the user does not specify a plotting stack.
-- Formal output: prefer vector formats such as SVG and PDF.
-- Font-stable export: default SVG text should be converted to paths, and default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and when the target environment has the required fonts.
+- Default output: when no format is specified, save only one SVG file and do not generate additional PNG, PDF, TIFF, or preview copies. Use another format only when explicitly requested or required by the target medium.
+- Font-stable export: convert default SVG text to paths. Embed fonts when PDF is explicitly requested. Keep editable SVG/PDF text only when explicitly requested and when the target environment has the required fonts.
 - Histograms: if the y-axis mode is unspecified and not clear from context, default to raw `Count` and state the assumption; ask only when normalization materially affects the result. Render default histograms as stepped bin outlines with light fill, not as connected bin-center lines.
 
 ## Typography

@@ -11,7 +11,9 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import warnings
+from pathlib import Path
 
 try:
     from cycler import cycler as _cycler_factory
@@ -472,6 +474,24 @@ def adaptive_bbox_inches(fig, *, pad_inches: float | None = None):
     return "tight", pad_inches
 
 
+def _resolve_default_figure_filename(filename, kwargs):
+    """Append .svg when neither a suffix nor an explicit format is supplied.
+
+    Leave file-like objects and explicitly formatted outputs unchanged. This
+    keeps Tao Style's SVG default reliable even when callers use a bundled save
+    helper without first applying matplotlib_rcparams().
+    """
+
+    if kwargs.get("format") is not None:
+        return filename
+    if not isinstance(filename, (str, os.PathLike)):
+        return filename
+    path = Path(filename)
+    if path.suffix:
+        return filename
+    return path.with_suffix(".svg")
+
+
 def save_adaptive_figure(fig, filename, *, pad_inches: float | None = None, **kwargs):
     """Save a Tao Style figure with fixed axes box and adaptive canvas.
 
@@ -482,6 +502,7 @@ def save_adaptive_figure(fig, filename, *, pad_inches: float | None = None, **kw
 
     bbox_inches, resolved_pad = adaptive_bbox_inches(fig, pad_inches=pad_inches)
     kwargs.setdefault("bbox_inches", bbox_inches)
+    filename = _resolve_default_figure_filename(filename, kwargs)
     kwargs.setdefault("pad_inches", resolved_pad)
     return fig.savefig(filename, **kwargs)
 
@@ -503,6 +524,7 @@ def save_fixed_canvas_figure(
     requires a fixed exported canvas height or width.
     """
 
+    filename = _resolve_default_figure_filename(filename, kwargs)
     if aspect not in FIGURE_ASPECTS:
         allowed = ", ".join(sorted(FIGURE_ASPECTS))
         raise ValueError(f"Unknown aspect ratio {aspect!r}. Allowed: {allowed}")
@@ -528,6 +550,7 @@ def save_fixed_height_figure(fig, filename, *, pad_inches: float | None = None, 
 
     kwargs.setdefault("bbox_inches", fixed_height_bbox_inches(fig, pad_inches=pad_inches))
     kwargs.setdefault("pad_inches", 0.0)
+    filename = _resolve_default_figure_filename(filename, kwargs)
     return fig.savefig(filename, **kwargs)
 
 
@@ -555,9 +578,10 @@ def plotly_dimensions(
 def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") -> dict[str, object]:
     """Return a starter rcParams dictionary for Tao Style plots.
 
-    The default SVG export converts text to paths so font appearance does not
-    depend on the fonts installed where the SVG is opened. PDF export keeps
-    embedded TrueType text by default via ``pdf.fonttype = 42``.
+    Matplotlib defaults to SVG when a filename has no extension. SVG export
+    converts text to paths so font appearance does not depend on fonts installed
+    where the file is opened. Explicit PDF export embeds TrueType text via
+    ``pdf.fonttype = 42``.
 
     The color prop_cycle matches the Tao Style per-count series orders for
     one to three ordinary series and repeats beyond that. With more than
@@ -585,6 +609,7 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") 
     return {
         "figure.dpi": 150,
         "savefig.dpi": 300,
+        "savefig.format": "svg",
         "savefig.bbox": "tight",
         "savefig.pad_inches": 0.03,
         "figure.facecolor": "white",

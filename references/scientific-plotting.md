@@ -34,8 +34,8 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Keep units in axis labels when units are known.
 - Use consistent significant figures and tick formatting.
 - Make legends, labels, and annotations readable at the final target size, not only on a large preview.
-- Use vector output for publication-style line art when possible.
-- Save a raster preview when helpful for quick inspection.
+- When no output format is specified, save only one SVG file. Do not also generate PNG, PDF, TIFF, or raster-preview copies.
+- Generate another format only when the user explicitly requests it or the target medium requires it.
 
 ## Typography
 
@@ -181,6 +181,8 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 
 When using Matplotlib, resolve the skill root from the loaded `SKILL.md`. Import `scripts/apply_tao_style.py` only after adding that root to the module search path or loading the module from its resolved file path. Do not assume the user's project has the skill root as its working directory. If direct import is unsuitable, run the CLI with the resolved absolute script path.
 
+The bundled Matplotlib save helpers append `.svg` when a path has no suffix and no explicit `format` argument, even if `matplotlib_rcparams()` was not applied. A supplied suffix or explicit format remains authoritative.
+
 ```python
 from scripts.apply_tao_style import (
     axes_box_size,
@@ -315,11 +317,10 @@ python <skill-root>/scripts/apply_tao_style.py --target plotly --aspect 3:2 --fo
 
 ## Output Defaults
 
-- Preview: PNG at 150-200 DPI.
-- Final raster: PNG or TIFF at 300 DPI unless the target venue requires otherwise.
-- Final vector: PDF or SVG for line art.
+- Default: save one SVG file only. Do not create an additional raster preview or PDF unless requested.
 - Default SVG export should be font-stable across viewing environments: convert text to paths using Matplotlib `svg.fonttype = "path"`.
-- Default PDF export should embed fonts so the visual appearance does not depend on fonts installed where the PDF is opened; in Matplotlib use `pdf.fonttype = 42` and keep `pdf.use14corefonts = False`.
+- When raster output is explicitly requested, use PNG or TIFF at the requested resolution, or `300 DPI` when no resolution is given.
+- When PDF is explicitly requested, embed fonts using Matplotlib `pdf.fonttype = 42` and keep `pdf.use14corefonts = False`.
 - Keep editable text in SVG/PDF only when the user explicitly needs text editing and the target machine or editor has the required fonts available.
 
 ## Figure QA Checklist

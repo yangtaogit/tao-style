@@ -36,8 +36,8 @@
 ### 后端与输出
 
 - 默认后端：Python/Matplotlib。
-- 正式输出：优先 SVG/PDF 等矢量格式。
-- 默认导出的 SVG/PDF 应保证跨环境打开时字体显示一致：SVG 默认将文字转为 path；PDF 默认嵌入字体。只有明确需要可编辑文字时，才保留 SVG/PDF 文本并确认目标环境具备对应字体。
+- 未指定格式时只保存 SVG，不同时生成 PNG、PDF 或其他预览副本；仅在明确要求或目标平台需要时额外输出其他格式。
+- 默认 SVG 将文字转为 path，确保跨环境显示一致。明确要求 PDF 时嵌入字体；只有明确需要可编辑文字时，才保留 SVG/PDF 文本并确认目标环境具备对应字体。
 
 ### 字体与字号
 
@@ -276,8 +276,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 ### Backend and Output
 
 - Default backend: Python/Matplotlib.
-- Formal output: prefer SVG/PDF vector formats.
-- Exported SVG/PDF files should be font-stable across viewing environments by default: SVG text is converted to paths, and PDF fonts are embedded. Keep editable SVG/PDF text only when explicitly needed and after confirming that the target environment has the required fonts.
+- When no format is specified, save only SVG; do not also generate PNG, PDF, or other preview copies. Produce another format only when explicitly requested or required by the target medium.
+- Default SVG output converts text to paths for stable cross-environment rendering. Embed fonts when PDF is explicitly requested. Keep editable SVG/PDF text only when explicitly needed and after confirming that the target environment has the required fonts.
 
 ### Fonts and Sizes
 

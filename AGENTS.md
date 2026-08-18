@@ -39,7 +39,7 @@ This repository is Tao's personal visual-style Skill. Use these notes when a new
 - Axis label font size: `9 pt`; tick label size: `8 pt`; legend size: `8 pt`.
 - Preferred Latin font: Helvetica; preferred Chinese font: 宋体; math font: Computer Modern.
 - Keep bundled fonts project-local. `matplotlib_rcparams()` registers `assets/fonts/helvetica/` only in the current Matplotlib process; `python3 scripts/manage_fonts.py --check` verifies availability. Never copy fonts into system or user font directories. If process-local loading fails or the backend does not support it, explicitly select and disclose a compatible fallback such as Arimo, Noto Sans, or Nimbus Sans.
-- Font-stable vector export: default SVG text should be converted to paths; default PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and target fonts are available.
+- Default figure export: when the user does not specify a format, save only one SVG and do not also generate PNG, PDF, TIFF, or preview copies. Convert default SVG text to paths. Generate other formats only when explicitly requested or required by the target medium; explicitly requested PDF output should embed fonts. Keep editable SVG/PDF text only when explicitly requested and target fonts are available.
 - Axis box: black boxed axes, inward ticks on all sides, axis linewidth `0.6 pt`, major tick width `0.6`, major tick length `2.5 pt`, minor tick width `0.3`, minor tick length `1.5 pt`, no grid by default.
 - Units use square brackets: `Quantity [Unit]`.
 - Log tick labels use plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext.

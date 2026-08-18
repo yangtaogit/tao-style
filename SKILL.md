@@ -36,8 +36,9 @@ The current repository location is only a development and validation workspace. 
 3. Load preferred fonts from bundled assets within the current rendering process when the backend supports local font registration. For Matplotlib, `matplotlib_rcparams()` performs this automatically; run `<skill-root>/scripts/manage_fonts.py --check` with an available Python runtime to verify it. Never copy bundled fonts into system or user font directories. If local loading is unsupported or fails, use a compatible fallback and disclose the substitution.
 4. Prefer styling at the source plotting layer, such as Matplotlib rcParams, Seaborn themes, Plotly templates, ggplot themes, MATLAB defaults, Makie themes, ROOT styles, or pgfplots settings, instead of post-processing rendered images.
 5. Apply typography, palette, line widths, marker sizes, tick style, legend placement, panel labels, and export settings consistently.
-6. Check that labels, units, legends, annotations, color scales, and tick text remain readable at the target output size.
-7. Verify the rendered figure when possible, especially for clipping, overlapping text, low contrast, and illegible symbols.
+6. When the user does not specify an output format, save only one SVG file. Do not also create PNG, PDF, TIFF, or preview copies. Generate another format only when explicitly requested or required by the target medium.
+7. Check that labels, units, legends, annotations, color scales, and tick text remain readable at the target output size.
+8. Verify the rendered figure when possible, especially for clipping, overlapping text, low contrast, and illegible symbols.
 
 ## Scientific Slides Workflow
 
