@@ -11,11 +11,17 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import warnings
 
 try:
     from cycler import cycler as _cycler_factory
 except ImportError:  # pragma: no cover - Matplotlib installs usually include cycler.
     _cycler_factory = None
+
+try:
+    from .manage_fonts import ensure_matplotlib_font
+except ImportError:  # Support direct imports when scripts/ is on sys.path.
+    from manage_fonts import ensure_matplotlib_font
 
 
 CORE_PALETTE = [
@@ -561,6 +567,16 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") 
 
     if svg_fonttype not in {"none", "path"}:
         raise ValueError("svg_fonttype must be 'none' or 'path'")
+
+    if not serializable:
+        try:
+            ensure_matplotlib_font()
+        except RuntimeError as exc:
+            warnings.warn(
+                f"Could not register bundled Helvetica: {exc}. Using the configured fallback stack.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
 
     prop_cycle = _cycler_expr("color", PALETTE)
     if not serializable and _cycler_factory is not None:

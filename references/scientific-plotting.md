@@ -30,10 +30,10 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 ## Typography
 
 - Use Helvetica as the first-choice English font.
-- Check Helvetica availability before rendering with `python scripts/manage_fonts.py --check`. The Skill includes font files under `assets/fonts/helvetica/`; when Helvetica is missing, tell the user and ask whether to install them with `python scripts/manage_fonts.py --install`. Do not install fonts automatically.
-- Use `Arimo`, `Noto Sans`, or `Nimbus Sans` as Helvetica-compatible local preview fallbacks only after the user declines installation or installation is unavailable. State the chosen substitution, and prefer a fallback with complete superscript glyphs for log-axis labels.
+- Load the bundled files under `assets/fonts/helvetica/` only in the current rendering process. For Matplotlib, `matplotlib_rcparams()` registers them automatically through `font_manager.fontManager.addfont`; `python scripts/manage_fonts.py --check` verifies the same process-local path. Do not copy bundled fonts into system or user font directories.
+- Use `Arimo`, `Noto Sans`, or `Nimbus Sans` as Helvetica-compatible local preview fallbacks only when the backend cannot load local fonts or the bundled files are unavailable. State the chosen substitution, and prefer a fallback with complete superscript glyphs for log-axis labels.
 - Use 宋体 for Chinese text. In code, prefer cross-platform font names in this order: `SimSun`, `Songti SC`, `Noto Serif CJK SC`.
-- Keep font selection explicit in plotting code when the environment may not have the preferred fonts installed.
+- Keep font selection explicit in plotting code; prefer backend-local font loading over environment-wide installation.
 - Make axis labels/titles slightly larger than tick labels. Use axis labels at `9 pt` and tick labels at `8 pt` by default.
 - Use Computer Modern as the default math font for real mathematical expressions.
 - For ordinary axis labels, tick labels, legends, and annotations, use plain text with the Tao Style font stack instead of Matplotlib mathtext. Avoid `$...$` for simple labels such as `x`, `y`, `y = sin(x)`, or `π/2`, because mathtext uses a separate math font.
