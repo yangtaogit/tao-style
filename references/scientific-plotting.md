@@ -16,11 +16,12 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - [Colors, markers, histograms, and lines](#color)
 - [Legend and layout](#legend)
 - [Python starter](#python-starter)
+- [Plotly and interactive HTML](plotly.md)
 - [Output and QA](#output-defaults)
 
 ## Backend Selection
 
-- Python: use Matplotlib by default for static scientific figures; use Seaborn only for statistical plot convenience when it does not obscure control; use Plotly only when interactive output is requested.
+- Python: use Matplotlib by default for static scientific figures; use Seaborn only for statistical plot convenience when it does not obscure control; prefer Plotly for interactive HTML, and respect an explicitly chosen Plotly stack. Read [plotly.md](plotly.md) for its style mapping and export rules.
 - R: use ggplot2 themes and scales that mirror the profile.
 - MATLAB: set root/default graphics properties or local axes properties.
 - Julia: use Makie or Plots themes matching the profile.
@@ -70,6 +71,8 @@ The skill is language-agnostic. Default to Python/Matplotlib when the user has n
 - Do not use grid lines by default. When grid lines are needed, show only major-tick grid lines, using gray dotted lines with color `#9E9E9E`, linestyle `":"`, and linewidth `0.2 pt`; do not show minor-tick grid lines.
 
 ## Three-Dimensional Axes
+
+For Plotly, use the native 3D mapping in [plotly.md](plotly.md#native-3d-rendering). Its normal rendering differences from Matplotlib are accepted; Matplotlib-specific frame repairs and padding recipes below do not transfer to Plotly.
 
 - For 3D scientific plots, show the visible X/Y/Z coordinate box and grid by default, but render the three inner panes transparent so the box reads as a black wireframe rather than shaded panels.
 - Use orthographic projection by default, `projection="ortho"`: vertical lines stay vertical on screen and equal heights remain comparable along the depth direction. Perspective tilts the Z axis toward a vanishing point and distorts height comparison.
@@ -301,7 +304,7 @@ If the skill is installed but the script path is not directly importable, copy t
 python <skill-root>/scripts/apply_tao_style.py --aspect 3:2 --format json
 ```
 
-For Plotly, use the helper functions when available:
+For Plotly, start with the helper when available, then apply the missing settings in [plotly.md](plotly.md). This helper alone does not implement the full Plotly profile:
 
 ```python
 from scripts.apply_tao_style import apply_plotly_style
@@ -316,6 +319,8 @@ python <skill-root>/scripts/apply_tao_style.py --target plotly --aspect 3:2 --fo
 ```
 
 ## Output Defaults
+
+Interactive HTML requests follow [plotly.md](plotly.md#compact-offline-html-export), including shared Plotly JS and font CSS. The static defaults below apply when interactive output is not requested.
 
 - Default: save one SVG file only. Do not create an additional raster preview or PDF unless requested.
 - Default SVG export should be font-stable across viewing environments: convert text to paths using Matplotlib `svg.fonttype = "path"`.

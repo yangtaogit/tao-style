@@ -19,6 +19,13 @@ See `references/scientific-plotting.md` for the active plotting workflow and bac
 - Font-stable export: convert default SVG text to paths. Embed fonts when PDF is explicitly requested. Keep editable SVG/PDF text only when explicitly requested and when the target environment has the required fonts.
 - Histograms: if the y-axis mode is unspecified and not clear from context, default to raw `Count` and state the assumption; ask only when normalization materially affects the result. Render default histograms as stepped bin outlines with light fill, not as connected bin-center lines.
 
+## Plotly and Interactive HTML
+
+- Prefer Plotly for interactive HTML figures and apply the shared visual profile using [plotly.md](plotly.md).
+- Keep Helvetica specified in HTML. Share one document-local font stylesheet and one Plotly JS library across output pages, without installing fonts or repeating payloads in every HTML. Retain offline use and deliver the companion files with the HTML.
+- Convert point-based sizes to CSS pixels and preserve the inner XY plotting-box dimensions; keep graph data serialized once per figure.
+- Accept native Plotly 3D rendering differences from Matplotlib. Preserve the accepted appearance instead of modifying camera, lighting, ticks or coordinate-box rendering merely for a closer visual match.
+
 ## Typography
 
 - Primary Latin font: Helvetica.

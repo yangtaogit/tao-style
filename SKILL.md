@@ -32,11 +32,11 @@ The current repository location is only a development and validation workspace. 
 ## Plotting Workflow
 
 1. Read `references/style-profile.md` before choosing visual parameters.
-2. For scientific plots, read `references/scientific-plotting.md` and match the user's existing plotting stack. Default to Python/Matplotlib when the user leaves the stack open, but do not force Matplotlib when the task is already in R, MATLAB, Julia, C++, Gnuplot, LaTeX, Plotly, or another tool.
+2. For scientific plots, read `references/scientific-plotting.md` and match the user's existing plotting stack. Default to Python/Matplotlib when the user leaves the stack open, but do not force Matplotlib when the task is already in R, MATLAB, Julia, C++, Gnuplot, LaTeX, Plotly, or another tool. For Plotly or interactive HTML, also read `references/plotly.md`.
 3. Load preferred fonts from bundled assets within the current rendering process when the backend supports local font registration. For Matplotlib, `matplotlib_rcparams()` performs this automatically; run `<skill-root>/scripts/manage_fonts.py --check` with an available Python runtime to verify it. Never copy bundled fonts into system or user font directories. If local loading is unsupported or fails, use a compatible fallback and disclose the substitution.
 4. Prefer styling at the source plotting layer, such as Matplotlib rcParams, Seaborn themes, Plotly templates, ggplot themes, MATLAB defaults, Makie themes, ROOT styles, or pgfplots settings, instead of post-processing rendered images.
 5. Apply typography, palette, line widths, marker sizes, tick style, legend placement, panel labels, and export settings consistently.
-6. When the user does not specify an output format, save only one SVG file. Do not also create PNG, PDF, TIFF, or preview copies. Generate another format only when explicitly requested or required by the target medium.
+6. When the user does not specify an output format, save only one SVG file. Do not also create PNG, PDF, TIFF, or preview copies. Generate another format only when explicitly requested or required by the target medium; interactive HTML requests use the shared-resource export in `references/plotly.md`.
 7. Check that labels, units, legends, annotations, color scales, and tick text remain readable at the target output size.
 8. Verify the rendered figure when possible, especially for clipping, overlapping text, low contrast, and illegible symbols.
 
@@ -60,6 +60,7 @@ The current repository location is only a development and validation workspace. 
 
 - `references/style-profile.md`: Canonical style profile and shared Tao Style preferences.
 - `references/scientific-plotting.md`: First concrete module, focused on research data visualization across plotting languages.
+- `references/plotly.md`: Plotly style mapping, shared-font/offline HTML export, and accepted native 3D rendering differences.
 - `references/scientific-slides.md`: Scientific slide report rules, including Beamer template selection.
 - `references/academic-documents.md`: Academic document rules, including the `yangtaogit/tao-document` template.
 - `scripts/apply_tao_style.py`: Starter Matplotlib style helper that can be imported or used to print a style dictionary. Treat it as the Python implementation of the broader profile, not as the only supported backend.

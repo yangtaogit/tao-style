@@ -39,6 +39,13 @@
 - 未指定格式时只保存 SVG，不同时生成 PNG、PDF 或其他预览副本；仅在明确要求或目标平台需要时额外输出其他格式。
 - 默认 SVG 将文字转为 path，确保跨环境显示一致。明确要求 PDF 时嵌入字体；只有明确需要可编辑文字时，才保留 SVG/PDF 文本并确认目标环境具备对应字体。
 
+### Plotly 交互 HTML
+
+- 交互 HTML 优先使用 Plotly，沿用 Tao Style 配色、字号、线型与坐标框规则，并指定 Helvetica。
+- 多个 HTML 共用一份 `plotly.min.js` 和 `tao-fonts.css`，避免重复嵌入；支持离线打开，分享时需携带这两个文件。
+- 接受 Plotly 与 Matplotlib 正常的 3D 渲染差异，不为追求外观一致而额外修改原生渲染。
+- 具体映射和导出方式见 [Plotly 规则](references/plotly.md)；现有 Plotly helper 是基础设置，完整样式需要按该规则补齐。
+
 ### 字体与字号
 
 - 英文字体首选 Helvetica；中文字体首选宋体；数学公式字体使用 Computer Modern。
@@ -278,6 +285,13 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - Default backend: Python/Matplotlib.
 - When no format is specified, save only SVG; do not also generate PNG, PDF, or other preview copies. Produce another format only when explicitly requested or required by the target medium.
 - Default SVG output converts text to paths for stable cross-environment rendering. Embed fonts when PDF is explicitly requested. Keep editable SVG/PDF text only when explicitly needed and after confirming that the target environment has the required fonts.
+
+### Plotly Interactive HTML
+
+- Prefer Plotly for interactive HTML, retaining Tao Style colors, sizes, line styles, axes and specified Helvetica.
+- Share one `plotly.min.js` and `tao-fonts.css` across HTML pages to avoid duplicate payloads. Include both files when sharing the offline bundle.
+- Accept normal native 3D rendering differences between Plotly and Matplotlib; do not modify native rendering merely to make their appearance match.
+- See the [Plotly rules](references/plotly.md) for style mapping and export details. The current Plotly helper supplies starter settings; complete the style according to that reference.
 
 ### Fonts and Sizes
 
