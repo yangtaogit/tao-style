@@ -73,6 +73,8 @@
 
 ### 三维坐标
 
+- Matplotlib 三维图默认将 Z 轴、刻度和轴标题放在画面左侧，色标仍在右侧；导出时自适应包含左侧标题。Plotly 保留原生三维渲染。
+
 - 默认显示 `X/Y/Z` 坐标框并使用正交投影 `projection="ortho"`；仅在强调景深时使用透视投影。pane 透明，pane 边和轴线为黑色 `0.6 pt`，并用 `add_matplotlib_3d_box_edge` 补齐后侧竖棱。
 - tick 向内；仅显示主 tick 对应的灰色点状网格（`#9E9E9E`、`":"`、`0.2 pt`）。每轴约 5 个主 tick，轴标题 `9 pt`、tick label `8 pt`，单位继续使用 `Quantity [Unit]`。
 - 紧凑布局以 `zoom=1.2`、`tick_pad=-1.5`、`labelpad=-3.0`、`zlabelpad=-6.0` 为起始值，并按最终视角检查。
@@ -319,6 +321,8 @@ Claude Code 可用 `/tao-style` 调用。未显式调用但任务涉及科研绘
 - Base-10 log major ticks should be displayed as plain-text superscripts such as `10⁻⁶`, not Matplotlib mathtext. Minor ticks should remain visible unless they become too crowded.
 
 ### 3D Axes
+
+- Matplotlib 3D figures place the Z axis, ticks and title on the screen-left side by default, with colorbars on the right; adaptive export includes the left-side title. Plotly retains its native 3D rendering.
 
 - Show the `X/Y/Z` coordinate box by default with orthographic projection, `projection="ortho"`; use perspective only when depth is intentional. Keep panes transparent with black `0.6 pt` pane edges and axis lines, and close the rear vertical edge with `add_matplotlib_3d_box_edge`.
 - Point ticks inward and show only major-tick grids using `#9E9E9E`, `":"`, and `0.2 pt`. Keep about five major ticks per axis, with `9 pt` axis labels, `8 pt` tick labels, and `Quantity [Unit]` units.

@@ -25,6 +25,7 @@ from apply_tao_style import (  # noqa: E402
     apply_matplotlib_3d_style,
     matplotlib_colormap,
     matplotlib_rcparams,
+    save_adaptive_figure,
     set_equal_xyz_box_aspect,
 )
 
@@ -105,7 +106,7 @@ def main() -> None:
     cbar.set_label("Value", labelpad=4)
 
     output = Path(__file__).with_suffix(".svg")
-    fig.savefig(output, bbox_inches="tight", pad_inches=0.03)
+    save_adaptive_figure(fig, output)
     plt.close(fig)
     print(output)
 

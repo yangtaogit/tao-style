@@ -501,6 +501,23 @@ def save_adaptive_figure(fig, filename, *, pad_inches: float | None = None, **kw
     """
 
     bbox_inches, resolved_pad = adaptive_bbox_inches(fig, pad_inches=pad_inches)
+    # Axes3D tight-bbox collection can omit axis titles outside the axes
+    # rectangle, notably after moving Z to the left. Include visible 3D text
+    # explicitly while retaining caller-supplied/default extra artists.
+    labels_3d = [
+        artist
+        for ax in fig.axes
+        if getattr(ax, "name", None) == "3d" and getattr(ax, "_axis3don", False)
+        for axis in (ax.xaxis, ax.yaxis, ax.zaxis)
+        if axis.get_visible()
+        for artist in (axis.label, axis.offsetText)
+        if artist.get_visible() and artist.get_text()
+    ]
+    if labels_3d:
+        extra = kwargs.get("bbox_extra_artists")
+        if extra is None:
+            extra = fig.get_default_bbox_extra_artists()
+        kwargs["bbox_extra_artists"] = list(extra) + labels_3d
     kwargs.setdefault("bbox_inches", bbox_inches)
     filename = _resolve_default_figure_filename(filename, kwargs)
     kwargs.setdefault("pad_inches", resolved_pad)
@@ -847,8 +864,13 @@ def apply_matplotlib_3d_style(
     zoom: float | None = 1.2,
     max_ticks: int | None = 5,
     projection: str = "ortho",
+    zaxis_side: str = "left",
 ):
     """Apply Tao typography to Matplotlib's default 3D axes style.
+
+    Z axis line, ticks and label default to the screen-left side. Set the
+    view angle before calling; reapply set_matplotlib_3d_zaxis_side() after
+    changing the view. Pass zaxis_side="default" to keep native placement.
 
     The Z axis title needs a tighter pad than X/Y: Matplotlib offsets each
     axis title from the outer edge of its tick labels, and Z tick numbers
@@ -935,6 +957,47 @@ def apply_matplotlib_3d_style(
         label.set_size(AXIS_LABEL_SIZE)
         label.set_color("#111111")
 
+    set_matplotlib_3d_zaxis_side(ax, zaxis_side)
+    return ax
+
+
+def set_matplotlib_3d_zaxis_side(ax, side: str = "left"):
+    """Place Z axis, tick labels and title on a screen side at the current view.
+
+    Native lower/upper positions (Matplotlib >=3.8) are not screen-left/right
+    across all azimuths, so compare their rendered projections. Older versions
+    use the two instance-local juggled edge orders instead. Two canvas draws
+    allow the native renderer to position text and ticks without monkeypatching
+    draw methods or changing the data/camera. Reapply after changing the view.
+    """
+    if side not in {"left", "right", "default"}:
+        raise ValueError("zaxis_side must be 'left', 'right', or 'default'")
+
+    axis = ax.zaxis
+    native_positions = hasattr(axis, "_tick_position")
+
+    def select(position):
+        if native_positions:
+            axis.set_ticks_position(position)
+            axis.set_label_position(position)
+        else:
+            # Per-axis state; do not modify Axis._AXINFO shared by other plots.
+            axis._axinfo["juggled"] = position
+
+    if side == "default":
+        select("default" if native_positions else (0, 2, 1))
+        return ax
+
+    candidates = ("lower", "upper") if native_positions else ((0, 2, 1), (1, 2, 0))
+    projected = []
+    for position in candidates:
+        select(position)
+        ax.figure.canvas.draw()
+        points = axis.line.get_transform().transform(axis.line.get_xydata())
+        projected.append((float(points[:, 0].mean()), position))
+    choose = min if side == "left" else max
+    select(choose(projected, key=lambda item: item[0])[1])
+    ax.stale = True
     return ax
 
 
