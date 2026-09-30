@@ -13,6 +13,7 @@ import json
 import math
 import os
 import warnings
+from collections.abc import Iterable
 from pathlib import Path
 
 try:
@@ -34,9 +35,9 @@ CORE_PALETTE = [
 EMPHASIS_PALETTE = [
     "#B04A4A",
 ]
-# Default prop_cycle: identical to the per-count core orders (1-3 ordinary
-# series). More than three series requires explicit assignment per the color
-# rules (tao palette in order, or a gradient for ordered series).
+# Default prop_cycle is categorical only (1-3 independent groups). Assign
+# ordered-series colors explicitly from parameter values, regardless of count.
+# More than three independent groups use the tao palette in order.
 PALETTE = [
     "#2A2F80",
     "#808080",
@@ -600,10 +601,11 @@ def matplotlib_rcparams(serializable: bool = False, svg_fonttype: str = "path") 
     where the file is opened. Explicit PDF export embeds TrueType text via
     ``pdf.fonttype = 42``.
 
-    The color prop_cycle matches the Tao Style per-count series orders for
-    one to three ordinary series and repeats beyond that. With more than
-    three ordinary series, assign colors explicitly: the tao palette in
-    order, or a tao-blue/tao gradient for ordered series.
+    The color prop_cycle is a categorical fallback for one to three groups
+    and repeats beyond that. Assign colors explicitly for more categories
+    (tao palette) or any ordered family (ordered_series_colors), even when
+    there are only two or three parameter values. rcParams cannot infer
+    data semantics.
     """
 
     if svg_fonttype not in {"none", "path"}:
@@ -1272,14 +1274,14 @@ def apply_plotly_style(
 
 
 def series_colors(n: int) -> list[str]:
-    """Return the Tao Style per-count color order for n ordinary series.
+    """Return the Tao Style per-count color order for n independent categories.
 
     The color set and its order both depend on the series count; do not
     truncate or extend another count's sequence. The rcParams prop_cycle
     already matches these orders for one to three series. With more than
     three ordinary series, Tao Style prefers the tao palette taken in order
-    (categorical_palette("tao")); for ordered series, use a tao-blue or tao
-    gradient instead.
+    (categorical_palette("tao")). For an ordered parameter, instead call
+    ordered_series_colors(values), even for only two or three series.
     """
 
     if n < 1:
@@ -1287,8 +1289,8 @@ def series_colors(n: int) -> list[str]:
     if n not in SERIES_COLOR_ORDERS:
         raise ValueError(
             "No per-count order for more than 3 ordinary series; "
-            "use categorical_palette('tao') in order, or gradient_colormap('tao-blue') "
-            "/ gradient_colormap('tao') for ordered series"
+            "use categorical_palette('tao') in order for independent categories, "
+            "or ordered_series_colors(values) for an ordered parameter"
         )
     return list(SERIES_COLOR_ORDERS[n])
 
@@ -1319,12 +1321,84 @@ def gradient_stops(name: str = "tao-blue") -> list[tuple[float, str]]:
     return [(i / last, color) for i, color in enumerate(colors)]
 
 
-def matplotlib_colormap(name: str = "tao-blue", n: int = 256):
-    """Build a Matplotlib LinearSegmentedColormap for a Tao Style gradient."""
+def matplotlib_colormap(
+    name: str = "tao-blue",
+    n: int = 256,
+    *,
+    start: float = 0.0,
+    stop: float = 1.0,
+):
+    """Build a Tao gradient, optionally sampling only its start/stop interval.
+
+    Defaults preserve the full scalar-field colormap. For single-hue gradients
+    such as tao-blue, start=0.4 skips the near-white end on white backgrounds.
+    The ordered-series default uses the full tao gradient without that crop.
+    Use the same interval for curves and any accompanying colorbar.
+    """
 
     from matplotlib.colors import LinearSegmentedColormap
+    import numpy as np
 
-    return LinearSegmentedColormap.from_list(f"tao-{name}", gradient_stops(name), N=n)
+    if not 0.0 <= start < stop <= 1.0:
+        raise ValueError("gradient interval must satisfy 0 <= start < stop <= 1")
+    if n < 2:
+        raise ValueError("n must be at least 2")
+    cmap = LinearSegmentedColormap.from_list(f"tao-{name}", gradient_stops(name), N=n)
+    if start == 0.0 and stop == 1.0:
+        return cmap
+    return LinearSegmentedColormap.from_list(
+        f"tao-{name}-{start:g}-{stop:g}", cmap(np.linspace(start, stop, n)), N=n
+    )
+
+
+def ordered_series_colors(
+    values: Iterable[float],
+    *,
+    name: str = "tao",
+    vmin: float | None = None,
+    vmax: float | None = None,
+    start: float | None = None,
+    stop: float = 1.0,
+) -> list[tuple[float, float, float, float]]:
+    """Map a known ordered parameter to RGBA colors in the original order.
+
+    This helper does not infer relationships from data or numeric sample IDs.
+    The caller must establish a shared quantitative parameter (or known ordinal
+    ranks). Numeric spacing is preserved through linear normalization. Equal
+    values share a color. Default tao spans the full blue-to-red gradient;
+    start=None resolves to 0.0 for tao or 0.4 for single-hue alternatives.
+    A degenerate range uses tao's low endpoint (blue by default), or the dark
+    endpoint of a single-hue alternative. Pass a shared vmin/vmax across
+    panels, including panels with only one value.
+
+    Reject missing/nonfinite parameters and out-of-range values rather than
+    inventing ranks or silently clipping. For a colorbar use Normalize(vmin,
+    vmax) and matplotlib_colormap(name, start=resolved_start, stop=stop),
+    with resolved_start following the same rule above. For deliberate log
+    normalization, use LogNorm with that colormap directly.
+    """
+
+    from matplotlib.colors import Normalize
+
+    try:
+        parameters = [float(value) for value in values]
+    except (TypeError, ValueError) as exc:
+        raise ValueError("values must be a nonempty sequence of finite numbers") from exc
+    if not parameters or not all(math.isfinite(value) for value in parameters):
+        raise ValueError("values must be a nonempty sequence of finite numbers")
+    lo = min(parameters) if vmin is None else float(vmin)
+    hi = max(parameters) if vmax is None else float(vmax)
+    if not (math.isfinite(lo) and math.isfinite(hi) and math.isfinite(hi - lo)) or lo > hi:
+        raise ValueError("vmin/vmax must define a finite, nondecreasing range")
+    if any(value < lo or value > hi for value in parameters):
+        raise ValueError("parameter values must lie within vmin/vmax")
+    if start is None:
+        start = 0.0 if name == "tao" else 0.4
+    cmap = matplotlib_colormap(name, start=start, stop=stop)
+    if lo == hi:
+        return [cmap(0.0 if name == "tao" else 1.0) for _ in parameters]
+    norm = Normalize(vmin=lo, vmax=hi)
+    return [cmap(float(norm(value))) for value in parameters]
 
 
 def _cycler_expr(key: str, values: list[str]) -> str:

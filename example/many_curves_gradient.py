@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Example: Tao Style many curves with an outside framed legend."""
+"""Example: temperature-driven colors with an outside framed legend."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ from apply_tao_style import (  # noqa: E402
     axes_box_size,
     save_adaptive_figure,
     set_fixed_axes_box,
-    matplotlib_colormap,
+    ordered_series_colors,
     matplotlib_rcparams,
 )
 
@@ -29,8 +29,8 @@ from apply_tao_style import (  # noqa: E402
 def main() -> None:
     x = np.linspace(0, 12, 320)
     temperatures = np.arange(80, 221, 20)
-    cmap = matplotlib_colormap("tao-blue")
-    colors = [cmap(value) for value in np.linspace(0.18, 1.0, len(temperatures))]
+    # The shared temperature parameter, not the curve count, calls for a gradient.
+    colors = ordered_series_colors(temperatures)
 
     plt.rcParams.update(matplotlib_rcparams(svg_fonttype="path"))
     fig, ax = plt.subplots(figsize=axes_box_size(DEFAULT_ASPECT))

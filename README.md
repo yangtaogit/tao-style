@@ -88,8 +88,10 @@
 
 - 默认偏好冷色调、暗蓝、黑色和灰色。
 - 核心颜色锚点（`tao-core`）为 deep blue `#2A2F80`、black `#000000`、gray `#808080`。muted red `#B04A4A` 仅在需要明确强调时使用，不进入普通序列。
-- 颜色按系列数查表：集合与顺序都由普通系列数决定，直接使用对应系列数的色表，不从其他系列数的色表截断或追加。1 系列：`#2A2F80`；2 系列：`#2A2F80`、`#808080`；3 系列：`#2A2F80`、`#808080`、`#000000`。
-- 超过 3 个系列时，优先使用 tao 色板并按其顺序取色；有序系列则优先改用暗蓝（tao blue）梯度或 tao 梯度。
+- 配色先判断数据语义，再看系列数；用户指定或已有的数据配色优先。独立类别按数量使用默认色：1 系列 `#2A2F80`；2 系列 `#2A2F80`、`#808080`；3 系列 `#2A2F80`、`#808080`、`#000000`。超过 3 个独立类别使用 tao 离散色板，不因数量多就改成渐变。
+- 同一参数的有序变化（温度、时间、浓度、电压等）默认使用完整的 `tao` 多色梯度：参数由低到高对应深蓝→青→绿→黄→橙→红，即使只有 2–3 组也如此；`tao-blue`、`tao-gray` 仅为可选单色梯度。按实际参数值取色，不按文件顺序；不等间隔保留数值间距，重复值同色，可比较的子图共用色阶。只有一个不同的参数值时使用单色。
+- 样品编号、曲线相似或统计相关性不等于有序参数；关系不明确时按独立类别处理，仅在会影响科学解释时询问。少量有序曲线优先用带单位的图例；多曲线可使用与曲线映射一致的 colorbar。完整 tao 梯度不截去蓝端，检查黄、青细线的对比度；仅可选单色梯度避开接近白色的一端。
+- Python helper：独立类别用 `series_colors(n)`（1–3 组）；有序参数用 `ordered_series_colors(values)`，可通过 `vmin/vmax` 固定跨子图范围。完整判断规则见 [科研绘图配色](references/scientific-plotting.md#color)。
 - tao 的色板用于需要更强视觉区分或专用 colorbar 的场景：`#2A2F80`、`#3953A5`、`#4378BC`、`#6FCCDE`、`#99CB6F`、`#F6EB14`、`#F67F21`、`#EE2024`、`#7D1415`。
 - 需要绿色或红色语义的顺序数据可用附加梯度：tao green `#EFF9EA`、`#C7EBB4`、`#92D982`、`#55BE55`、`#2BA13C`、`#158029`、`#0E5A20`；tao red `#FCEFEC`、`#F8C4BA`、`#F09083`、`#DD4B3E`、`#9E1A15`。这两条梯度有意比分类色更明亮；强调红 `#B04A4A` 属于分类色，不在 tao red 梯度中。
 - colorbar 默认置于坐标框外右侧，竖向布局，黑色外框线宽与坐标轴一致；竖向单图带右侧 colorbar 时，保持坐标框宽度固定并让 canvas 向右扩展，避免重叠。
@@ -337,8 +339,10 @@ See `references/scientific-plotting.md` for complete Matplotlib parameters and h
 
 - The default palette favors cool tones, dark blue, black, and gray.
 - The core color anchors (`tao-core`) are deep blue `#2A2F80`, black `#000000`, and gray `#808080`. Muted red `#B04A4A` is used only for explicit emphasis and never enters the ordinary sequence.
-- Series colors are looked up by count; both the set and the order depend on the number of ordinary series. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`.
-- With more than three ordinary series, prefer the tao palette, taking its colors in order; for ordered series, switch to a tao blue or tao gradient instead.
+- Choose colors by data semantics before series count; explicit or established data mappings take priority. Independent categories retain the defaults: 1 series `#2A2F80`; 2 series `#2A2F80`, `#808080`; 3 series `#2A2F80`, `#808080`, `#000000`. More than three independent categories use the discrete tao palette, not a gradient merely because there are many curves.
+- Ordered changes in a shared parameter (temperature, time, concentration, voltage, etc.) use the full `tao` multi-hue gradient, even for 2–3 groups: low-to-high values follow deep blue → cyan → green → yellow → orange → red. `tao-blue` and `tao-gray` remain optional single-hue alternatives. Map actual parameter values, not file order: preserve unequal numeric intervals, give equal values equal colors, and share scales across comparable panels. A single distinct parameter value uses one color.
+- Sample IDs, similar curves, and statistical correlation do not establish parameter order. Unknown relationships fall back to categories; ask only when interpretation would materially change. Prefer a legend with units for a few ordered curves; many curves may use a colorbar matching the curve mapping. Keep the full tao gradient's blue end and check yellow/cyan line contrast; avoid near-white colors only for optional single-hue gradients.
+- Python helpers: use `series_colors(n)` for 1–3 independent categories and `ordered_series_colors(values)` for ordered parameters, with `vmin/vmax` for shared panel ranges. See the [plotting color rules](references/scientific-plotting.md#color) for the full decision workflow.
 - The tao palette is available when stronger visual separation or a dedicated colorbar is needed: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
 - Additional family gradients when the data semantics call for green or red: tao green `#EFF9EA`, `#C7EBB4`, `#92D982`, `#55BE55`, `#2BA13C`, `#158029`, `#0E5A20`; tao red `#FCEFEC`, `#F8C4BA`, `#F09083`, `#DD4B3E`, `#9E1A15`. These two are deliberately brighter than the categorical colors; the emphasis red `#B04A4A` is a categorical color and not part of the tao red gradient.
 - Colorbars should be placed outside the right side of the corresponding axes, use a vertical layout, and keep a black outline width matching the axes box.

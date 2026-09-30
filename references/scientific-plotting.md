@@ -109,21 +109,24 @@ For Plotly, use the native 3D mapping in [plotly.md](plotly.md#native-3d-renderi
 
 ## Color
 
-- Prefer cool, restrained colors by default: deep blue `#2A2F80`, black `#000000`, and gray `#808080` are the core anchors, exposed as `categorical_palette("tao-core")`.
-- Per-count series colors: the color set and its order both depend on the number of ordinary series; use the sequence for the actual series count instead of truncating or extending another count's sequence. 1: `#2A2F80`. 2: `#2A2F80`, `#808080`. 3: `#2A2F80`, `#808080`, `#000000`.
-- More than three ordinary series: prefer the tao palette, taking its colors in order; for ordered series, switch to a tao blue or tao gradient instead.
-- Use red with lower priority unless the data or user request specifically calls for emphasis, contrast, warning, or a warm-category encoding. When red is needed, prefer muted red `#B04A4A` over saturated red. Red is not part of the default ordinary multi-series sequence.
-- For many curves or ordered series that need a color gradient, prefer tao blue gradients or tao gray gradients by default.
-- Use the tao palette as an optional alternative when Tao asks for stronger visual separation, a presentation-style figure, or a dedicated colorbar/heatmap: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
-- Treat the tao palette as a deliberate alternative, not the default. It is closer to a vivid blue-cyan-green-yellow-orange-red colorbar than the restrained cool palette.
-- Avoid rainbow-like or highly saturated multi-hue gradients unless Tao specifically asks for them or chooses the tao palette.
-- Preferred tao blue gradient, based on deep blue `#2A2F80`: `#EEF1F8`, `#C8D2EA`, `#8799CF`, `#4E5CA4`, `#2A2F80`.
-- Preferred tao gray gradient: `#EDEDED`, `#C9C9C9`, `#9A9A9A`, `#5F5F5F`, `#000000`.
-- Additional family gradients when the data semantics call for green or red: tao green gradient `#EFF9EA`, `#C7EBB4`, `#92D982`, `#55BE55`, `#2BA13C`, `#158029`, `#0E5A20`; tao red gradient `#FCEFEC`, `#F8C4BA`, `#F09083`, `#DD4B3E`, `#9E1A15`. These two are deliberately brighter than the categorical colors; the emphasis red `#B04A4A` is a categorical color and not part of the tao red gradient.
-- Optional tao gradient: `#2A2F80`, `#3953A5`, `#4378BC`, `#6FCCDE`, `#99CB6F`, `#F6EB14`, `#F67F21`, `#EE2024`, `#7D1415`.
-- Colorbars should sit outside the right side of the corresponding axes, use a vertical layout, and keep a black outline with the same line width as the axes box. For portrait single-panel figures, keep the axes-box width fixed and allow the canvas to expand rightward for the colorbar; do not squeeze the axes box or let the colorbar overlap tick labels.
-- Use these lists consistently across supported backends unless the user provides a data-specific color mapping.
-- Keep the lists easy to extend as Tao adds more preferred colors.
+Use the palette values in [style-profile.md](style-profile.md#color) as the single source of truth. Decide the encoding before plotting:
+
+1. Honor an explicit user mapping or an established mapping for the same datasets first.
+2. Inspect labels, metadata, and the experimental design. Independent materials, algorithms, or sample identities are categories. Measurements varying one shared parameter (temperature, time, concentration, bias voltage, etc.) or explicitly ordered levels form an ordered family. A numeric ID, shared X axis, similar curve shape, or correlation alone is not evidence of an ordered family. The response need not be monotonic for the parameter order to be meaningful.
+3. For independent categories, use `series_colors(n)` for one to three groups: blue; blue/gray; blue/gray/black. For four to nine groups use `categorical_palette("tao")[:n]` with categorical line styles. Beyond that, prefer panels or another explicit category encoding rather than silently repeating colors or inventing a gradient. Count data groups, not auxiliary fit, band, or error-bar artists.
+4. For an ordered family with at least two distinct parameter values, use the full `tao` gradient by default even for only two or three curves: low-to-high parameter values follow deep blue → cyan → green → yellow → orange → red. Do not replace it with a light-to-dark blue gradient; `tao-blue` and `tao-gray` are optional alternatives. Keep all curves solid. Gradient reds encode high parameter values, not emphasis; muted red `#B04A4A` remains reserved for explicit emphasis.
+5. When the relationship is unspecified, fall back to categories. Ask a concise question only if the ambiguity would materially change the scientific interpretation. Do not compute a correlation test to choose a palette.
+
+For an ordered family:
+
+- Map actual parameter values linearly to the gradient by default, keeping colors aligned with their input datasets. Do not assign equal color steps to unequal numeric intervals. Equal values share a color; with one distinct value and no wider shared range, use one color (the low blue endpoint for default tao; the dark endpoint for single-hue alternatives) and omit a continuous colorbar.
+- For known ordinal labels such as low/medium/high, use explicit ranks and a labeled discrete legend. Do not invent numerical distances or a quantitative colorbar. Use a logarithmic color normalization only when explicitly requested or scientifically justified and disclosed.
+- Preserve the same parameter range, normalization, and colormap across comparable panels; do not independently rescale subsets. Missing or invalid parameter values must be resolved or visibly distinguished, never assigned fabricated ranks.
+- Sample the full `tao` interval `0.0–1.0` by default; do not discard its blue end using a single-hue contrast preset. Check yellow/cyan curve contrast on white at final size, using labels or panels where needed without silently changing the parameter mapping. Optional single-hue gradients start at `0.4` to avoid their near-white end; scalar-field/heatmap gradients may still use the full range. The tao gradient is not monotonic in lightness, so do not claim it preserves parameter order in grayscale.
+- For a few curves, prefer a legend sorted by parameter value with the quantity and units. For many curves, a labeled colorbar may be clearer; it must use exactly the same normalization and sampled colormap as the curves. Close parameter values can have similar colors: use labels, panels, or a legend rather than distorting the numeric mapping.
+- If both category and parameter vary, prefer separate panels per category with a shared parameter scale. Do not flatten unrelated categories into one gradient. Corresponding fits, uncertainty bands, and data reuse the dataset color.
+
+Keep colorbars outside the right side of the axes with a vertical layout and black outline matching the axes box. Preserve the fixed axes-box size and expand the canvas for the colorbar.
 
 ## Markers and Error Bars
 
@@ -205,12 +208,30 @@ set_fixed_axes_box(fig, ax, aspect=aspect)
 save_adaptive_figure(fig, "figure.svg")
 ```
 
-The per-count series orders (up to three) are also available programmatically; the fixed `prop_cycle` already matches them. With more than three ordinary series, use `categorical_palette("tao")` in order, or a gradient for ordered series:
+The fixed `prop_cycle` is only a categorical fallback; it cannot infer data semantics. Choose the encoding explicitly after the decision above:
 
 ```python
-from scripts.apply_tao_style import series_colors
+from scripts.apply_tao_style import series_colors, ordered_series_colors
 
-colors = series_colors(3)
+colors = series_colors(2)  # independent samples: blue, gray
+temperatures = [300, 100, 150]  # K; order in the input need not be sorted
+colors = ordered_series_colors(temperatures)  # numeric value, not list position
+```
+
+`ordered_series_colors` returns RGBA colors in input order and defaults to `name="tao"` with the full `0.0–1.0` interval. It accepts shared `vmin/vmax` and gradient `start/stop`; omitted `start` resolves to `0.0` for tao and `0.4` for optional single-hue gradients, with `stop=1.0`. It rejects empty/nonfinite values and values outside the specified range instead of silently clipping. It does not guess which datasets are related. For ordinal levels, pass known ranks instead of arbitrary IDs.
+
+When a quantitative colorbar is needed, reuse the same mapping. Omit it only when the full shared parameter range is degenerate, not merely because one panel contains a single value:
+
+```python
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import Normalize
+from scripts.apply_tao_style import matplotlib_colormap
+
+lo, hi = 100, 300  # shared parameter range across panels, in K
+colors = ordered_series_colors(temperatures, vmin=lo, vmax=hi)
+mappable = ScalarMappable(norm=Normalize(lo, hi),
+                          cmap=matplotlib_colormap("tao"))
+# After fixing the axes box, pass mappable to add_matplotlib_colorbar.
 ```
 
 For equal-unit XY plots such as spatial coordinates or geometry, fix the X-axis box width and let the Y-axis height follow the data range:
@@ -252,12 +273,12 @@ cbar.set_label("Signal [Unit]")
 save_adaptive_figure(fig, "figure.svg")
 ```
 
-For gradient colormaps, build them with the helper:
+For gradient colormaps, build them with the helper. Use an explicit `"tao"` for ordered parameter sweeps; the general colormap helper retains its `"tao-blue"` default for existing scalar-field code:
 
 ```python
 from scripts.apply_tao_style import matplotlib_colormap
 
-cmap = matplotlib_colormap("tao-blue")  # or "tao-gray", "tao-green", "tao-red", "tao"
+cmap = matplotlib_colormap("tao")  # ordered sweeps; single-hue alternatives remain available
 ```
 
 For histograms, determine the y-axis mode (default `count` when unspecified and clear from context), then use the helper when available:
@@ -336,6 +357,7 @@ Interactive HTML requests follow [plotly.md](plotly.md#compact-offline-html-expo
 - Tick labels are readable and not overcrowded.
 - Legend does not cover important data.
 - Colors remain distinguishable in grayscale or for common color-vision deficiencies.
+- Color encodes category or a documented ordered parameter correctly; gradients follow actual values, comparable panels share a scale, and pale curves remain visible.
 - Multi-panel figures align axes, labels, and panel spacing.
 - Exported files do not clip titles, labels, legends, or annotations.
 - Final file format matches the user's target use: notebook, manuscript, slide, report, or web.
